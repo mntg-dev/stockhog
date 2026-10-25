@@ -475,6 +475,7 @@ Estimated value: {6} USD.</value></data>
   <data name="Strategies_Section_HowItWorks" xml:space="preserve"><value>How it works</value></data>
   <data name="Strategies_Section_WhenItWorks" xml:space="preserve"><value>When it works and when it fails</value></data>
   <data name="Strategies_Section_HowToUse" xml:space="preserve"><value>How to use it</value></data>
+  <data name="Strategies_Section_TestResults" xml:space="preserve"><value>Test results</value></data>
   <data name="Strategies_Parameters" xml:space="preserve"><value>Parameters</value></data>
   <data name="Strategies_SuggestedHint" xml:space="preserve"><value>"Suggested to test" is the range worth trying first in an optimization (from – to / step). The Optimize button fills it in for you.</value></data>
   <data name="Strategies_Parameter" xml:space="preserve"><value>Parameter</value></data>
@@ -504,7 +505,7 @@ Estimated value: {6} USD.</value></data>
   <data name="StrategyDoc_RsiMeanReversionStrategy_WhenItWorks" xml:space="preserve"><value>Works on stocks that move in a range and bounce back after short drops. Fails in strong downtrends: the RSI stays oversold while the price keeps falling, so the stop loss matters. In strong uptrends it often sells too early.</value></data>
   <data name="StrategyDoc_RsiMeanReversionStrategy_HowToUse" xml:space="preserve"><value>• Download Minute data for the test period; the warm-up needs only a few days.
 • Optimize the oversold and overbought levels first, then the RSI period and the stop loss.
-• Compare it with the RSI(2) pullback, which buys only in uptrends.</value></data>
+• Compare it with the RSI pullback, which buys only in uptrends.</value></data>
   <data name="StrategyDoc_DonchianBreakoutStrategy_Summary" xml:space="preserve"><value>Classic breakout trend following (the Turtle traders' rule) on daily bars: buys when the price makes a new N-day high and rides the trend until it makes a new M-day low. Long only.</value></data>
   <data name="StrategyDoc_DonchianBreakoutStrategy_HowItWorks" xml:space="preserve"><value>• Entry: daily close above the highest high of the previous N days (entry channel).
 • Exit: close below the lowest low of the previous M days (exit channel), or below the initial ATR stop.
@@ -528,7 +529,7 @@ Estimated value: {6} USD.</value></data>
   <data name="StrategyDoc_RsiPullbackStrategy_WhenItWorks" xml:space="preserve"><value>Works well on liquid stocks and index ETFs in rising markets: high win rate, short trades. Fails when the uptrend breaks: the dip keeps going and, with no stop loss, a loss can grow until the maximum holding time ends the trade.</value></data>
   <data name="StrategyDoc_RsiPullbackStrategy_HowToUse" xml:space="preserve"><value>• Download Minute data with about a year extra before the test period (200-day SMA warm-up).
 • Try it on SPY or large stocks first.
-• Optimize the entry level (5–25) and the exit SMA; keep the RSI period short (2–3).</value></data>
+• Optimize the entry level (5–25) and the exit SMA; keep the RSI period short (2–5). The defaults 4 / 15 held up best in our tests; Connors' original is 2 / 10.</value></data>
   <data name="StrategyDoc_BollingerReversionStrategy_Summary" xml:space="preserve"><value>Mean reversion on hourly bars: buys when the price falls below the lower Bollinger band and sells when it returns to the middle band. Long only.</value></data>
   <data name="StrategyDoc_BollingerReversionStrategy_HowItWorks" xml:space="preserve"><value>• Bands: a moving average of N hourly closes, plus and minus σ standard deviations.
 • Entry: close below the lower band (an unusually large drop).
@@ -599,8 +600,8 @@ Estimated value: {6} USD.</value></data>
   <data name="StrategyParam_MomentumTrendStrategy_allocation-percent_Name" xml:space="preserve"><value>Allocation (%)</value></data>
   <data name="StrategyParam_MomentumTrendStrategy_allocation-percent_Description" xml:space="preserve"><value>Share of equity invested while holding.</value></data>
 
-  <data name="Strategy_RsiPullbackStrategy_Name" xml:space="preserve"><value>RSI(2) pullback (Connors)</value></data>
-  <data name="Strategy_RsiPullbackStrategy_Description" xml:space="preserve"><value>In an uptrend (above the long SMA), buys a sharp dip in a 2-day RSI; exits above the short SMA or after N days. Long only.</value></data>
+  <data name="Strategy_RsiPullbackStrategy_Name" xml:space="preserve"><value>RSI pullback (Connors)</value></data>
+  <data name="Strategy_RsiPullbackStrategy_Description" xml:space="preserve"><value>In an uptrend (above the long SMA), buys a sharp dip in a short (2–5 day) RSI; exits above the short SMA or after N days. Long only.</value></data>
   <data name="StrategyParam_RsiPullbackStrategy_rsi-period_Name" xml:space="preserve"><value>RSI period (days)</value></data>
   <data name="StrategyParam_RsiPullbackStrategy_rsi-period_Description" xml:space="preserve"><value>A very short RSI reacts to a few down days.</value></data>
   <data name="StrategyParam_RsiPullbackStrategy_entry-level_Name" xml:space="preserve"><value>Entry RSI below</value></data>
@@ -635,4 +636,28 @@ Estimated value: {6} USD.</value></data>
   <data name="StrategyParam_OpeningRangeBreakoutStrategy_min-range-percent_Description" xml:space="preserve"><value>Skip days whose opening range is narrower than this share of the price (too little movement).</value></data>
   <data name="StrategyParam_OpeningRangeBreakoutStrategy_allocation-percent_Name" xml:space="preserve"><value>Allocation (%)</value></data>
   <data name="StrategyParam_OpeningRangeBreakoutStrategy_allocation-percent_Description" xml:space="preserve"><value>Share of equity invested per position.</value></data>
+
+  <!-- Optional "Test results" sections: optimized on 2024-11-01..2025-10-31, checked on 2025-11-01..2026-10-23. -->
+  <data name="StrategyDoc_MomentumTrendStrategy_TestResults" xml:space="preserve"><value>Optimized on AAPL, MSFT and SPY from Nov 2024 to Oct 2025, then checked on Nov 2025 – Oct 2026. Past results in a mostly rising market: re-run both steps on your own symbols.
+• Best lookback: 63 days (105 on MSFT); the trend SMA hardly mattered.
+• Check year: AAPL +21.1%, MSFT −1.7%, SPY +2.4%. Buying and holding made +27.1%, +1.9% and +11.2%.
+• It mostly keeps you in the stock, so it did not beat buy-and-hold. Its benefit was a smaller drawdown in the optimization year: 14% against 33% for holding AAPL.</value></data>
+  <data name="StrategyDoc_RsiPullbackStrategy_TestResults" xml:space="preserve"><value>Optimized on AAPL, MSFT and SPY from Nov 2024 to Oct 2025, then checked on Nov 2025 – Oct 2026. Past results in a mostly rising market: re-run both steps on your own symbols.
+• Best: RSI period 4–5 with entry at 15–20, hence the defaults 4 / 15.
+• Check year with 4 / 15: AAPL +8.9%, SPY +2.6% (RSI 2 / entry 5: +6.3%). MSFT: no edge (−1.1% to +2.6%).
+• Drawdowns stayed at 1.5–3%, but it trades only 1–10 times a year, so single results carry little weight.</value></data>
+  <data name="StrategyDoc_OpeningRangeBreakoutStrategy_TestResults" xml:space="preserve"><value>Optimized on AAPL, MSFT and SPY from Nov 2024 to Oct 2025, then checked on Nov 2025 – Oct 2026. Past results in a mostly rising market: re-run both steps on your own symbols.
+• Best range: 60 minutes on AAPL and SPY (the default), 15 minutes on MSFT; the minimum range between 0 and 0.5% hardly mattered.
+• Check year: AAPL +5.6%, SPY +1.7%, MSFT +7.1% (15 minutes). In MSFT's flat year, holding made only +1.9% with a 31.5% drawdown.
+• With 50–160 trades a year these are the most reliable figures of the tests, but the edge was smaller out of sample than in it.</value></data>
+  <data name="StrategyDoc_BollingerReversionStrategy_TestResults" xml:space="preserve"><value>Optimized on AAPL, MSFT and SPY from Nov 2024 to Oct 2025, then checked on Nov 2025 – Oct 2026. Past results in a mostly rising market: re-run both steps on your own symbols.
+• Single stocks: no reliable edge. AAPL lost in the optimization year; MSFT's best setting fell from +28.9% to +3.8% and the next ones lost.
+• SPY: 20 hours / 3σ made +6.1% and then +3.6%; 10 hours / 2σ +7.9% and then +7.7%.
+• Use it on an index rather than a single stock.</value></data>
+  <data name="StrategyDoc_DonchianBreakoutStrategy_TestResults" xml:space="preserve"><value>Optimized on AAPL, MSFT and SPY from Nov 2024 to Oct 2025, then checked on Nov 2025 – Oct 2026. Past results in a mostly rising market: re-run both steps on your own symbols.
+• Weak on all three: best check results +2.3% (AAPL), +1.7% (SPY) and −2.3% (MSFT).
+• Only 1–4 trades a year: daily breakouts need longer periods or more symbols to say anything.</value></data>
+  <data name="StrategyDoc_SmaCrossStrategy_TestResults" xml:space="preserve"><value>Optimized on AAPL from Oct 2025 to Oct 2026, then checked on the year before (Oct 2024 – Oct 2025). Past results: re-run both steps on your own symbols.
+• All five best settings lost 8–17% on the check year; on the optimization period they had made between −1.3% and +1%.
+• The best optimized result fitted the noise of its own period; don't use it without a check that holds up.</value></data>
 </root>

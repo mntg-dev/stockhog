@@ -5,6 +5,7 @@ using EmTrading.Application.Abstractions.Messaging;
 using EmTrading.Application.Backtesting.Strategies;
 using EmTrading.Application.Optimization.GetBestStrategyParameters;
 using EmTrading.Presentation.Backtesting;
+using EmTrading.Presentation.Localization;
 using EmTrading.Presentation.Optimization;
 using EmTrading.Presentation.Shell;
 using Microsoft.Extensions.Logging;
@@ -19,6 +20,9 @@ public sealed partial class StrategiesViewModel : PageViewModel, IRecipient<Opti
 {
     /// <summary>Text sections of each strategy's description, in display order.</summary>
     public static readonly IReadOnlyList<string> DocSections = ["Summary", "HowItWorks", "WhenItWorks", "HowToUse"];
+
+    /// <summary>Sections shown after <see cref="DocSections"/> only for strategies that have them, e.g. results of tests.</summary>
+    public static readonly IReadOnlyList<string> OptionalDocSections = ["TestResults"];
 
     private readonly IDispatcher _dispatcher;
     private readonly IMessenger _messenger;
@@ -58,10 +62,17 @@ public sealed partial class StrategiesViewModel : PageViewModel, IRecipient<Opti
 
     partial void OnSelectedStrategyChanged(StrategyDescriptor? value)
     {
-        Sections = value is null ? [] : DocSections.Select(section => new StrategyDocSection(section, value.Name)).ToList();
+        Sections = value is null ? [] : DocSectionsOf(value.Name);
         Parameters = value?.Parameters.Select(p => new ParameterGuide(value.Name, p)).ToList() ?? [];
         _ = LoadBestResultsAsync();
     }
+
+    /// <summary>The required sections, then the optional ones this strategy has texts for.</summary>
+    public static IReadOnlyList<StrategyDocSection> DocSectionsOf(string strategyName) =>
+        DocSections
+            .Concat(OptionalDocSections.Where(section => Loc.TryGet(new StrategyDocSection(section, strategyName).Key, out _)))
+            .Select(section => new StrategyDocSection(section, strategyName))
+            .ToList();
 
     private async Task LoadBestResultsAsync()
     {

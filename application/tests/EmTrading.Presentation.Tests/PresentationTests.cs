@@ -160,6 +160,16 @@ public sealed class StrategyTextsTests : IDisposable
     }
 
     [Fact]
+    public void Test_results_are_shown_only_for_strategies_that_have_them()
+    {
+        Loc.Instance.SetCulture(Loc.Polish);
+
+        Assert.Equal("TestResults", StrategiesViewModel.DocSectionsOf("RsiPullbackStrategy")[^1].Section);
+        Assert.Equal("Wyniki testów", Loc.Get(StrategiesViewModel.DocSectionsOf("RsiPullbackStrategy")[^1].TitleKey));
+        Assert.Equal(StrategiesViewModel.DocSections, StrategiesViewModel.DocSectionsOf("RsiMeanReversionStrategy").Select(s => s.Section));
+    }
+
+    [Fact]
     public void A_strategy_without_resources_shows_its_attribute_texts()
     {
         Loc.Instance.SetCulture(Loc.Polish);

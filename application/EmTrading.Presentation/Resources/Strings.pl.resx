@@ -475,6 +475,7 @@ Szacowana wartość: {6} USD.</value></data>
   <data name="Strategies_Section_HowItWorks" xml:space="preserve"><value>Jak działa</value></data>
   <data name="Strategies_Section_WhenItWorks" xml:space="preserve"><value>Kiedy działa, a kiedy zawodzi</value></data>
   <data name="Strategies_Section_HowToUse" xml:space="preserve"><value>Jak jej używać</value></data>
+  <data name="Strategies_Section_TestResults" xml:space="preserve"><value>Wyniki testów</value></data>
   <data name="Strategies_Parameters" xml:space="preserve"><value>Parametry</value></data>
   <data name="Strategies_SuggestedHint" xml:space="preserve"><value>„Do przetestowania” to zakres, od którego warto zacząć optymalizację (od – do / krok). Przycisk Optymalizuj wpisuje go za Ciebie.</value></data>
   <data name="Strategies_Parameter" xml:space="preserve"><value>Parametr</value></data>
@@ -504,7 +505,7 @@ Szacowana wartość: {6} USD.</value></data>
   <data name="StrategyDoc_RsiMeanReversionStrategy_WhenItWorks" xml:space="preserve"><value>Działa na spółkach poruszających się w przedziale, które odbijają po krótkich spadkach. Zawodzi w silnych spadkach: RSI pozostaje wyprzedany, a cena dalej spada, dlatego ważny jest stop loss. W silnych wzrostach często sprzedaje za wcześnie.</value></data>
   <data name="StrategyDoc_RsiMeanReversionStrategy_HowToUse" xml:space="preserve"><value>• Pobierz dane minutowe za okres testu; rozgrzewka potrzebuje tylko kilku dni.
 • Najpierw optymalizuj poziomy wyprzedania i wykupienia, potem okres RSI i stop loss.
-• Porównaj ją ze strategią RSI(2) pullback, która kupuje tylko w trendzie wzrostowym.</value></data>
+• Porównaj ją ze strategią Korekta RSI, która kupuje tylko w trendzie wzrostowym.</value></data>
   <data name="StrategyDoc_DonchianBreakoutStrategy_Summary" xml:space="preserve"><value>Klasyczne wybicie z kanału (reguła „żółwi”) na dziennych świecach: kupuje, gdy cena ustanawia nowe N-dniowe maksimum, i trzyma trend, aż spadnie do nowego M-dniowego minimum. Tylko long.</value></data>
   <data name="StrategyDoc_DonchianBreakoutStrategy_HowItWorks" xml:space="preserve"><value>• Wejście: dzienne zamknięcie powyżej najwyższego maksimum z poprzednich N dni (kanał wejścia).
 • Wyjście: zamknięcie poniżej najniższego minimum z poprzednich M dni (kanał wyjścia) albo poniżej początkowego stopu ATR.
@@ -528,7 +529,7 @@ Szacowana wartość: {6} USD.</value></data>
   <data name="StrategyDoc_RsiPullbackStrategy_WhenItWorks" xml:space="preserve"><value>Dobrze działa na płynnych spółkach i ETF-ach indeksowych w rosnącym rynku: wysoka skuteczność, krótkie transakcje. Zawodzi, gdy trend wzrostowy się łamie: spadek trwa dalej, a bez stop lossa strata może rosnąć, aż maksymalny czas trzymania zamknie pozycję.</value></data>
   <data name="StrategyDoc_RsiPullbackStrategy_HowToUse" xml:space="preserve"><value>• Pobierz dane minutowe z mniej więcej rokiem zapasu przed okresem testu (rozgrzewka 200-dniowej średniej).
 • Zacznij od SPY albo dużych spółek.
-• Optymalizuj poziom wejścia (5–25) i średnią wyjścia; okres RSI trzymaj krótki (2–3).</value></data>
+• Optymalizuj poziom wejścia (5–25) i średnią wyjścia; okres RSI trzymaj krótki (2–5). Domyślne 4 / 15 najlepiej wypadły w naszych testach; oryginał Connorsa to 2 / 10.</value></data>
   <data name="StrategyDoc_BollingerReversionStrategy_Summary" xml:space="preserve"><value>Powrót do średniej na godzinowych świecach: kupuje, gdy cena spada pod dolną wstęgę Bollingera, i sprzedaje, gdy wraca do środkowej. Tylko long.</value></data>
   <data name="StrategyDoc_BollingerReversionStrategy_HowItWorks" xml:space="preserve"><value>• Wstęgi: średnia z N godzinowych zamknięć plus/minus σ odchyleń standardowych.
 • Wejście: zamknięcie poniżej dolnej wstęgi (nietypowo duży spadek).
@@ -599,8 +600,8 @@ Szacowana wartość: {6} USD.</value></data>
   <data name="StrategyParam_MomentumTrendStrategy_allocation-percent_Name" xml:space="preserve"><value>Alokacja (%)</value></data>
   <data name="StrategyParam_MomentumTrendStrategy_allocation-percent_Description" xml:space="preserve"><value>Część kapitału zainwestowana w czasie trzymania pozycji.</value></data>
 
-  <data name="Strategy_RsiPullbackStrategy_Name" xml:space="preserve"><value>Korekta RSI(2) (Connors)</value></data>
-  <data name="Strategy_RsiPullbackStrategy_Description" xml:space="preserve"><value>W trendzie wzrostowym (nad długą SMA) kupuje gwałtowny spadek 2-dniowego RSI; wychodzi nad krótką SMA lub po N dniach. Tylko long.</value></data>
+  <data name="Strategy_RsiPullbackStrategy_Name" xml:space="preserve"><value>Korekta RSI (Connors)</value></data>
+  <data name="Strategy_RsiPullbackStrategy_Description" xml:space="preserve"><value>W trendzie wzrostowym (nad długą SMA) kupuje gwałtowny spadek krótkiego (2–5 dni) RSI; wychodzi nad krótką SMA lub po N dniach. Tylko long.</value></data>
   <data name="StrategyParam_RsiPullbackStrategy_rsi-period_Name" xml:space="preserve"><value>Okres RSI (dni)</value></data>
   <data name="StrategyParam_RsiPullbackStrategy_rsi-period_Description" xml:space="preserve"><value>Bardzo krótki RSI reaguje już na kilka spadkowych dni.</value></data>
   <data name="StrategyParam_RsiPullbackStrategy_entry-level_Name" xml:space="preserve"><value>Wejście, gdy RSI poniżej</value></data>
@@ -635,4 +636,28 @@ Szacowana wartość: {6} USD.</value></data>
   <data name="StrategyParam_OpeningRangeBreakoutStrategy_min-range-percent_Description" xml:space="preserve"><value>Pomija dni, w których zakres otwarcia jest węższy niż ta część ceny (za mały ruch).</value></data>
   <data name="StrategyParam_OpeningRangeBreakoutStrategy_allocation-percent_Name" xml:space="preserve"><value>Alokacja (%)</value></data>
   <data name="StrategyParam_OpeningRangeBreakoutStrategy_allocation-percent_Description" xml:space="preserve"><value>Część kapitału zainwestowana w pozycję.</value></data>
+
+  <!-- Opcjonalne sekcje „Wyniki testów”: optymalizacja 2024-11-01..2025-10-31, sprawdzenie 2025-11-01..2026-10-23. -->
+  <data name="StrategyDoc_MomentumTrendStrategy_TestResults" xml:space="preserve"><value>Optymalizacja na AAPL, MSFT i SPY od listopada 2024 do października 2025, potem sprawdzenie na listopadzie 2025 – październiku 2026. To wyniki historyczne z rynku, który głównie rósł: powtórz oba kroki na swoich symbolach.
+• Najlepszy okres momentum: 63 dni (105 na MSFT); SMA trendu prawie nie miała znaczenia.
+• Rok sprawdzenia: AAPL +21,1%, MSFT −1,7%, SPY +2,4%. Kupno i trzymanie dało +27,1%, +1,9% i +11,2%.
+• Strategia głównie trzyma akcje, więc nie pobiła kupna i trzymania. Jej zaletą było mniejsze obsunięcie w roku optymalizacji: 14% wobec 33% przy trzymaniu AAPL.</value></data>
+  <data name="StrategyDoc_RsiPullbackStrategy_TestResults" xml:space="preserve"><value>Optymalizacja na AAPL, MSFT i SPY od listopada 2024 do października 2025, potem sprawdzenie na listopadzie 2025 – październiku 2026. To wyniki historyczne z rynku, który głównie rósł: powtórz oba kroki na swoich symbolach.
+• Najlepiej: okres RSI 4–5 i wejście przy 15–20, stąd domyślne 4 / 15.
+• Rok sprawdzenia dla 4 / 15: AAPL +8,9%, SPY +2,6% (RSI 2 / wejście 5: +6,3%). MSFT: brak przewagi (od −1,1% do +2,6%).
+• Obsunięcia zostały na poziomie 1,5–3%, ale strategia zawiera tylko 1–10 transakcji rocznie, więc pojedyncze wyniki niewiele znaczą.</value></data>
+  <data name="StrategyDoc_OpeningRangeBreakoutStrategy_TestResults" xml:space="preserve"><value>Optymalizacja na AAPL, MSFT i SPY od listopada 2024 do października 2025, potem sprawdzenie na listopadzie 2025 – październiku 2026. To wyniki historyczne z rynku, który głównie rósł: powtórz oba kroki na swoich symbolach.
+• Najlepszy zakres: 60 minut na AAPL i SPY (domyślny), 15 minut na MSFT; minimalny zakres między 0 a 0,5% prawie nie miał znaczenia.
+• Rok sprawdzenia: AAPL +5,6%, SPY +1,7%, MSFT +7,1% (15 minut). W płaskim roku MSFT trzymanie dało tylko +1,9% przy obsunięciu 31,5%.
+• Przy 50–160 transakcjach rocznie to najbardziej wiarygodne wyniki testów, ale przewaga poza okresem optymalizacji była mniejsza.</value></data>
+  <data name="StrategyDoc_BollingerReversionStrategy_TestResults" xml:space="preserve"><value>Optymalizacja na AAPL, MSFT i SPY od listopada 2024 do października 2025, potem sprawdzenie na listopadzie 2025 – październiku 2026. To wyniki historyczne z rynku, który głównie rósł: powtórz oba kroki na swoich symbolach.
+• Pojedyncze akcje: brak pewnej przewagi. AAPL tracił w roku optymalizacji; najlepsze ustawienie dla MSFT spadło z +28,9% do +3,8%, a kolejne traciły.
+• SPY: 20 godzin / 3σ dało +6,1%, a potem +3,6%; 10 godzin / 2σ +7,9%, a potem +7,7%.
+• Używaj jej raczej na indeksie niż na pojedynczej akcji.</value></data>
+  <data name="StrategyDoc_DonchianBreakoutStrategy_TestResults" xml:space="preserve"><value>Optymalizacja na AAPL, MSFT i SPY od listopada 2024 do października 2025, potem sprawdzenie na listopadzie 2025 – październiku 2026. To wyniki historyczne z rynku, który głównie rósł: powtórz oba kroki na swoich symbolach.
+• Słabo na wszystkich trzech: najlepsze wyniki sprawdzenia +2,3% (AAPL), +1,7% (SPY) i −2,3% (MSFT).
+• Tylko 1–4 transakcje rocznie: dzienne wybicia potrzebują dłuższych okresów albo większej liczby symboli, by coś pokazać.</value></data>
+  <data name="StrategyDoc_SmaCrossStrategy_TestResults" xml:space="preserve"><value>Optymalizacja na AAPL od października 2025 do października 2026, potem sprawdzenie na roku wcześniej (październik 2024 – październik 2025). To wyniki historyczne: powtórz oba kroki na swoich symbolach.
+• Wszystkie pięć najlepszych ustawień straciło 8–17% w roku sprawdzenia; w okresie optymalizacji dawały od −1,3% do +1%.
+• Najlepszy wynik optymalizacji dopasował się do szumu swojego okresu; nie używaj go bez sprawdzenia, które się utrzyma.</value></data>
 </root>

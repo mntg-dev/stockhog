@@ -9,9 +9,10 @@ namespace EmTrading.Strategies;
 /// Intraday opening range breakout on minute bars: records the high and low of the first minutes of the session,
 /// buys once if the price breaks above that range, stops out below the range low, and is always flat before the
 /// close, so no position is held overnight. Long only.
+/// The 60-minute default range held up best out of sample on AAPL and SPY, 2024–2026 (MSFT preferred 15).
 /// </summary>
 [Strategy("Opening range breakout", Description = "Intraday: buy a break above the first N minutes' high, stop at the range low, flat before the close. Long only.")]
-[StrategyParameter(RangeMinutes, "Opening range (minutes)", StrategyParameterType.Integer, 30, Minimum = 5, Maximum = 120,
+[StrategyParameter(RangeMinutes, "Opening range (minutes)", StrategyParameterType.Integer, 60, Minimum = 5, Maximum = 120,
     Description = "Minutes after the 9:30 open that define the range.",
     SuggestedFrom = 15, SuggestedTo = 60, SuggestedStep = 15)]
 [StrategyParameter(ExitMinutesBeforeClose, "Exit before close (minutes)", StrategyParameterType.Integer, 5, Minimum = 1, Maximum = 120,
