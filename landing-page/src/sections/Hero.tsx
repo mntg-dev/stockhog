@@ -10,10 +10,10 @@ export function Hero() {
         <h1 id="hero-title">{t.hero.title}</h1>
         <p className="lead">{t.hero.lead}</p>
         <div className="actions">
-          <a className="button primary" href="https://github.com/emskypl/em-trading/releases">
+          <a className="button primary" href="https://github.com/mntg-dev/em-trading/releases">
             {t.hero.download}
           </a>
-          <a className="button" href="https://github.com/emskypl/em-trading">
+          <a className="button" href="https://github.com/mntg-dev/em-trading">
             {t.hero.viewSource}
           </a>
         </div>

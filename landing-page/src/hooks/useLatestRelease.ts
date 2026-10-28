@@ -15,7 +15,7 @@ type Status = 'loading' | 'ready' | 'error'
 const CACHE_KEY = 'emtrading-latest-release-v2'
 // Written by the release workflow next to the installers in Azure Storage.
 const MANIFEST_URL = 'https://emtradingstorage.blob.core.windows.net/releases/latest.json'
-const RELEASES_API_URL = 'https://api.github.com/repos/emskypl/em-trading/releases/latest'
+const RELEASES_API_URL = 'https://api.github.com/repos/mntg-dev/em-trading/releases/latest'
 
 interface ManifestFile {
   name: string
