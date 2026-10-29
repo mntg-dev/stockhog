@@ -28,7 +28,7 @@ internal sealed class StorageOptionsPostConfigure : IPostConfigureOptions<Storag
         var root = StoragePathResolver.FindDefaultRoot(AppContext.BaseDirectory);
         options.DataFolder = StoragePathResolver.Resolve(root, options.DataFolder, "TradingData");
         options.ResultsFolder = StoragePathResolver.Resolve(root, options.ResultsFolder, "Results");
-        options.DatabaseFile = StoragePathResolver.Resolve(root, options.DatabaseFile, "stockhog.db");
+        options.DatabaseFile = StoragePathResolver.Resolve(root, options.DatabaseFile, LegacyDataMigration.DatabaseName);
     }
 }
 
@@ -46,7 +46,7 @@ internal static class StoragePathResolver
                 return dir.FullName;
         }
 
-        return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Stockhog");
+        return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), LegacyDataMigration.FolderName);
     }
 
     public static string Resolve(string root, string? configured, string defaultFolderName)

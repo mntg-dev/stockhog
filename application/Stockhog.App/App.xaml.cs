@@ -44,7 +44,13 @@ public partial class App : System.Windows.Application
 
         try
         {
+            // Data of the app's former name, EmTrading: copied before anything (logging, settings, the database) opens it.
+            var copiedFolder = LegacyDataMigration.CopyAppDataFolder(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData));
             _host = CreateHost(e.Args);
+            var copiedDatabase = LegacyDataMigration.CopyDatabase(_host.Services.GetRequiredService<IOptions<StorageOptions>>().Value.DatabaseFile);
+            if (copiedFolder || copiedDatabase)
+                Logger?.LogInformation("Copied EmTrading data: app data folder {Folder}, database {Database}", copiedFolder, copiedDatabase);
+
             await _host.StartAsync();
 
             // Every SymbolBox finds its suggestions through one of these resources; views are created after this point.
