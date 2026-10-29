@@ -1,0 +1,25 @@
+<Project Sdk="WixToolset.Sdk/7.0.0">
+
+  <PropertyGroup>
+    <OutputType>Package</OutputType>
+    <OutputName>Stockhog-Setup</OutputName>
+    <!-- Keep this installer project's extension package versions out of the app's central
+         Directory.Packages.props; it's a separate tool, not an app dependency. -->
+    <ManagePackageVersionsCentrally>false</ManagePackageVersionsCentrally>
+    <!-- WiX v7's Open Source Maintenance Fee EULA (https://www.firegiant.com/oss-maintenance-fee/):
+         source and binaries stay free to use; only organizations with >$10k/year revenue owe a fee.
+         This project doesn't, so we accept the EULA here instead of prompting on every build/CI run. -->
+    <AcceptEula>true</AcceptEula>
+    <!-- Overridden from CI: -p:PublishDir=<path> -p:ProductVersion=<x.y.z>, pointing at a folder with
+         Stockhog.App + Stockhog.EngineRunner already published self-contained for win-x64. -->
+    <PublishDir Condition="'$(PublishDir)' == ''">..\..\..\dist\</PublishDir>
+    <ProductVersion Condition="'$(ProductVersion)' == ''">0.1.0</ProductVersion>
+    <DefineConstants>PublishDir=$(PublishDir);ProductVersion=$(ProductVersion)</DefineConstants>
+    <SuppressIces>ICE61</SuppressIces>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="WixToolset.UI.wixext" Version="7.0.0" />
+  </ItemGroup>
+
+</Project>

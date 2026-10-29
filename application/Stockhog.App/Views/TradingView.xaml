@@ -1,0 +1,281 @@
+<UserControl x:Class="Stockhog.App.Views.TradingView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:loc="clr-namespace:Stockhog.Presentation.Localization;assembly=Stockhog.Presentation"
+             xmlns:controls="clr-namespace:Stockhog.Wpf.Controls;assembly=Stockhog.Wpf.Controls"
+             xmlns:charts="clr-namespace:Stockhog.Wpf.Controls.Charts;assembly=Stockhog.Wpf.Controls">
+    <UserControl.Resources>
+        <DataTemplate x:Key="LocalizedEnumItem">
+            <TextBlock Text="{Binding Converter={StaticResource LocalizedEnum}}" />
+        </DataTemplate>
+        <Style x:Key="SmallButton" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+            <Setter Property="Margin" Value="2" />
+            <Setter Property="Padding" Value="6,0" />
+            <Setter Property="MinHeight" Value="22" />
+        </Style>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!-- Title, paper badge, connections, kill switch -->
+        <DockPanel Margin="0,0,0,6">
+            <TextBlock Text="{loc:Tr Trading_Title}" Style="{StaticResource PageTitle}" DockPanel.Dock="Left" />
+            <Border DockPanel.Dock="Left" Background="#FFF3E0" BorderBrush="#FB8C00" BorderThickness="1" CornerRadius="3"
+                    Padding="6,1" Margin="10,0,0,0" VerticalAlignment="Center"
+                    Visibility="{Binding IsPaper, Converter={StaticResource BooleanToVisibility}}">
+                <TextBlock Text="{loc:Tr Trading_PaperBadge}" Foreground="#E65100" FontWeight="Bold" FontSize="11" />
+            </Border>
+            <Border DockPanel.Dock="Left" Background="#FFEBEE" BorderBrush="#C62828" BorderThickness="1" CornerRadius="3"
+                    Padding="6,1" Margin="10,0,0,0" VerticalAlignment="Center"
+                    Visibility="{Binding IsLive, Converter={StaticResource BooleanToVisibility}}">
+                <TextBlock Text="{loc:Tr Trading_LiveBadge}" Foreground="#B71C1C" FontWeight="Bold" FontSize="11" />
+            </Border>
+            <CheckBox DockPanel.Dock="Right" IsChecked="{Binding TradingEnabled}" Content="{loc:Tr Trading_KillSwitch}"
+                      VerticalAlignment="Center" ToolTip="{loc:Tr Trading_KillSwitchHint}" />
+            <!-- Live only: orders are refused until armed for the session. -->
+            <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" Margin="0,0,16,0" VerticalAlignment="Center"
+                        Visibility="{Binding IsLive, Converter={StaticResource BooleanToVisibility}}">
+                <TextBlock VerticalAlignment="Center" Margin="0,0,8,0" FontWeight="SemiBold">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Text" Value="{loc:Tr Trading_NotArmed}" />
+                            <Setter Property="Foreground" Value="Gray" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsArmed}" Value="True">
+                                    <Setter Property="Text" Value="{loc:Tr Trading_Armed}" />
+                                    <Setter Property="Foreground" Value="#B71C1C" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+                <Button Content="{loc:Tr Trading_Arm}" Command="{Binding ArmLiveTradingCommand}" Margin="0,0,4,0" />
+                <Button Content="{loc:Tr Trading_Disarm}" Command="{Binding DisarmLiveTradingCommand}" />
+            </StackPanel>
+            <ItemsControl ItemsSource="{Binding ConnectionStates}" VerticalAlignment="Center" Margin="16,0">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Margin="0,0,14,0" ToolTip="{Binding Detail}" Foreground="Gray">
+                            <Run Text="{Binding Name, Mode=OneWay}" />
+                            <Run Text=":" />
+                            <Run Text="{Binding State, Mode=OneWay, Converter={StaticResource LocalizedEnum}}" FontWeight="SemiBold" />
+                        </TextBlock>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </DockPanel>
+
+        <!-- Account -->
+        <Grid Grid.Row="1" Margin="0,0,0,8">
+            <UniformGrid Columns="4">
+                <controls:KpiCard Title="{loc:Tr Trading_Equity}" Value="{Binding EquityText}" Accent="{StaticResource AccentBrush}" />
+                <controls:KpiCard Title="{loc:Tr Trading_DayProfitLoss}" Value="{Binding DayProfitLossText}" Accent="{StaticResource PositiveBrush}" />
+                <controls:KpiCard Title="{loc:Tr Trading_BuyingPower}" Value="{Binding BuyingPowerText}" />
+                <controls:KpiCard Title="{loc:Tr Trading_Cash}" Value="{Binding CashText}" />
+            </UniformGrid>
+            <TextBlock Text="{Binding AccountError}" Foreground="{StaticResource NegativeBrush}" VerticalAlignment="Bottom" Margin="4,0,0,-14" FontSize="10" />
+        </Grid>
+
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="300" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <!-- Watchlist and order ticket -->
+            <Border Style="{StaticResource Card}" Margin="0,0,12,0">
+                <ScrollViewer Style="{StaticResource FormScrollViewer}">
+                    <StackPanel>
+                        <TextBlock Text="{loc:Tr Trading_Watchlist}" Style="{StaticResource SectionTitle}" />
+                        <DockPanel>
+                            <Button DockPanel.Dock="Right" Content="{loc:Tr Trading_ApplyWatchlist}" Command="{Binding ApplyWatchlistCommand}" Margin="4,0,0,0" />
+                            <controls:SymbolBox Text="{Binding WatchlistText}" AllowMultiple="True"
+                                                SuggestionProvider="{StaticResource SymbolSuggestions}" ToolTip="{loc:Tr Trading_WatchlistHint}"
+                                                AutomationProperties.Name="{loc:Tr Trading_Watchlist}" />
+                        </DockPanel>
+                        <DataGrid ItemsSource="{Binding Watchlist}" SelectedValue="{Binding SelectedSymbol}" SelectedValuePath="Symbol"
+                                  SelectionMode="Single" Height="190" Margin="0,6,0,0" HeadersVisibility="Column">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="{loc:Tr Field_Symbol}" Binding="{Binding Symbol}" Width="60" />
+                                <DataGridTextColumn Header="{loc:Tr Trading_Bid}" Binding="{Binding Bid, StringFormat=N2}" Width="*" />
+                                <DataGridTextColumn Header="{loc:Tr Trading_Ask}" Binding="{Binding Ask, StringFormat=N2}" Width="*" />
+                                <DataGridTextColumn Header="{loc:Tr Trading_Last}" Binding="{Binding Last, StringFormat=N2}" Width="*" />
+                            </DataGrid.Columns>
+                        </DataGrid>
+
+                        <TextBlock Text="{loc:Tr Ticket_Title}" Style="{StaticResource SectionTitle}" Margin="0,14,0,2" />
+                        <Grid DataContext="{Binding Ticket}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <StackPanel Margin="0,0,3,0">
+                                <TextBlock Text="{loc:Tr Field_Symbol}" Style="{StaticResource FieldLabel}" />
+                                <controls:SymbolBox Text="{Binding Symbol}" SuggestionProvider="{StaticResource SymbolSuggestions}"
+                                                    ToolTip="{loc:Tr Symbol_SearchHint}" AutomationProperties.Name="{loc:Tr Field_Symbol}" />
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" Margin="3,0,0,0">
+                                <TextBlock Text="{loc:Tr Ticket_Side}" Style="{StaticResource FieldLabel}" />
+                                <ComboBox ItemsSource="{Binding Sides}" SelectedItem="{Binding Side}" ItemTemplate="{StaticResource LocalizedEnumItem}" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="1" Margin="0,0,3,0">
+                                <TextBlock Text="{loc:Tr Ticket_Type}" Style="{StaticResource FieldLabel}" />
+                                <ComboBox ItemsSource="{Binding Types}" SelectedItem="{Binding Type}" ItemTemplate="{StaticResource LocalizedEnumItem}" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="1" Grid.Column="1" Margin="3,0,0,0">
+                                <TextBlock Text="{loc:Tr Ticket_Quantity}" Style="{StaticResource FieldLabel}" />
+                                <TextBox Text="{Binding Quantity, UpdateSourceTrigger=PropertyChanged}" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="2" Margin="0,0,3,0" Visibility="{Binding HasLimitPrice, Converter={StaticResource BooleanToVisibility}}">
+                                <TextBlock Text="{loc:Tr Ticket_LimitPrice}" Style="{StaticResource FieldLabel}" />
+                                <TextBox Text="{Binding LimitPrice, UpdateSourceTrigger=PropertyChanged}" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="2" Grid.Column="1" Margin="3,0,0,0" Visibility="{Binding HasStopPrice, Converter={StaticResource BooleanToVisibility}}">
+                                <TextBlock Text="{loc:Tr Ticket_StopPrice}" Style="{StaticResource FieldLabel}" />
+                                <TextBox Text="{Binding StopPrice, UpdateSourceTrigger=PropertyChanged}" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="3" Margin="0,0,3,0">
+                                <TextBlock Text="{loc:Tr Ticket_TimeInForce}" Style="{StaticResource FieldLabel}" />
+                                <ComboBox ItemsSource="{Binding TimesInForce}" SelectedItem="{Binding TimeInForce}" ItemTemplate="{StaticResource LocalizedEnumItem}" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="3" Grid.Column="1" Margin="3,0,0,0">
+                                <TextBlock Text="{loc:Tr Ticket_Estimated}" Style="{StaticResource FieldLabel}" />
+                                <TextBlock Text="{Binding EstimatedValue, StringFormat=N2, TargetNullValue=–}" FontWeight="SemiBold" Margin="0,4,0,0" />
+                            </StackPanel>
+                        </Grid>
+                        <TextBlock Text="{Binding Ticket.Error}" Foreground="{StaticResource NegativeBrush}" FontSize="10" TextWrapping="Wrap" Margin="0,4,0,0" />
+                        <!-- Shown when the assistant filled in the ticket: its reason; the user still decides. -->
+                        <Border Background="#FFF6DD" CornerRadius="4" Padding="6,4" Margin="0,6,0,0">
+                            <Border.Style>
+                                <Style TargetType="Border">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Ticket.ProposalNote}" Value="{x:Null}">
+                                            <Setter Property="Visibility" Value="Collapsed" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+                            <TextBlock TextWrapping="Wrap" FontSize="11">
+                                <Run Text="{loc:Tr Ticket_ProposedBy}" FontWeight="SemiBold" /> <Run Text="{Binding Ticket.ProposalNote, Mode=OneWay}" />
+                            </TextBlock>
+                        </Border>
+                        <Button Content="{loc:Tr Ticket_Submit}" Command="{Binding PlaceOrderCommand}" Style="{StaticResource PrimaryButton}" Margin="0,8,0,4" />
+                        <TextBlock Text="{loc:Tr Ticket_Hint}" Foreground="Gray" FontSize="10" TextWrapping="Wrap" />
+                    </StackPanel>
+                </ScrollViewer>
+            </Border>
+
+            <!-- Chart, positions, orders -->
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" MinHeight="180" />
+                    <RowDefinition Height="6" />
+                    <RowDefinition Height="*" MinHeight="160" />
+                </Grid.RowDefinitions>
+
+                <Border Style="{StaticResource Card}">
+                    <DockPanel>
+                        <TextBlock DockPanel.Dock="Top" Style="{StaticResource SectionTitle}">
+                            <Run Text="{loc:Tr Trading_LiveChart}" />
+                            <Run Text="{Binding SelectedSymbol, Mode=OneWay}" />
+                        </TextBlock>
+                        <charts:PriceChart Bars="{Binding Bars}" PriceLabel="{loc:Tr Chart_Price}" />
+                    </DockPanel>
+                </Border>
+
+                <GridSplitter Grid.Row="1" HorizontalAlignment="Stretch" Background="Transparent" />
+
+                <TabControl Grid.Row="2" Background="White">
+                    <TabItem Header="{loc:Tr Trading_TabPositions}">
+                        <DockPanel>
+                            <StackPanel DockPanel.Dock="Top" Style="{StaticResource Toolbar}">
+                                <Button Content="{loc:Tr Common_Refresh}" Command="{Binding RefreshAccountCommand}" Margin="0,0,6,0" />
+                                <Button Content="{loc:Tr Trading_CloseAll}" Command="{Binding CloseAllCommand}" />
+                            </StackPanel>
+                            <DataGrid ItemsSource="{Binding Positions}">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="{loc:Tr Field_Symbol}" Binding="{Binding Symbol}" Width="70" />
+                                    <DataGridTextColumn Header="{loc:Tr Ticket_Quantity}" Binding="{Binding Quantity, StringFormat=0.#########}" Width="80" />
+                                    <DataGridTextColumn Header="{loc:Tr Trading_AveragePrice}" Binding="{Binding AverageEntryPrice, StringFormat=N2}" Width="90" />
+                                    <DataGridTextColumn Header="{loc:Tr Trading_Last}" Binding="{Binding CurrentPrice, StringFormat=N2}" Width="80" />
+                                    <DataGridTextColumn Header="{loc:Tr Trading_MarketValue}" Binding="{Binding MarketValue, StringFormat=N2}" Width="100" />
+                                    <DataGridTextColumn Header="{loc:Tr Trading_UnrealizedPl}" Binding="{Binding UnrealizedProfitLoss, StringFormat=N2}" Width="100" />
+                                    <DataGridTextColumn Header="%" Binding="{Binding UnrealizedProfitLossPercent, StringFormat=N2}" Width="60" />
+                                    <DataGridTemplateColumn Width="*">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Button Content="{loc:Tr Trading_Close}" Style="{StaticResource SmallButton}" HorizontalAlignment="Left"
+                                                        Command="{Binding DataContext.ClosePositionCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                        CommandParameter="{Binding Symbol}" AutomationProperties.Name="{Binding Symbol}" />
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </DockPanel>
+                    </TabItem>
+                    <TabItem Header="{loc:Tr Trading_TabOrders}">
+                        <DockPanel>
+                            <StackPanel DockPanel.Dock="Top" Style="{StaticResource Toolbar}">
+                                <CheckBox Content="{loc:Tr Trading_OpenOnly}" IsChecked="{Binding OpenOrdersOnly}" VerticalAlignment="Center" />
+                            </StackPanel>
+                            <DataGrid ItemsSource="{Binding Orders}">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="{loc:Tr History_Created}" Binding="{Binding CreatedAt.LocalDateTime, StringFormat=T}" Width="70" />
+                                    <DataGridTextColumn Header="{loc:Tr Field_Symbol}" Binding="{Binding Symbol}" Width="60" />
+                                    <DataGridTextColumn Header="{loc:Tr Ticket_Side}" Binding="{Binding Side, Converter={StaticResource LocalizedEnum}}" Width="70" />
+                                    <DataGridTextColumn Header="{loc:Tr Ticket_Type}" Binding="{Binding Type, Converter={StaticResource LocalizedEnum}}" Width="80" />
+                                    <DataGridTextColumn Header="{loc:Tr Ticket_Quantity}" Binding="{Binding Quantity, StringFormat=0.#########}" Width="65" />
+                                    <DataGridTextColumn Header="{loc:Tr Ticket_LimitPrice}" Binding="{Binding LimitPrice, StringFormat=N2}" Width="70" />
+                                    <DataGridTextColumn Header="{loc:Tr Ticket_StopPrice}" Binding="{Binding StopPrice, StringFormat=N2}" Width="70" />
+                                    <DataGridTextColumn Header="{loc:Tr History_Status}" Binding="{Binding Status, Converter={StaticResource LocalizedEnum}}" Width="100" />
+                                    <DataGridTextColumn Header="{loc:Tr Trading_Filled}" Binding="{Binding FilledQuantity, StringFormat=0.#########}" Width="65" />
+                                    <DataGridTextColumn Header="{loc:Tr Trading_AveragePrice}" Binding="{Binding AverageFillPrice, StringFormat=N2}" Width="80" />
+                                    <DataGridTextColumn Header="{loc:Tr History_Error}" Binding="{Binding RejectReason}" Width="*" />
+                                    <DataGridTemplateColumn Width="80">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Button Content="{loc:Tr Common_Cancel}" Style="{StaticResource SmallButton}" IsEnabled="{Binding IsCancellable}"
+                                                        Command="{Binding DataContext.CancelOrderCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                        CommandParameter="{Binding}" AutomationProperties.Name="{Binding ClientOrderId}" />
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </DockPanel>
+                    </TabItem>
+                    <TabItem Header="{loc:Tr Trading_TabAudit}">
+                        <DataGrid ItemsSource="{Binding AuditLog}">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="{loc:Tr Audit_Time}" Binding="{Binding Time.LocalDateTime, StringFormat=G}" Width="140" />
+                                <DataGridTextColumn Header="{loc:Tr Audit_Mode}" Binding="{Binding Mode, Converter={StaticResource LocalizedEnum}}" Width="60" />
+                                <DataGridTextColumn Header="{loc:Tr Audit_Category}" Binding="{Binding Category, Converter={StaticResource LocalizedEnum}}" Width="80" />
+                                <DataGridTextColumn Header="{loc:Tr Audit_Action}" Binding="{Binding Action}" Width="110" />
+                                <DataGridTextColumn Header="{loc:Tr Field_Symbol}" Binding="{Binding Symbol}" Width="60" />
+                                <DataGridTextColumn Header="{loc:Tr Audit_Order}" Binding="{Binding ClientOrderId}" Width="190" />
+                                <DataGridTextColumn Header="{loc:Tr Audit_Details}" Binding="{Binding Details}" Width="*" />
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </TabItem>
+                </TabControl>
+            </Grid>
+        </Grid>
+    </Grid>
+</UserControl>

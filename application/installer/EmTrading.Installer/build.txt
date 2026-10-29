@@ -1,1 +1,0 @@
-﻿dotnet build "D:\development\my_projects\em-trading-app\application\installer\EmTrading.Installer\EmTrading.Installer.wixproj" -c Release -p:PublishDir="D:\development\my_projects\em-trading-app\dist" -p:ProductVersion=0.1.0

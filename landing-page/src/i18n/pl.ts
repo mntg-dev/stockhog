@@ -19,7 +19,7 @@ export const pl: typeof en = {
     download: 'Pobierz dla Windows',
     viewSource: 'Zobacz na GitHub',
     imageAlt:
-      'Strona handlu na koncie demo w EmTrading: lista obserwowanych instrumentów, świece minutowe, zlecenie i pozycje',
+      'Strona handlu na koncie demo w Stockhog: lista obserwowanych instrumentów, świece minutowe, zlecenie i pozycje',
   },
   features: {
     title: 'Wszystko, czego potrzebujesz, zanim zaryzykujesz prawdziwe pieniądze',
@@ -91,7 +91,7 @@ export const pl: typeof en = {
     steps: [
       {
         title: 'Pobierz dane rynkowe',
-        desc: 'Wybierz instrumenty — EmTrading pobiera historyczne notowania i trzyma je na bieżąco.',
+        desc: 'Wybierz instrumenty — Stockhog pobiera historyczne notowania i trzyma je na bieżąco.',
       },
       {
         title: 'Testuj i optymalizuj',
@@ -142,7 +142,7 @@ export const pl: typeof en = {
     quickStart: [
       'Uruchom instalator (albo rozpakuj wersję przenośną)',
       'Dodaj swoje klucze API Alpaca do appsettings.json (Alpaca:ApiKey / Alpaca:ApiSecret) albo ustaw je jako zmienne środowiskowe',
-      'Uruchom EmTrading.App.exe',
+      'Uruchom Stockhog.App.exe',
     ],
     smartScreenNote:
       'Windows SmartScreen może ostrzec przed nierozpoznaną aplikacją przy pierwszym uruchomieniu, bo nie jest jeszcze podpisana cyfrowo. Kliknij „Więcej informacji”, a potem „Uruchom mimo to”.',
@@ -160,7 +160,7 @@ export const pl: typeof en = {
     items: [
       {
         q: 'Czy to porada finansowa?',
-        a: 'Nie. EmTrading to narzędzie do badań i testowania. Nic w aplikacji ani na tej stronie nie jest poradą finansową.',
+        a: 'Nie. Stockhog to narzędzie do badań i testowania. Nic w aplikacji ani na tej stronie nie jest poradą finansową.',
       },
       {
         q: 'Konto demo czy prawdziwe?',

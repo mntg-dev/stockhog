@@ -1,0 +1,52 @@
+<UserControl x:Class="Stockhog.App.Views.GuideView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:loc="clr-namespace:Stockhog.Presentation.Localization;assembly=Stockhog.Presentation">
+    <ScrollViewer Style="{StaticResource FormScrollViewer}">
+        <StackPanel MaxWidth="900" HorizontalAlignment="Left">
+            <TextBlock Text="{loc:Tr Guide_Title}" Style="{StaticResource PageTitle}" />
+            <TextBlock Text="{loc:Tr Guide_Intro}" TextWrapping="Wrap" Foreground="Gray" Margin="0,0,0,12" />
+
+            <ItemsControl ItemsSource="{Binding Sections}" Focusable="False">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border Style="{StaticResource Card}" Margin="0,0,0,12">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+
+                                <!-- Keys come from data, so they go through LocalizeKey to follow language changes. -->
+                                <TextBlock Style="{StaticResource SectionTitle}">
+                                    <TextBlock.Text>
+                                        <MultiBinding Converter="{StaticResource LocalizeKey}">
+                                            <Binding Path="TitleKey" />
+                                            <Binding Path="Culture" Source="{x:Static loc:Loc.Instance}" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
+                                <Button Grid.Column="1" Content="{loc:Tr Guide_OpenPage}" VerticalAlignment="Top"
+                                        Command="{Binding DataContext.OpenPageCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                        CommandParameter="{Binding PageType}"
+                                        Visibility="{Binding HasPage, Converter={StaticResource BooleanToVisibility}}" />
+                                <TextBlock Grid.Row="1" Grid.ColumnSpan="2" TextWrapping="Wrap" LineHeight="20" Margin="0,4,0,0">
+                                    <TextBlock.Text>
+                                        <MultiBinding Converter="{StaticResource LocalizeKey}">
+                                            <Binding Path="BodyKey" />
+                                            <Binding Path="Culture" Source="{x:Static loc:Loc.Instance}" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

@@ -17,7 +17,7 @@ export function Header() {
     <header className="site-header">
       <div className="site-header-inner">
         <a className="brand" href="#top">
-          EmTrading
+          Stockhog
         </a>
 
         <nav className={`main-nav ${menuOpen ? 'open' : ''}`} aria-label="Primary">

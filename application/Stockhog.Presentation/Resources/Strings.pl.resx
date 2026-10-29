@@ -1,0 +1,663 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generated from one table of English/Polish pairs, so both cultures always define the same keys. -->
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="App_Title" xml:space="preserve"><value>Stockhog – backtesty i dane rynkowe</value></data>
+  <data name="Nav_Backtest" xml:space="preserve"><value>Backtest</value></data>
+  <data name="Nav_History" xml:space="preserve"><value>Historia</value></data>
+  <data name="Nav_MarketData" xml:space="preserve"><value>Dane rynkowe</value></data>
+  <data name="Nav_Jobs" xml:space="preserve"><value>Zadania</value></data>
+  <data name="Nav_Logs" xml:space="preserve"><value>Logi</value></data>
+  <data name="Nav_Settings" xml:space="preserve"><value>Ustawienia</value></data>
+  <data name="Nav_Guide" xml:space="preserve"><value>Przewodnik</value></data>
+  <data name="Nav_Compare" xml:space="preserve"><value>Porównanie</value></data>
+  <data name="Nav_Assistant" xml:space="preserve"><value>Asystent AI</value></data>
+  <data name="Compare_Title" xml:space="preserve"><value>Porównanie spółek</value></data>
+  <data name="Compare_SymbolsHint" xml:space="preserve"><value>Do 100 symboli oddzielonych przecinkami; wpisz ticker lub nazwę spółki, aby zobaczyć podpowiedzi.</value></data>
+  <data name="Compare_DownloadData" xml:space="preserve"><value>1. Pobierz dane</value></data>
+  <data name="Compare_RunBacktests" xml:space="preserve"><value>2. Uruchom backtesty</value></data>
+  <data name="Compare_RunHint" xml:space="preserve"><value>Oba kroki działają jako zadania w tle (zob. Zadania). Backtesty używają domyślnych parametrów strategii; aby je zmienić, użyj strony Backtest. Wyniki pojawiają się w tabeli w miarę kończenia.</value></data>
+  <data name="Compare_Ranking" xml:space="preserve"><value>Ranking</value></data>
+  <data name="Compare_AllStrategies" xml:space="preserve"><value>Wszystkie strategie</value></data>
+  <data name="Compare_LatestOnly" xml:space="preserve"><value>Najnowszy przebieg na symbol</value></data>
+  <data name="Compare_OnlyListed" xml:space="preserve"><value>Tylko symbole z listy</value></data>
+  <data name="Compare_ChartSelected" xml:space="preserve"><value>Wykres zaznaczonych</value></data>
+  <data name="Compare_ChartHint" xml:space="preserve"><value>Skumulowany zwrot maksymalnie 8 zaznaczonych przebiegów na jednym wykresie (zaznaczanie z Ctrl lub Shift).</value></data>
+  <data name="Compare_AskAssistant" xml:space="preserve"><value>Zapytaj asystenta</value></data>
+  <data name="Compare_AskAssistantHint" xml:space="preserve"><value>Prosi asystenta AI o ocenę zaznaczonych przebiegów albo 10 najlepszych, gdy nic nie jest zaznaczone.</value></data>
+  <data name="Compare_AssistantPrompt" xml:space="preserve"><value>Porównaj najnowsze backtesty dla {0}. Które wyglądają najlepiej po uwzględnieniu ryzyka, które wyniki są mało wiarygodne i czy któraś pozycja byłaby warta otwarcia przy moim koncie i limitach ryzyka?</value></data>
+  <data name="Compare_NetProfit" xml:space="preserve"><value>Zysk netto %</value></data>
+  <data name="Compare_MaxDrawdown" xml:space="preserve"><value>Maks. obs. %</value></data>
+  <data name="Compare_ReturnOverDrawdown" xml:space="preserve"><value>Zwrot/obs.</value></data>
+  <data name="Compare_WinRate" xml:space="preserve"><value>Skuteczność %</value></data>
+  <data name="Compare_Empty" xml:space="preserve"><value>Nie ma jeszcze zakończonych backtestów do porównania. Wpisz symbole po lewej, pobierz dane, a potem uruchom backtesty.</value></data>
+  <data name="Assistant_Title" xml:space="preserve"><value>Asystent AI</value></data>
+  <data name="Assistant_Model" xml:space="preserve"><value>Model:</value></data>
+  <data name="Assistant_NewChat" xml:space="preserve"><value>Nowa rozmowa</value></data>
+  <data name="Assistant_OpenSettings" xml:space="preserve"><value>Otwórz Ustawienia</value></data>
+  <data name="Assistant_NoKey" xml:space="preserve"><value>Asystent potrzebuje klucza API Anthropic. Wpisz go w Ustawienia → Asystent AI.</value></data>
+  <data name="Assistant_Intro" xml:space="preserve"><value>Pytaj o wyniki backtestów, np. „Które z porównywanych spółek wyglądają najlepiej po uwzględnieniu ryzyka?” albo „Czy wynik AAPL jest wiarygodny?”. Asystent czyta ranking, szczegóły przebiegów, aktualne ceny, Twoje konto i limity ryzyka. Może wypełnić formularz zlecenia do Twojej oceny, ale nigdy nie składa zleceń. Jego odpowiedzi to analiza, nie porada inwestycyjna.</value></data>
+  <data name="Assistant_OpenTrading" xml:space="preserve"><value>Otwórz Handel (paper)</value></data>
+  <data name="Assistant_Send" xml:space="preserve"><value>Wyślij</value></data>
+  <data name="Assistant_Stop" xml:space="preserve"><value>Zatrzymaj</value></data>
+  <data name="Assistant_InputHint" xml:space="preserve"><value>Wpisz pytanie i naciśnij Enter.</value></data>
+  <data name="Assistant_Stopped" xml:space="preserve"><value> (zatrzymano)</value></data>
+  <data name="Assistant_ToolGeneric" xml:space="preserve"><value>Używam {0}…</value></data>
+  <data name="Assistant_Tool_get_run_ranking" xml:space="preserve"><value>Czytam ranking backtestów…</value></data>
+  <data name="Assistant_Tool_get_run_details" xml:space="preserve"><value>Czytam szczegóły przebiegu…</value></data>
+  <data name="Assistant_Tool_list_strategies" xml:space="preserve"><value>Czytam listę strategii…</value></data>
+  <data name="Assistant_Tool_get_best_parameters" xml:space="preserve"><value>Czytam wyniki Twoich optymalizacji…</value></data>
+  <data name="Assistant_Tool_get_market_data_coverage" xml:space="preserve"><value>Sprawdzam zapisane dane rynkowe…</value></data>
+  <data name="Assistant_Tool_get_latest_prices" xml:space="preserve"><value>Pobieram aktualne ceny…</value></data>
+  <data name="Assistant_Tool_get_account" xml:space="preserve"><value>Czytam konto i pozycje…</value></data>
+  <data name="Assistant_Tool_get_risk_limits" xml:space="preserve"><value>Czytam limity ryzyka…</value></data>
+  <data name="Assistant_Tool_propose_order_ticket" xml:space="preserve"><value>Wypełniam formularz zlecenia…</value></data>
+  <data name="Assistant_ProposalNote" xml:space="preserve"><value>Formularz zlecenia wypełniony: {0} {1} {2}. Nic nie zostało wysłane; sprawdź go na stronie Handel (paper) i zdecyduj sam.</value></data>
+  <data name="Ticket_ProposedBy" xml:space="preserve"><value>Propozycja asystenta:</value></data>
+  <data name="Settings_Assistant" xml:space="preserve"><value>Asystent AI</value></data>
+  <data name="Settings_ApiKey" xml:space="preserve"><value>Klucz API Anthropic</value></data>
+  <data name="Settings_SaveApiKey" xml:space="preserve"><value>Zapisz klucz</value></data>
+  <data name="Settings_RemoveApiKey" xml:space="preserve"><value>Usuń klucz</value></data>
+  <data name="Settings_ApiKeyHint" xml:space="preserve"><value>Klucz utworzysz na console.anthropic.com. Jest zapisywany w postaci zaszyfrowanej dla Twojego konta Windows na tym komputerze i służy tylko do rozmowy z asystentem; użycie jest rozliczane na Twoim koncie Anthropic.</value></data>
+  <data name="Settings_AssistantReady" xml:space="preserve"><value>Gotowy, model {0}.</value></data>
+  <data name="Settings_AssistantNoKey" xml:space="preserve"><value>Brak klucza API: asystent jest wyłączony.</value></data>
+  <data name="Status_ApiKeySaved" xml:space="preserve"><value>Zapisano klucz API.</value></data>
+  <data name="Status_ApiKeyRemoved" xml:space="preserve"><value>Usunięto klucz API.</value></data>
+  <data name="Status_TicketProposed" xml:space="preserve"><value>Asystent wypełnił formularz zlecenia dla {0}; sprawdź go przed złożeniem.</value></data>
+  <data name="Guide_Compare_Title" xml:space="preserve"><value>6. Porównanie wielu spółek</value></data>
+  <data name="Guide_Compare_Body" xml:space="preserve"><value>Strona Porównanie testuje jedną strategię na maksymalnie 100 symbolach i układa wyniki w ranking.
+• Wybierz strategię, wpisz symbole i okres, kliknij 1. Pobierz dane, poczekaj na zadania, potem 2. Uruchom backtesty.
+• Tabela rankingu wypełnia się w miarę kończenia przebiegów. Kliknij nagłówek kolumny, aby sortować, np. po Zwrot/obs. (zysk na jednostkę obsunięcia) albo wskaźniku Sharpe'a.
+• Najnowszy przebieg na symbol ukrywa starsze przebiegi tego samego symbolu; Wszystkie strategie pokazuje też przebiegi innych strategii.
+• Zaznacz przebiegi (Ctrl lub Shift) i kliknij Wykres zaznaczonych, aby zobaczyć ich zwroty razem, albo Pokaż wyniki, aby otworzyć jeden.</value></data>
+  <data name="Guide_Assistant_Title" xml:space="preserve"><value>9. Asystent AI</value></data>
+  <data name="Guide_Assistant_Body" xml:space="preserve"><value>Asystent (Claude od Anthropic) pomaga czytać wyniki i zastanowić się nad pozycjami.
+• Wpisz klucz API Anthropic w Ustawienia → Asystent AI; jest zapisywany w postaci zaszyfrowanej dla Twojego konta Windows.
+• Pytaj po polsku lub po angielsku. Sam sprawdza ranking, szczegóły przebiegów, aktualne ceny, Twoje konto i limity ryzyka.
+• Na stronie Porównanie przycisk Zapytaj asystenta wysyła mu zaznaczone przebiegi.
+• Może wypełnić formularz zlecenia na stronie Handel (paper), ale nigdy nie składa zleceń: to Ty je sprawdzasz i składasz, a kontrole ryzyka nadal działają.
+• Jego odpowiedzi to analiza oparta na danych historycznych, nie porada inwestycyjna.</value></data>
+  <data name="Guide_Title" xml:space="preserve"><value>Jak korzystać z Stockhog</value></data>
+  <data name="Guide_Intro" xml:space="preserve"><value>Sekcje idą typową ścieżką: od pobrania danych, przez testowanie i dostrajanie strategii, do transakcji na koncie paper. Każda sekcja otwiera swoją stronę.</value></data>
+  <data name="Guide_OpenPage" xml:space="preserve"><value>Otwórz stronę</value></data>
+  <data name="Guide_Start_Title" xml:space="preserve"><value>1. Pierwsze uruchomienie: klucze i język</value></data>
+  <data name="Guide_Start_Body" xml:space="preserve"><value>Dane rynkowe i handel na koncie paper pochodzą z Alpaca. Załóż darmowe konto na alpaca.markets i wygeneruj klucze API dla konta paper.
+• Zapisz klucze jako zmienne środowiskowe użytkownika Windows Alpaca__ApiKey i Alpaca__ApiSecret (dwa podkreślenia), a potem uruchom aplikację ponownie. Przy pracy ze źródłami działają też user secrets (zob. README).
+• Backtesty na już pobranych danych działają bez kluczy.
+• Język: Ustawienia → Język od razu przełącza między polskim a angielskim.
+• Ustawienia → Wartości domyślne ustalają symbole i kapitał, od których startują formularze.</value></data>
+  <data name="Guide_MarketData_Title" xml:space="preserve"><value>2. Pobieranie danych rynkowych</value></data>
+  <data name="Guide_MarketData_Body" xml:space="preserve"><value>Strategie są testowane na danych zapisanych na tym komputerze, więc najpierw je pobierz.
+• Wpisz symbole (np. AAPL, MSFT), wybierz interwał (Minutowy dla wbudowanych strategii) i okres, potem kliknij Pobierz.
+• Każdy symbol to osobne zadanie w tle; dane dzienne SPY są dodawane automatycznie jako benchmark.
+• Ponowne pobranie ściąga tylko brakujące dni, więc codzienna aktualizacja trwa sekundy.
+• Zapisane lokalnie pokazuje, co już masz; zaznacz wiersz, aby zobaczyć podgląd świec.</value></data>
+  <data name="Guide_Backtest_Title" xml:space="preserve"><value>3. Backtest</value></data>
+  <data name="Guide_Backtest_Body" xml:space="preserve"><value>Backtest odtwarza strategię na danych historycznych i pokazuje, jak by sobie poradziła.
+• Wybierz symbol, okres, kapitał początkowy i strategię. Jej parametry pojawiają się poniżej i są sprawdzane w trakcie wpisywania.
+• Uruchom backtest startuje silnik; pasek stanu pokazuje postęp, a Anuluj go przerywa.
+• Raport: kluczowe wskaźniki na górze, dalej Kapitał i obsunięcie, Cena i transakcje (wejścia i wyjścia na wykresie), Dziennik transakcji i Analiza.
+• Uruchomienia w tle: wpisz listę symboli i kliknij Uruchom dla listy w tle, aby sprawdzić ten sam układ na wszystkich. Naraz działają maksymalnie trzy; wyniki trafiają do Historii.</value></data>
+  <data name="Guide_History_Title" xml:space="preserve"><value>5. Historia i porównywanie przebiegów</value></data>
+  <data name="Guide_History_Body" xml:space="preserve"><value>Każdy przebieg jest zapisywany, także nieudane i anulowane.
+• Pokaż wyniki otwiera raport przebiegu na stronie Backtest (działa też dwuklik).
+• Zaznacz od 2 do 8 zakończonych przebiegów z Ctrl lub Shift i kliknij Porównaj zaznaczone, aby zobaczyć ich wskaźniki obok siebie i zwroty na jednym wykresie.
+• Analizuj ryzyko otwiera zaznaczony przebieg na stronie Analiza ryzyka.</value></data>
+  <data name="Guide_Optimization_Title" xml:space="preserve"><value>7. Optymalizacja parametrów</value></data>
+  <data name="Guide_Optimization_Body" xml:space="preserve"><value>Optymalizacja uruchamia backtest dla każdej kombinacji zmienianych parametrów i wskazuje najlepszą.
+• Zaznacz zmieniaj przy parametrach do sprawdzenia i ustaw od, do i krok; formularz pokazuje, ile to daje kombinacji.
+• Wybierz Cel (wskaźnik Sharpe'a, zysk netto albo zwrot podzielony przez maksymalne obsunięcie) i liczbę równoległych procesów silnika.
+• Mapa cieplna pokazuje wynik każdej kombinacji, najlepsza jest obramowana.
+• Użyj najlepszych parametrów kopiuje je do formularza backtestu. Pamiętaj, że najlepszy wynik na danych historycznych to często częściowo szczęście: sprawdź go na innym okresie, zanim mu zaufasz.
+• Sprawdź na innym okresie uruchamia najlepsze próby ponownie na dniach, których optymalizacja nie widziała, np. na roku po niej. Kolumny „spr.” na karcie Próby pokazują, jak każda się utrzymała; warto używać parametrów, które tam nadal są dobre.</value></data>
+  <data name="Guide_Analysis_Title" xml:space="preserve"><value>8. Analiza ryzyka (Monte Carlo)</value></data>
+  <data name="Guide_Analysis_Body" xml:space="preserve"><value>Jeden backtest to jedna możliwa historia. Analiza ryzyka odtwarza te same transakcje tysiące razy, aby pokazać, o ile gorzej mogło pójść.
+• Losowa kolejność zachowuje wszystkie transakcje i zmienia tylko ich kolejność: wynik końcowy jest stały, zmieniają się obsunięcia.
+• Bootstrap losuje transakcje ze zwracaniem, więc zmienia się też wynik końcowy.
+• Czytaj prawdopodobieństwo straty i percentyle: obsunięcie 15% na 95. percentylu znaczy, że 1 symulacja na 20 wypadła gorzej.</value></data>
+  <data name="Guide_Trading_Title" xml:space="preserve"><value>10. Handel na koncie paper</value></data>
+  <data name="Guide_Trading_Body" xml:space="preserve"><value>Zlecenia trafiają na Twoje konto paper w Alpaca: prawdziwe ceny rynkowe, bez prawdziwych pieniędzy.
+• Obserwowane: wpisz symbole i kliknij Zastosuj, aby śledzić ich ceny na żywo.
+• Zlecenie: wybierz stronę, typ, ilość i ważność. Złóż zlecenie sprawdza limity ryzyka i prosi o potwierdzenie, zanim cokolwiek zostanie wysłane.
+• Pozycje i Zlecenia pokazują, co masz i co czeka na realizację; Zamknij i Zamknij wszystkie pozycje wychodzą zleceniami rynkowymi.
+• Handel włączony to wyłącznik awaryjny: gdy wyłączony, przyjmowane są tylko zlecenia zmniejszające pozycję. Wyłącza się sam po osiągnięciu dziennego limitu straty.
+• Dziennik audytu zapisuje każdy krok, także odrzucone zlecenia.</value></data>
+  <data name="Guide_Jobs_Title" xml:space="preserve"><value>11. Zadania w tle i logi</value></data>
+  <data name="Guide_Jobs_Body" xml:space="preserve"><value>Pobierania, backtesty w tle, optymalizacje i odświeżanie listy symboli działają jako zadania, więc aplikacja nie zamarza.
+• Zadania pokazują ich postęp; tam też można zadanie anulować.
+• Liczba aktywnych zadań jest zawsze widoczna na pasku stanu.
+• Logi pokazują, co robi aplikacja, co pomaga, gdy coś się nie uda.</value></data>
+  <data name="Guide_Symbols_Title" xml:space="preserve"><value>Wskazówka: wyszukiwanie symboli</value></data>
+  <data name="Guide_Symbols_Body" xml:space="preserve"><value>Aplikacja przechowuje listę amerykańskich akcji i ETF-ów z Alpaca i odświeża ją co tydzień (Dane rynkowe → Odśwież symbole).
+• W każdym polu symbolu wpisz ticker albo część nazwy spółki, np. „micro” lub „nvidia”.
+• Strzałki w górę i w dół przechodzą po podpowiedziach, Enter lub Tab wybiera, Escape zamyka listę.
+• W polach na kilka symboli po wybranym symbolu pojawia się przecinek, więc od razu można wpisać kolejny.</value></data>
+  <data name="Shell_ActiveJobs" xml:space="preserve"><value>Aktywne zadania:</value></data>
+  <data name="Common_Cancel" xml:space="preserve"><value>Anuluj</value></data>
+  <data name="Common_Refresh" xml:space="preserve"><value>Odśwież</value></data>
+  <data name="Common_Save" xml:space="preserve"><value>Zapisz</value></data>
+  <data name="Field_Symbol" xml:space="preserve"><value>Symbol</value></data>
+  <data name="Field_SymbolList" xml:space="preserve"><value>Symbole (oddzielone przecinkami)</value></data>
+  <data name="Field_StartDate" xml:space="preserve"><value>Od</value></data>
+  <data name="Field_EndDate" xml:space="preserve"><value>Do</value></data>
+  <data name="Field_InitialCapital" xml:space="preserve"><value>Kapitał początkowy ($)</value></data>
+  <data name="Field_Strategy" xml:space="preserve"><value>Strategia</value></data>
+  <data name="Field_Timeframe" xml:space="preserve"><value>Interwał</value></data>
+  <data name="Backtest_Title" xml:space="preserve"><value>Backtest</value></data>
+  <data name="Backtest_Run" xml:space="preserve"><value>Uruchom backtest</value></data>
+  <data name="Backtest_LoadLatest" xml:space="preserve"><value>Wczytaj ostatni</value></data>
+  <data name="Backtest_BatchTitle" xml:space="preserve"><value>Uruchomienia w tle</value></data>
+  <data name="Backtest_BatchHint" xml:space="preserve"><value>Uruchamia wybraną strategię dla każdego symbolu jako równoległe zadania w tle.</value></data>
+  <data name="Backtest_RunBatch" xml:space="preserve"><value>Uruchom dla listy w tle</value></data>
+  <data name="Backtest_NoReport" xml:space="preserve"><value>Brak raportu – uruchom backtest lub otwórz go z historii.</value></data>
+  <data name="Backtest_TabEquity" xml:space="preserve"><value>Kapitał i obsunięcie</value></data>
+  <data name="Backtest_TabPrice" xml:space="preserve"><value>Cena i transakcje</value></data>
+  <data name="Backtest_TabTrades" xml:space="preserve"><value>Dziennik transakcji</value></data>
+  <data name="Backtest_TabAnalysis" xml:space="preserve"><value>Analiza</value></data>
+  <data name="Kpi_AnnualReturn" xml:space="preserve"><value>Roczna stopa zwrotu</value></data>
+  <data name="Kpi_MaxDrawdown" xml:space="preserve"><value>Maks. obsunięcie</value></data>
+  <data name="Kpi_WinRate" xml:space="preserve"><value>Skuteczność</value></data>
+  <data name="Kpi_ProfitFactor" xml:space="preserve"><value>Profit factor</value></data>
+  <data name="Kpi_Sharpe" xml:space="preserve"><value>Wskaźnik Sharpe’a</value></data>
+  <data name="Kpi_Trades" xml:space="preserve"><value>Transakcje</value></data>
+  <data name="Kpi_NetProfit" xml:space="preserve"><value>Zysk netto</value></data>
+  <data name="Chart_Equity" xml:space="preserve"><value>Kapitał ($)</value></data>
+  <data name="Chart_Drawdown" xml:space="preserve"><value>Obsunięcie</value></data>
+  <data name="Chart_Price" xml:space="preserve"><value>Cena ($)</value></data>
+  <data name="Chart_CumulativeReturn" xml:space="preserve"><value>Skumulowana stopa zwrotu</value></data>
+  <data name="Trades_Direction" xml:space="preserve"><value>Kierunek</value></data>
+  <data name="Trades_EntryTime" xml:space="preserve"><value>Wejście</value></data>
+  <data name="Trades_EntryPrice" xml:space="preserve"><value>Cena wejścia</value></data>
+  <data name="Trades_ExitTime" xml:space="preserve"><value>Wyjście</value></data>
+  <data name="Trades_ExitPrice" xml:space="preserve"><value>Cena wyjścia</value></data>
+  <data name="Trades_ExitReason" xml:space="preserve"><value>Powód wyjścia</value></data>
+  <data name="Trades_ProfitLoss" xml:space="preserve"><value>Zysk / strata ($)</value></data>
+  <data name="Trades_ProfitLossPercent" xml:space="preserve"><value>Zysk / strata (%)</value></data>
+  <data name="Analysis_AverageWin" xml:space="preserve"><value>Średni zysk</value></data>
+  <data name="Analysis_AverageLoss" xml:space="preserve"><value>Średnia strata</value></data>
+  <data name="Analysis_MaxWins" xml:space="preserve"><value>Najwięcej zysków z rzędu</value></data>
+  <data name="Analysis_MaxLosses" xml:space="preserve"><value>Najwięcej strat z rzędu</value></data>
+  <data name="History_Title" xml:space="preserve"><value>Historia backtestów</value></data>
+  <data name="History_Open" xml:space="preserve"><value>Pokaż wyniki</value></data>
+  <data name="History_Compare" xml:space="preserve"><value>Porównaj zaznaczone</value></data>
+  <data name="History_CompareHint" xml:space="preserve"><value>Zaznacz 2–8 zakończonych backtestów (Ctrl/Shift + klik).</value></data>
+  <data name="History_Created" xml:space="preserve"><value>Utworzono</value></data>
+  <data name="History_Status" xml:space="preserve"><value>Status</value></data>
+  <data name="History_Progress" xml:space="preserve"><value>Postęp</value></data>
+  <data name="History_Duration" xml:space="preserve"><value>Czas</value></data>
+  <data name="History_Error" xml:space="preserve"><value>Błąd</value></data>
+  <data name="Comparison_Title" xml:space="preserve"><value>Porównanie</value></data>
+  <data name="MarketData_Title" xml:space="preserve"><value>Dane rynkowe</value></data>
+  <data name="MarketData_SymbolsHint" xml:space="preserve"><value>Każdy symbol to osobne zadanie w tle; pobierane są tylko brakujące dni. SPY (benchmark) jest dodawany automatycznie.</value></data>
+  <data name="MarketData_Download" xml:space="preserve"><value>Pobierz</value></data>
+  <data name="MarketData_DownloadHint" xml:space="preserve"><value>Postęp widać na stronie Zadania.</value></data>
+  <data name="MarketData_Symbols" xml:space="preserve"><value>Lista symboli</value></data>
+  <data name="MarketData_RefreshSymbols" xml:space="preserve"><value>Odśwież symbole</value></data>
+  <data name="MarketData_SymbolsStatus" xml:space="preserve"><value>{0:N0} symboli, aktualizacja {1:g}</value></data>
+  <data name="MarketData_SymbolsMissing" xml:space="preserve"><value>Jeszcze nie pobrana. Wymaga kluczy Alpaca.</value></data>
+  <data name="Symbol_SearchHint" xml:space="preserve"><value>Wpisz symbol lub nazwę spółki; strzałki i Enter wybierają podpowiedź.</value></data>
+  <data name="Status_QueuedSymbolRefresh" xml:space="preserve"><value>Dodano odświeżenie listy symboli do kolejki.</value></data>
+  <data name="Status_SymbolRefreshRunning" xml:space="preserve"><value>Lista symboli jest już odświeżana.</value></data>
+  <data name="MarketData_Stored" xml:space="preserve"><value>Zapisane lokalnie</value></data>
+  <data name="MarketData_Days" xml:space="preserve"><value>Dni</value></data>
+  <data name="MarketData_LastDownload" xml:space="preserve"><value>Ostatnie pobranie</value></data>
+  <data name="MarketData_Ranges" xml:space="preserve"><value>Zakresy</value></data>
+  <data name="MarketData_SelectForPreview" xml:space="preserve"><value>Zaznacz wiersz, aby zobaczyć podgląd danych.</value></data>
+  <data name="MarketData_PreviewTitle" xml:space="preserve"><value>{0} – świece {1} ({2})</value></data>
+  <data name="Jobs_Title" xml:space="preserve"><value>Zadania w tle</value></data>
+  <data name="Jobs_ClearFinished" xml:space="preserve"><value>Wyczyść zakończone</value></data>
+  <data name="Jobs_Job" xml:space="preserve"><value>Zadanie</value></data>
+  <data name="Jobs_Message" xml:space="preserve"><value>Komunikat</value></data>
+  <data name="Logs_Title" xml:space="preserve"><value>Dziennik aplikacji</value></data>
+  <data name="Logs_MinimumLevel" xml:space="preserve"><value>Minimalny poziom:</value></data>
+  <data name="Logs_Clear" xml:space="preserve"><value>Wyczyść</value></data>
+  <data name="Logs_Time" xml:space="preserve"><value>Czas</value></data>
+  <data name="Logs_Level" xml:space="preserve"><value>Poziom</value></data>
+  <data name="Logs_Source" xml:space="preserve"><value>Źródło</value></data>
+  <data name="Settings_Title" xml:space="preserve"><value>Ustawienia</value></data>
+  <data name="Settings_Language" xml:space="preserve"><value>Język</value></data>
+  <data name="Settings_LanguageHint" xml:space="preserve"><value>Zmiana działa od razu i jest zapamiętywana.</value></data>
+  <data name="Settings_Defaults" xml:space="preserve"><value>Wartości domyślne</value></data>
+  <data name="Settings_DefaultsHint" xml:space="preserve"><value>Używane przy kolejnym uruchomieniu.</value></data>
+  <data name="Settings_Environment" xml:space="preserve"><value>Środowisko</value></data>
+  <data name="Settings_DataFolder" xml:space="preserve"><value>Folder danych</value></data>
+  <data name="Settings_ResultsFolder" xml:space="preserve"><value>Folder wyników</value></data>
+  <data name="Settings_Database" xml:space="preserve"><value>Baza danych</value></data>
+  <data name="Settings_LogFolder" xml:space="preserve"><value>Folder logów</value></data>
+  <data name="Settings_AlpacaKeys" xml:space="preserve"><value>Klucze API Alpaca</value></data>
+  <data name="Settings_AlpacaConfigured" xml:space="preserve"><value>Skonfigurowane (user secrets)</value></data>
+  <data name="Settings_AlpacaMissing" xml:space="preserve"><value>Brak – patrz README</value></data>
+  <data name="Settings_ParallelJobs" xml:space="preserve"><value>Równoległe zadania</value></data>
+  <data name="Strategy_Range" xml:space="preserve"><value>Zakres: {0}.</value></data>
+  <data name="Resolution_Daily" xml:space="preserve"><value>dzienne</value></data>
+  <data name="Resolution_Hourly" xml:space="preserve"><value>godzinowe</value></data>
+  <data name="Status_Ready" xml:space="preserve"><value>Gotowe</value></data>
+  <data name="Status_Failed" xml:space="preserve"><value>Błąd: {0}</value></data>
+  <data name="Status_Cancelled" xml:space="preserve"><value>Anulowano.</value></data>
+  <data name="Status_RunningBacktest" xml:space="preserve"><value>Uruchamianie {0} dla {1}...</value></data>
+  <data name="Status_BacktestCompleted" xml:space="preserve"><value>Backtest {0} zakończony.</value></data>
+  <data name="Status_QueuedBacktests" xml:space="preserve"><value>Dodano {0} backtest(y) do kolejki.</value></data>
+  <data name="Status_QueuedBacktestsSkipped" xml:space="preserve"><value>Dodano {0} backtest(y) do kolejki; już trwają: {1}.</value></data>
+  <data name="Status_QueuedDownloads" xml:space="preserve"><value>Dodano {0} pobrań do kolejki.</value></data>
+  <data name="Status_QueuedDownloadsSkipped" xml:space="preserve"><value>Dodano {0} pobrań do kolejki; już w kolejce: {1}.</value></data>
+  <data name="Status_LoadingResults" xml:space="preserve"><value>Wczytywanie wyników {0}...</value></data>
+  <data name="Status_Loaded" xml:space="preserve"><value>Wczytano {0}.</value></data>
+  <data name="Status_FixInputs" xml:space="preserve"><value>Popraw zaznaczone pola.</value></data>
+  <data name="Status_SelectDates" xml:space="preserve"><value>Wybierz daty początku i końca.</value></data>
+  <data name="Status_SelectStrategy" xml:space="preserve"><value>Wybierz strategię.</value></data>
+  <data name="Status_Comparing" xml:space="preserve"><value>Porównywanie {0} uruchomień...</value></data>
+  <data name="Status_Compared" xml:space="preserve"><value>Porównano {0} uruchomienia.</value></data>
+  <data name="Status_SettingsSaved" xml:space="preserve"><value>Zapisano ustawienia.</value></data>
+  <data name="TradeDirection_Long" xml:space="preserve"><value>Długa</value></data>
+  <data name="TradeDirection_Short" xml:space="preserve"><value>Krótka</value></data>
+  <data name="BacktestStatus_Queued" xml:space="preserve"><value>W kolejce</value></data>
+  <data name="BacktestStatus_Running" xml:space="preserve"><value>W toku</value></data>
+  <data name="BacktestStatus_Completed" xml:space="preserve"><value>Zakończony</value></data>
+  <data name="BacktestStatus_Failed" xml:space="preserve"><value>Błąd</value></data>
+  <data name="BacktestStatus_Cancelled" xml:space="preserve"><value>Anulowany</value></data>
+  <data name="JobStatus_Queued" xml:space="preserve"><value>W kolejce</value></data>
+  <data name="JobStatus_Running" xml:space="preserve"><value>W toku</value></data>
+  <data name="JobStatus_Succeeded" xml:space="preserve"><value>Zakończone</value></data>
+  <data name="JobStatus_Failed" xml:space="preserve"><value>Błąd</value></data>
+  <data name="JobStatus_Cancelled" xml:space="preserve"><value>Anulowane</value></data>
+  <data name="LogLevel_Debug" xml:space="preserve"><value>Diagnostyka</value></data>
+  <data name="LogLevel_Information" xml:space="preserve"><value>Informacja</value></data>
+  <data name="LogLevel_Warning" xml:space="preserve"><value>Ostrzeżenie</value></data>
+  <data name="LogLevel_Error" xml:space="preserve"><value>Błąd</value></data>
+  <data name="Timeframe_Minute" xml:space="preserve"><value>Minutowy</value></data>
+  <data name="Timeframe_Hour" xml:space="preserve"><value>Godzinowy</value></data>
+  <data name="Timeframe_Daily" xml:space="preserve"><value>Dzienny</value></data>
+  <data name="Nav_Optimization" xml:space="preserve"><value>Optymalizacja</value></data>
+  <data name="Nav_Analysis" xml:space="preserve"><value>Analiza ryzyka</value></data>
+  <data name="History_Analyze" xml:space="preserve"><value>Analizuj ryzyko</value></data>
+  <data name="Optimization_Title" xml:space="preserve"><value>Optymalizacja parametrów</value></data>
+  <data name="Optimization_Objective" xml:space="preserve"><value>Cel</value></data>
+  <data name="Optimization_ParallelTrials" xml:space="preserve"><value>Równoległe procesy silnika</value></data>
+  <data name="Optimization_Parameters" xml:space="preserve"><value>Parametry</value></data>
+  <data name="Optimization_Vary" xml:space="preserve"><value>zmieniaj</value></data>
+  <data name="Optimization_From" xml:space="preserve"><value>Od</value></data>
+  <data name="Optimization_To" xml:space="preserve"><value>Do</value></data>
+  <data name="Optimization_Step" xml:space="preserve"><value>Krok</value></data>
+  <data name="Optimization_Start" xml:space="preserve"><value>Uruchom optymalizację</value></data>
+  <data name="Optimization_StartHint" xml:space="preserve"><value>Działa jako jedno zadanie w tle; próby działają w równoległych procesach silnika. Postęp widać też na stronie Zadania.</value></data>
+  <data name="Optimization_SelectVaried" xml:space="preserve"><value>Wybierz co najmniej jeden zmieniany parametr.</value></data>
+  <data name="Optimization_Combinations" xml:space="preserve"><value>Kombinacji: {0} (maks. {1})</value></data>
+  <data name="Optimization_StepPositive" xml:space="preserve"><value>Krok musi być dodatni.</value></data>
+  <data name="Optimization_ToBelowFrom" xml:space="preserve"><value>Wartość „do” nie może być mniejsza niż „od”.</value></data>
+  <data name="Optimization_WholeStep" xml:space="preserve"><value>Od, do i krok muszą być liczbami całkowitymi.</value></data>
+  <data name="Optimization_TooManyValues" xml:space="preserve"><value>Wartości: {0}; dozwolone maksymalnie {1}.</value></data>
+  <data name="Optimization_BestTrial" xml:space="preserve"><value>Najlepsza: próba nr {0} ({1}), wynik {2}</value></data>
+  <data name="Optimization_Runs" xml:space="preserve"><value>Optymalizacje</value></data>
+  <data name="Optimization_CancelRun" xml:space="preserve"><value>Zatrzymaj optymalizację</value></data>
+  <data name="Optimization_ApplyBest" xml:space="preserve"><value>Użyj najlepszych parametrów</value></data>
+  <data name="Optimization_ApplyBestHint" xml:space="preserve"><value>Kopiuje parametry najlepszej próby do formularza backtestu.</value></data>
+  <data name="Optimization_OpenTrial" xml:space="preserve"><value>Pokaż wyniki próby</value></data>
+  <data name="Optimization_TabHeatmap" xml:space="preserve"><value>Mapa cieplna</value></data>
+  <data name="Optimization_TabTrials" xml:space="preserve"><value>Próby</value></data>
+  <data name="Optimization_XAxis" xml:space="preserve"><value>Oś X</value></data>
+  <data name="Optimization_YAxis" xml:space="preserve"><value>Oś Y</value></data>
+  <data name="Optimization_HeatmapHint" xml:space="preserve"><value>Komórka pokazuje wynik próby; przy trzech zmienianych parametrach najlepszy po niepokazanym. Najlepsza próba jest obramowana.</value></data>
+  <data name="Optimization_Trial" xml:space="preserve"><value>Próba</value></data>
+  <data name="Optimization_Point" xml:space="preserve"><value>Parametry</value></data>
+  <data name="Optimization_Score" xml:space="preserve"><value>Wynik</value></data>
+  <data name="Optimization_CheckTitle" xml:space="preserve"><value>Sprawdź na innym okresie</value></data>
+  <data name="Optimization_CheckStart" xml:space="preserve"><value>Początek okresu sprawdzenia</value></data>
+  <data name="Optimization_CheckEnd" xml:space="preserve"><value>Koniec okresu sprawdzenia</value></data>
+  <data name="Optimization_CheckTop" xml:space="preserve"><value>Najlepsze próby</value></data>
+  <data name="Optimization_Check" xml:space="preserve"><value>Sprawdź</value></data>
+  <data name="Optimization_CheckHint" xml:space="preserve"><value>Uruchamia najlepsze próby ponownie jako backtesty na okresie, którego optymalizacja nie widziała. Parametry dopasowane tylko do szumu okresu optymalizacji zwykle wypadają tam dużo gorzej; ufaj tym, które się utrzymują.</value></data>
+  <data name="Optimization_CheckDone" xml:space="preserve"><value>Ostatnie sprawdzenie: {0} – {1}. Wyniki są w kolumnach „spr.” na karcie Próby i na stronie Strategie.</value></data>
+  <data name="Optimization_CheckScore" xml:space="preserve"><value>Wynik (spr.)</value></data>
+  <data name="Optimization_CheckProfit" xml:space="preserve"><value>Zysk (spr.)</value></data>
+  <data name="Optimization_CheckStatus" xml:space="preserve"><value>Sprawdzenie</value></data>
+  <data name="Status_CheckStarted" xml:space="preserve"><value>Rozpoczęto sprawdzenie: {0} prób działa w tle jako backtesty.</value></data>
+  <data name="Optimization_Trials" xml:space="preserve"><value>Próby</value></data>
+  <data name="Optimization_BestScore" xml:space="preserve"><value>Najlepszy wynik</value></data>
+  <data name="OptimizationObjective_SharpeRatio" xml:space="preserve"><value>Wskaźnik Sharpe'a</value></data>
+  <data name="OptimizationObjective_NetProfit" xml:space="preserve"><value>Zysk netto</value></data>
+  <data name="OptimizationObjective_ReturnOverDrawdown" xml:space="preserve"><value>Zysk / maks. obsunięcie</value></data>
+  <data name="OptimizationStatus_Queued" xml:space="preserve"><value>W kolejce</value></data>
+  <data name="OptimizationStatus_Running" xml:space="preserve"><value>W toku</value></data>
+  <data name="OptimizationStatus_Completed" xml:space="preserve"><value>Zakończona</value></data>
+  <data name="OptimizationStatus_Failed" xml:space="preserve"><value>Błąd</value></data>
+  <data name="OptimizationStatus_Cancelled" xml:space="preserve"><value>Anulowana</value></data>
+  <data name="TrialStatus_Pending" xml:space="preserve"><value>Oczekuje</value></data>
+  <data name="TrialStatus_Running" xml:space="preserve"><value>W toku</value></data>
+  <data name="TrialStatus_Completed" xml:space="preserve"><value>Zakończona</value></data>
+  <data name="TrialStatus_Failed" xml:space="preserve"><value>Błąd</value></data>
+  <data name="TrialStatus_Cancelled" xml:space="preserve"><value>Anulowana</value></data>
+  <data name="MonteCarloMethod_Shuffle" xml:space="preserve"><value>Losowa kolejność transakcji</value></data>
+  <data name="MonteCarloMethod_Bootstrap" xml:space="preserve"><value>Losowanie ze zwracaniem (bootstrap)</value></data>
+  <data name="Status_OptimizationStarted" xml:space="preserve"><value>Uruchomiono optymalizację: {0} prób.</value></data>
+  <data name="Status_OptimizationStartedSkipped" xml:space="preserve"><value>Uruchomiono optymalizację: {0} prób (pominięto niepoprawne kombinacje: {1}).</value></data>
+  <data name="Status_BestApplied" xml:space="preserve"><value>Najlepsze parametry skopiowano do formularza backtestu.</value></data>
+  <data name="Status_Analyzing" xml:space="preserve"><value>Analiza {0} ({1:N0} symulacji)...</value></data>
+  <data name="Status_Analyzed" xml:space="preserve"><value>Analiza {0} jest gotowa.</value></data>
+  <data name="Analysis_Title" xml:space="preserve"><value>Analiza ryzyka</value></data>
+  <data name="Analysis_Run" xml:space="preserve"><value>Przebieg backtestu</value></data>
+  <data name="Analysis_Simulations" xml:space="preserve"><value>Symulacje</value></data>
+  <data name="Analysis_Method" xml:space="preserve"><value>Metoda</value></data>
+  <data name="Analysis_Seed" xml:space="preserve"><value>Ziarno losowania</value></data>
+  <data name="Analysis_Analyze" xml:space="preserve"><value>Analizuj</value></data>
+  <data name="Analysis_MethodHint" xml:space="preserve"><value>Losowa kolejność zachowuje wszystkie transakcje i zmienia tylko ich kolejność: wynik końcowy jest stały, zmieniają się obsunięcia. Bootstrap losuje transakcje ze zwracaniem, więc zmienia się też wynik. To samo ziarno daje ten sam wynik.</value></data>
+  <data name="Analysis_NoRun" xml:space="preserve"><value>Wybierz zakończony przebieg albo użyj „Analizuj ryzyko” na stronie Historia.</value></data>
+  <data name="Analysis_FinalReturn" xml:space="preserve"><value>Zwrot końcowy</value></data>
+  <data name="Analysis_MaxDrawdown" xml:space="preserve"><value>Maks. obsunięcie</value></data>
+  <data name="Analysis_SimulatedPath" xml:space="preserve"><value>Symulacja</value></data>
+  <data name="Analysis_HistoricalPath" xml:space="preserve"><value>Kolejność historyczna</value></data>
+  <data name="Analysis_ComputeInfo" xml:space="preserve"><value>{0:N0} symulacji z {1} transakcji w {2} ms na {3} rdzeniach logicznych</value></data>
+  <data name="Analysis_ProbabilityOfLoss" xml:space="preserve"><value>Prawdopodobieństwo straty</value></data>
+  <data name="Analysis_MedianDrawdown" xml:space="preserve"><value>Mediana obsunięcia</value></data>
+  <data name="Analysis_Drawdown95" xml:space="preserve"><value>Obsunięcie (95. percentyl)</value></data>
+  <data name="Analysis_HistoricalDrawdown" xml:space="preserve"><value>Obsunięcie historyczne (transakcje)</value></data>
+  <data name="Analysis_Percentiles" xml:space="preserve"><value>Percentyle</value></data>
+  <data name="Analysis_Statistic" xml:space="preserve"><value>Miara</value></data>
+  <data name="Analysis_TabPaths" xml:space="preserve"><value>Ścieżki kapitału</value></data>
+  <data name="Analysis_TabDistribution" xml:space="preserve"><value>Rozkład obsunięć</value></data>
+  <data name="Analysis_TabDrawdowns" xml:space="preserve"><value>Okresy obsunięć</value></data>
+  <data name="Analysis_TradeNumber" xml:space="preserve"><value>Numer transakcji</value></data>
+  <data name="Analysis_Peak" xml:space="preserve"><value>Szczyt</value></data>
+  <data name="Analysis_Trough" xml:space="preserve"><value>Dołek</value></data>
+  <data name="Analysis_Recovered" xml:space="preserve"><value>Odrobione</value></data>
+  <data name="Analysis_Depth" xml:space="preserve"><value>Głębokość</value></data>
+  <data name="Analysis_DeclineDays" xml:space="preserve"><value>Spadek (dni)</value></data>
+  <data name="Analysis_RecoveryDays" xml:space="preserve"><value>Odrabianie (dni)</value></data>
+  <data name="Analysis_TimeUnderwater" xml:space="preserve"><value>Czas poniżej szczytu</value></data>
+  <data name="Nav_Trading" xml:space="preserve"><value>Handel (paper)</value></data>
+  <data name="Trading_Title" xml:space="preserve"><value>Handel na koncie paper</value></data>
+  <data name="Trading_PaperBadge" xml:space="preserve"><value>KONTO PAPER</value></data>
+  <data name="Trading_KillSwitch" xml:space="preserve"><value>Handel włączony</value></data>
+  <data name="Trading_KillSwitchHint" xml:space="preserve"><value>Wyłącznik awaryjny: gdy wyłączony, każde zlecenie zwiększające ekspozycję jest odrzucane; zamykanie pozycji nadal działa.</value></data>
+  <data name="Trading_Equity" xml:space="preserve"><value>Kapitał</value></data>
+  <data name="Trading_DayProfitLoss" xml:space="preserve"><value>Wynik dnia</value></data>
+  <data name="Trading_BuyingPower" xml:space="preserve"><value>Siła nabywcza</value></data>
+  <data name="Trading_Cash" xml:space="preserve"><value>Gotówka</value></data>
+  <data name="Trading_Watchlist" xml:space="preserve"><value>Obserwowane</value></data>
+  <data name="Trading_ApplyWatchlist" xml:space="preserve"><value>Zastosuj</value></data>
+  <data name="Trading_WatchlistHint" xml:space="preserve"><value>Symbole oddzielone przecinkami (maks. 30); dla nich strumieniowane są notowania i świece minutowe.</value></data>
+  <data name="Trading_Bid" xml:space="preserve"><value>Kupno</value></data>
+  <data name="Trading_Ask" xml:space="preserve"><value>Sprzedaż</value></data>
+  <data name="Trading_Last" xml:space="preserve"><value>Ostatnia</value></data>
+  <data name="Trading_LiveChart" xml:space="preserve"><value>Świece minutowe, ostatnia sesja:</value></data>
+  <data name="Trading_TabPositions" xml:space="preserve"><value>Pozycje</value></data>
+  <data name="Trading_TabOrders" xml:space="preserve"><value>Zlecenia</value></data>
+  <data name="Trading_CloseAll" xml:space="preserve"><value>Zamknij wszystkie pozycje</value></data>
+  <data name="Trading_Close" xml:space="preserve"><value>Zamknij</value></data>
+  <data name="Trading_AveragePrice" xml:space="preserve"><value>Śr. cena</value></data>
+  <data name="Trading_MarketValue" xml:space="preserve"><value>Wartość rynkowa</value></data>
+  <data name="Trading_UnrealizedPl" xml:space="preserve"><value>Niezrealizowany wynik</value></data>
+  <data name="Trading_OpenOnly" xml:space="preserve"><value>Tylko otwarte zlecenia</value></data>
+  <data name="Trading_Filled" xml:space="preserve"><value>Wykonano</value></data>
+  <data name="Trading_ConfirmClose" xml:space="preserve"><value>Zamknąć całą pozycję {0} zleceniem rynkowym?</value></data>
+  <data name="Trading_ConfirmCloseAll" xml:space="preserve"><value>Anulować wszystkie otwarte zlecenia i zamknąć wszystkie pozycje zleceniami rynkowymi?</value></data>
+  <data name="Ticket_Title" xml:space="preserve"><value>Zlecenie</value></data>
+  <data name="Ticket_Side" xml:space="preserve"><value>Strona</value></data>
+  <data name="Ticket_Type" xml:space="preserve"><value>Typ</value></data>
+  <data name="Ticket_Quantity" xml:space="preserve"><value>Ilość</value></data>
+  <data name="Ticket_LimitPrice" xml:space="preserve"><value>Limit</value></data>
+  <data name="Ticket_StopPrice" xml:space="preserve"><value>Stop</value></data>
+  <data name="Ticket_TimeInForce" xml:space="preserve"><value>Ważność</value></data>
+  <data name="Ticket_Estimated" xml:space="preserve"><value>Szac. wartość (USD)</value></data>
+  <data name="Ticket_Submit" xml:space="preserve"><value>Złóż zlecenie</value></data>
+  <data name="Ticket_Hint" xml:space="preserve"><value>Każde zlecenie jest sprawdzane z limitami ryzyka i potwierdzane przed wysłaniem na konto paper.</value></data>
+  <data name="Ticket_InvalidSymbol" xml:space="preserve"><value>Podaj poprawny symbol.</value></data>
+  <data name="Ticket_InvalidQuantity" xml:space="preserve"><value>Podaj ilość większą od zera.</value></data>
+  <data name="Ticket_FractionalMarketOnly" xml:space="preserve"><value>Ułamkowe ilości są dozwolone tylko dla zleceń rynkowych ważnych na dzień.</value></data>
+  <data name="Ticket_InvalidLimit" xml:space="preserve"><value>Podaj cenę limitu większą od zera.</value></data>
+  <data name="Ticket_InvalidStop" xml:space="preserve"><value>Podaj cenę stop większą od zera.</value></data>
+  <data name="Ticket_ConfirmTitle" xml:space="preserve"><value>Potwierdź (konto paper)</value></data>
+  <data name="Ticket_Describe" xml:space="preserve"><value>{0} {1} {2}, {3}{4}, {5}.
+Szacowana wartość: {6} USD.</value></data>
+  <data name="Ticket_DescribeLimit" xml:space="preserve"><value>limit {0}</value></data>
+  <data name="Ticket_DescribeStop" xml:space="preserve"><value>stop {0}</value></data>
+  <data name="OrderSide_Buy" xml:space="preserve"><value>Kup</value></data>
+  <data name="OrderSide_Sell" xml:space="preserve"><value>Sprzedaj</value></data>
+  <data name="OrderType_Market" xml:space="preserve"><value>Rynkowe</value></data>
+  <data name="OrderType_Limit" xml:space="preserve"><value>Z limitem</value></data>
+  <data name="OrderType_Stop" xml:space="preserve"><value>Stop</value></data>
+  <data name="OrderType_StopLimit" xml:space="preserve"><value>Stop z limitem</value></data>
+  <data name="TimeInForce_Day" xml:space="preserve"><value>Dzień</value></data>
+  <data name="TimeInForce_Gtc" xml:space="preserve"><value>Do odwołania</value></data>
+  <data name="OrderStatus_New" xml:space="preserve"><value>Nowe</value></data>
+  <data name="OrderStatus_Submitted" xml:space="preserve"><value>Przyjęte</value></data>
+  <data name="OrderStatus_PartiallyFilled" xml:space="preserve"><value>Częściowo wykonane</value></data>
+  <data name="OrderStatus_Filled" xml:space="preserve"><value>Wykonane</value></data>
+  <data name="OrderStatus_Cancelled" xml:space="preserve"><value>Anulowane</value></data>
+  <data name="OrderStatus_Rejected" xml:space="preserve"><value>Odrzucone</value></data>
+  <data name="OrderStatus_Expired" xml:space="preserve"><value>Wygasłe</value></data>
+  <data name="ConnectionState_NotConfigured" xml:space="preserve"><value>brak kluczy</value></data>
+  <data name="ConnectionState_Connecting" xml:space="preserve"><value>łączenie</value></data>
+  <data name="ConnectionState_Connected" xml:space="preserve"><value>połączono</value></data>
+  <data name="ConnectionState_Reconnecting" xml:space="preserve"><value>ponowne łączenie</value></data>
+  <data name="ConnectionState_Stopped" xml:space="preserve"><value>zatrzymano</value></data>
+  <data name="Status_WatchlistSet" xml:space="preserve"><value>Obserwowane symbole: {0}.</value></data>
+  <data name="Status_PlacingOrder" xml:space="preserve"><value>Składanie zlecenia {0}...</value></data>
+  <data name="Status_OrderPlaced" xml:space="preserve"><value>Zlecenie {0}: {1}.</value></data>
+  <data name="Status_CancelRequested" xml:space="preserve"><value>Zlecono anulowanie zlecenia {0}.</value></data>
+  <data name="Status_ClosingPosition" xml:space="preserve"><value>Zamykanie {0}...</value></data>
+  <data name="Status_PositionClosing" xml:space="preserve"><value>Złożono zlecenie zamykające {0}.</value></data>
+  <data name="Status_ClosingAll" xml:space="preserve"><value>Zamykanie wszystkich pozycji...</value></data>
+  <data name="Status_ClosedAll" xml:space="preserve"><value>Złożono zleceń zamykających: {0}.</value></data>
+  <data name="Status_ClosedAllWithFailures" xml:space="preserve"><value>Złożono zleceń zamykających: {0}; nieudane: {1}</value></data>
+  <data name="Status_TradingEnabled" xml:space="preserve"><value>Handel włączony.</value></data>
+  <data name="Status_TradingDisabled" xml:space="preserve"><value>Handel wyłączony: dozwolone są tylko zlecenia zmniejszające pozycje.</value></data>
+  <data name="Common_Ok" xml:space="preserve"><value>OK</value></data>
+  <data name="Ticket_ConfirmTitleLive" xml:space="preserve"><value>ZLECENIE NA ŻYWO: prawdziwe pieniądze</value></data>
+  <data name="Trading_LiveBadge" xml:space="preserve"><value>KONTO RZECZYWISTE: PRAWDZIWE PIENIĄDZE</value></data>
+  <data name="Trading_Arm" xml:space="preserve"><value>Uzbrój handel na żywo</value></data>
+  <data name="Trading_Disarm" xml:space="preserve"><value>Rozbrój</value></data>
+  <data name="Trading_Armed" xml:space="preserve"><value>Handel na żywo UZBROJONY</value></data>
+  <data name="Trading_NotArmed" xml:space="preserve"><value>Handel na żywo nieuzbrojony: zlecenia są odrzucane</value></data>
+  <data name="Trading_ArmTitle" xml:space="preserve"><value>Uzbrojenie handlu na żywo</value></data>
+  <data name="Trading_ArmMessage" xml:space="preserve"><value>Zlecenia będą trafiać na konto RZECZYWISTE i używać prawdziwych pieniędzy, dopóki nie rozbroisz handlu lub nie zamkniesz aplikacji. Wpisz numer konta ({0}), aby potwierdzić.</value></data>
+  <data name="Trading_TabAudit" xml:space="preserve"><value>Dziennik audytu</value></data>
+  <data name="Audit_Time" xml:space="preserve"><value>Czas</value></data>
+  <data name="Audit_Mode" xml:space="preserve"><value>Konto</value></data>
+  <data name="Audit_Category" xml:space="preserve"><value>Kategoria</value></data>
+  <data name="Audit_Action" xml:space="preserve"><value>Akcja</value></data>
+  <data name="Audit_Order" xml:space="preserve"><value>Zlecenie</value></data>
+  <data name="Audit_Details" xml:space="preserve"><value>Szczegóły</value></data>
+  <data name="TradingMode_Paper" xml:space="preserve"><value>Paper</value></data>
+  <data name="TradingMode_Live" xml:space="preserve"><value>Rzeczywiste</value></data>
+  <data name="AuditCategory_Order" xml:space="preserve"><value>Zlecenie</value></data>
+  <data name="AuditCategory_Risk" xml:space="preserve"><value>Ryzyko</value></data>
+  <data name="AuditCategory_Session" xml:space="preserve"><value>Sesja</value></data>
+  <data name="Status_LiveArmed" xml:space="preserve"><value>Handel na żywo uzbrojony na tę sesję.</value></data>
+  <data name="Status_LiveDisarmed" xml:space="preserve"><value>Handel na żywo rozbrojony.</value></data>
+  <data name="Nav_Strategies" xml:space="preserve"><value>Strategie</value></data>
+  <data name="Strategies_Title" xml:space="preserve"><value>Strategie</value></data>
+  <data name="Strategies_TryInBacktest" xml:space="preserve"><value>Wypróbuj w backteście</value></data>
+  <data name="Strategies_Optimize" xml:space="preserve"><value>Optymalizuj</value></data>
+  <data name="Strategies_Section_Summary" xml:space="preserve"><value>Co robi</value></data>
+  <data name="Strategies_Section_HowItWorks" xml:space="preserve"><value>Jak działa</value></data>
+  <data name="Strategies_Section_WhenItWorks" xml:space="preserve"><value>Kiedy działa, a kiedy zawodzi</value></data>
+  <data name="Strategies_Section_HowToUse" xml:space="preserve"><value>Jak jej używać</value></data>
+  <data name="Strategies_Section_TestResults" xml:space="preserve"><value>Wyniki testów</value></data>
+  <data name="Strategies_Parameters" xml:space="preserve"><value>Parametry</value></data>
+  <data name="Strategies_SuggestedHint" xml:space="preserve"><value>„Do przetestowania” to zakres, od którego warto zacząć optymalizację (od – do / krok). Przycisk Optymalizuj wpisuje go za Ciebie.</value></data>
+  <data name="Strategies_Parameter" xml:space="preserve"><value>Parametr</value></data>
+  <data name="Strategies_Meaning" xml:space="preserve"><value>Znaczenie</value></data>
+  <data name="Strategies_Default" xml:space="preserve"><value>Domyślnie</value></data>
+  <data name="Strategies_Allowed" xml:space="preserve"><value>Dozwolone</value></data>
+  <data name="Strategies_Suggested" xml:space="preserve"><value>Do przetestowania</value></data>
+  <data name="Strategies_BestResults" xml:space="preserve"><value>Twoje najlepsze wyniki</value></data>
+  <data name="Strategies_BestResultsHint" xml:space="preserve"><value>Najlepsza próba z każdej Twojej optymalizacji tej strategii, od najnowszej. Najlepszy wynik na danych historycznych częściowo dopasowuje się do szumu: zanim zaufasz parametrom, użyj Sprawdź na innym okresie na stronie Optymalizacja. Kolumny „spr.” pokazują, jak wypadły na tym okresie; wynik, który się utrzymał, jest bardziej wiarygodny.</value></data>
+  <data name="Strategies_CheckPeriod" xml:space="preserve"><value>Okres sprawdzenia</value></data>
+  <data name="Strategies_CheckSharpe" xml:space="preserve"><value>Sharpe (spr.)</value></data>
+  <data name="Strategies_NoResults" xml:space="preserve"><value>Nie ma jeszcze optymalizacji tej strategii. Kliknij Optymalizuj, aby znaleźć najlepsze parametry dla symbolu; wyniki pojawią się tutaj.</value></data>
+  <data name="Strategies_Values" xml:space="preserve"><value>Wartości parametrów</value></data>
+  <data name="Strategies_UseInBacktest" xml:space="preserve"><value>Użyj w backteście</value></data>
+  <data name="StrategyDoc_SmaCrossStrategy_Summary" xml:space="preserve"><value>Podążanie za trendem na 15-minutowych świecach. Wchodzi w kierunku trendu, gdy szybka EMA jest nad (lub pod) wolną EMA, trend jest silny (ADX), a cena jest po tej samej stronie co zamknięcia sprzed 100 i 200 dni sesyjnych. Gra na wzrosty i spadki.</value></data>
+  <data name="StrategyDoc_SmaCrossStrategy_HowItWorks" xml:space="preserve"><value>• Wejście long: szybka EMA nad wolną, ADX powyżej progu, cena powyżej zamknięć sprzed 100 i 200 dni sesyjnych. Short jest lustrzanym odbiciem.
+• Wielkość: pozycja jest tak dobrana, by trafienie początkowego stopu (ATR × mnożnik) kosztowało wybrany % kapitału.
+• Wyjście: kroczący stop ATR, który podąża za ceną.</value></data>
+  <data name="StrategyDoc_SmaCrossStrategy_WhenItWorks" xml:space="preserve"><value>Działa na rynkach z długimi, równymi trendami, np. spółka w wyraźnym wielomiesięcznym wzroście. Zawodzi w trendzie bocznym i szarpanym: średnie przecinają się tam i z powrotem, stop jest często trafiany i sumują się małe straty. Handluje często, więc koszty mają znaczenie.</value></data>
+  <data name="StrategyDoc_SmaCrossStrategy_HowToUse" xml:space="preserve"><value>• Pobierz dane minutowe o mniej więcej rok dłuższe niż okres testu: dzienny filtr potrzebuje 200 dni sesyjnych przed startem.
+• Najpierw optymalizuj okresy EMA (szybką i wolną), potem próg ADX i mnożnik ATR.
+• Na koncie paper trzymaj ryzyko na transakcję na poziomie 0,5–1%.</value></data>
+  <data name="StrategyDoc_RsiMeanReversionStrategy_Summary" xml:space="preserve"><value>Powrót do średniej na godzinowych świecach: kupuje, gdy godzinowy RSI pokazuje wyprzedanie, i sprzedaje, gdy pojawia się wykupienie. Tylko long.</value></data>
+  <data name="StrategyDoc_RsiMeanReversionStrategy_HowItWorks" xml:space="preserve"><value>• Wejście: RSI poniżej poziomu wyprzedania.
+• Wyjście: RSI powyżej poziomu wykupienia albo spadek ceny o % stop loss poniżej wejścia.
+• Wielkość: stały udział kapitału (alokacja).</value></data>
+  <data name="StrategyDoc_RsiMeanReversionStrategy_WhenItWorks" xml:space="preserve"><value>Działa na spółkach poruszających się w przedziale, które odbijają po krótkich spadkach. Zawodzi w silnych spadkach: RSI pozostaje wyprzedany, a cena dalej spada, dlatego ważny jest stop loss. W silnych wzrostach często sprzedaje za wcześnie.</value></data>
+  <data name="StrategyDoc_RsiMeanReversionStrategy_HowToUse" xml:space="preserve"><value>• Pobierz dane minutowe za okres testu; rozgrzewka potrzebuje tylko kilku dni.
+• Najpierw optymalizuj poziomy wyprzedania i wykupienia, potem okres RSI i stop loss.
+• Porównaj ją ze strategią Korekta RSI, która kupuje tylko w trendzie wzrostowym.</value></data>
+  <data name="StrategyDoc_DonchianBreakoutStrategy_Summary" xml:space="preserve"><value>Klasyczne wybicie z kanału (reguła „żółwi”) na dziennych świecach: kupuje, gdy cena ustanawia nowe N-dniowe maksimum, i trzyma trend, aż spadnie do nowego M-dniowego minimum. Tylko long.</value></data>
+  <data name="StrategyDoc_DonchianBreakoutStrategy_HowItWorks" xml:space="preserve"><value>• Wejście: dzienne zamknięcie powyżej najwyższego maksimum z poprzednich N dni (kanał wejścia).
+• Wyjście: zamknięcie poniżej najniższego minimum z poprzednich M dni (kanał wyjścia) albo poniżej początkowego stopu ATR.
+• Wielkość: pozycja tak dobrana, by początkowy stop (20-dniowy ATR × mnożnik) kosztował wybrany % kapitału, nigdy więcej niż pozwala gotówka.</value></data>
+  <data name="StrategyDoc_DonchianBreakoutStrategy_WhenItWorks" xml:space="preserve"><value>Działa, gdy spółka zaczyna duży, trwały ruch: mało transakcji, duże zyski. Zawodzi w konsolidacji: wiele fałszywych wybić szybko się odwraca, więc skuteczność jest niska, a zysk pochodzi z kilku dużych trendów. Oceniaj ją na kilku latach, nie miesiącach.</value></data>
+  <data name="StrategyDoc_DonchianBreakoutStrategy_HowToUse" xml:space="preserve"><value>• Pobierz dane minutowe z około dwoma miesiącami zapasu przed okresem testu, na rozgrzewkę.
+• Typowe ustawienia: 20/10 (szybsze) albo 55/20 (wolniejsze, mniej transakcji).
+• Najpierw optymalizuj kanał wejścia, potem wyjścia; kanał wyjścia trzymaj krótszy niż wejścia.</value></data>
+  <data name="StrategyDoc_MomentumTrendStrategy_Summary" xml:space="preserve"><value>Momentum szeregu czasowego: trzyma spółkę, dopóki rosła w ostatnich miesiącach i jest powyżej długiej średniej; w przeciwnym razie czeka w gotówce. Bardzo mało transakcji. Tylko long.</value></data>
+  <data name="StrategyDoc_MomentumTrendStrategy_HowItWorks" xml:space="preserve"><value>• Co K dni sesyjnych sprawdza: czy zwrot z okresu lookback jest dodatni i czy zamknięcie jest powyżej średniej trendu?
+• Jeśli oba warunki są spełnione, inwestuje alokację; jeśli nie, sprzedaje i czeka w gotówce.
+• Między sprawdzeniami nic nie robi, co ogranicza koszty.</value></data>
+  <data name="StrategyDoc_MomentumTrendStrategy_WhenItWorks" xml:space="preserve"><value>Łapie długie wzrosty i schodzi z rynku w długich spadkach, co może ograniczyć głębokie obsunięcia. Zawodzi przy gwałtownych odwróceniach w kształcie V (sprzedaje i odkupuje za późno) oraz w trendzie bocznym, gdzie sygnał przeskakuje tam i z powrotem.</value></data>
+  <data name="StrategyDoc_MomentumTrendStrategy_HowToUse" xml:space="preserve"><value>• Pobierz dane minutowe z mniej więcej rokiem zapasu przed okresem testu: 200-dniowa średnia i 126-dniowy lookback potrzebują rozgrzewki.
+• Optymalizuj lookback (63–252 dni) i odstęp między sprawdzeniami; średnia trendu ma mniejsze znaczenie.
+• Porównaj jej obsunięcie z samym trzymaniem spółki albo SPY.</value></data>
+  <data name="StrategyDoc_RsiPullbackStrategy_Summary" xml:space="preserve"><value>Kupuje krótkie, ostre spadki w długoterminowym trendzie wzrostowym (metoda RSI(2) Larry'ego Connorsa) i sprzedaje, gdy tylko cena odbije. Dzienne świece, tylko long.</value></data>
+  <data name="StrategyDoc_RsiPullbackStrategy_HowItWorks" xml:space="preserve"><value>• Filtr: zamknięcie powyżej średniej trendu (domyślnie 200 dni), więc kupuje tylko w trendzie wzrostowym.
+• Wejście: bardzo krótki RSI (2 dni) poniżej poziomu wejścia (10), czyli po kilku silnych dniach spadków.
+• Wyjście: zamknięcie powyżej krótkiej średniej wyjścia (5 dni) albo po maksymalnym czasie trzymania.</value></data>
+  <data name="StrategyDoc_RsiPullbackStrategy_WhenItWorks" xml:space="preserve"><value>Dobrze działa na płynnych spółkach i ETF-ach indeksowych w rosnącym rynku: wysoka skuteczność, krótkie transakcje. Zawodzi, gdy trend wzrostowy się łamie: spadek trwa dalej, a bez stop lossa strata może rosnąć, aż maksymalny czas trzymania zamknie pozycję.</value></data>
+  <data name="StrategyDoc_RsiPullbackStrategy_HowToUse" xml:space="preserve"><value>• Pobierz dane minutowe z mniej więcej rokiem zapasu przed okresem testu (rozgrzewka 200-dniowej średniej).
+• Zacznij od SPY albo dużych spółek.
+• Optymalizuj poziom wejścia (5–25) i średnią wyjścia; okres RSI trzymaj krótki (2–5). Domyślne 4 / 15 najlepiej wypadły w naszych testach; oryginał Connorsa to 2 / 10.</value></data>
+  <data name="StrategyDoc_BollingerReversionStrategy_Summary" xml:space="preserve"><value>Powrót do średniej na godzinowych świecach: kupuje, gdy cena spada pod dolną wstęgę Bollingera, i sprzedaje, gdy wraca do środkowej. Tylko long.</value></data>
+  <data name="StrategyDoc_BollingerReversionStrategy_HowItWorks" xml:space="preserve"><value>• Wstęgi: średnia z N godzinowych zamknięć plus/minus σ odchyleń standardowych.
+• Wejście: zamknięcie poniżej dolnej wstęgi (nietypowo duży spadek).
+• Wyjście: powrót do środkowej wstęgi albo stały stop loss poniżej wejścia.</value></data>
+  <data name="StrategyDoc_BollingerReversionStrategy_WhenItWorks" xml:space="preserve"><value>Działa na spółkach poruszających się w przedziale, które często reagują przesadnie. Zawodzi w trendach: w spadkach cena może zjeżdżać wzdłuż dolnej wstęgi, a we wzrostach rzadko do niej dochodzi. Szkody ogranicza stop loss.</value></data>
+  <data name="StrategyDoc_BollingerReversionStrategy_HowToUse" xml:space="preserve"><value>• Pobierz dane minutowe za okres testu; rozgrzewka trwa około dwóch tygodni.
+• Najpierw optymalizuj szerokość wstęgi (1,5–3σ), potem okres i stop loss.
+• Szersza wstęga daje mniej, ale silniejszych sygnałów.</value></data>
+  <data name="StrategyDoc_OpeningRangeBreakoutStrategy_Summary" xml:space="preserve"><value>Wybicie w ciągu dnia: zapisuje maksimum i minimum pierwszych minut po otwarciu, kupuje, jeśli cena wybije się ponad ten zakres, i zawsze sprzedaje przed zamknięciem. Bez pozycji na noc. Tylko long.</value></data>
+  <data name="StrategyDoc_OpeningRangeBreakoutStrategy_HowItWorks" xml:space="preserve"><value>• Zakres: maksimum i minimum między 9:30 a 9:30 + minuty zakresu (czas nowojorski).
+• Wejście: najwyżej raz dziennie, gdy minuta zamyka się powyżej maksimum zakresu, a zakres ma co najmniej minimalną szerokość %.
+• Wyjście: zamknięcie poniżej minimum zakresu (stop) albo wybraną liczbę minut przed 16:00.</value></data>
+  <data name="StrategyDoc_OpeningRangeBreakoutStrategy_WhenItWorks" xml:space="preserve"><value>Działa w dni z wyraźnym kierunkiem po otwarciu (wiadomości, wyniki, silne ruchy rynku) i na zmiennych spółkach. Zawodzi w dni spokojne lub szarpane: wybicie się odwraca i stop zostaje trafiony. Handluje prawie codziennie, więc spready i prowizje mocno ważą, a wyniki na darmowym kanale IEX mogą różnić się od pełnego rynku.</value></data>
+  <data name="StrategyDoc_OpeningRangeBreakoutStrategy_HowToUse" xml:space="preserve"><value>• Pobierz dane minutowe za okres testu; rozgrzewka nie jest potrzebna.
+• Najpierw optymalizuj długość zakresu (15–60 minut) i minimalną szerokość.
+• Oglądaj wyniki miesiąc po miesiącu: strategie dzienne mogą dobrze wyglądać średnio, a opierać się na kilku dużych dniach.</value></data>
+  <data name="Guide_Strategies_Title" xml:space="preserve"><value>4. Wybór strategii</value></data>
+  <data name="Guide_Strategies_Body" xml:space="preserve"><value>Strona Strategie opisuje każdą strategię: co robi, kiedy działa, a kiedy zawodzi, jakich danych potrzebuje i które parametry warto testować.
+• Wypróbuj w backteście otwiera stronę Backtest z wybraną strategią i jej wartościami domyślnymi.
+• Optymalizuj otwiera stronę Optymalizacja z wpisanymi już proponowanymi zakresami.
+• Twoje najlepsze wyniki pokazuje najlepsze parametry znalezione przez Twoje optymalizacje, dla symbolu i okresu; Użyj w backteście kopiuje je do formularza.</value></data>
+  <!-- Strategy and parameter texts (see StrategyTexts). -->
+  <data name="Strategy_SmaCrossStrategy_Name" xml:space="preserve"><value>Przecięcie EMA + trend ADX</value></data>
+  <data name="Strategy_SmaCrossStrategy_Description" xml:space="preserve"><value>Przecięcie EMA na 15-minutowych świecach, filtrowane przez ADX i zamknięcia sprzed 100/200 dni; kroczący stop ATR.</value></data>
+  <data name="StrategyParam_SmaCrossStrategy_fast-period_Name" xml:space="preserve"><value>Okres szybkiej EMA</value></data>
+  <data name="StrategyParam_SmaCrossStrategy_fast-period_Description" xml:space="preserve"><value>W świecach 15-minutowych.</value></data>
+  <data name="StrategyParam_SmaCrossStrategy_slow-period_Name" xml:space="preserve"><value>Okres wolnej EMA</value></data>
+  <data name="StrategyParam_SmaCrossStrategy_slow-period_Description" xml:space="preserve"><value>W świecach 15-minutowych.</value></data>
+  <data name="StrategyParam_SmaCrossStrategy_adx-threshold_Name" xml:space="preserve"><value>Próg ADX</value></data>
+  <data name="StrategyParam_SmaCrossStrategy_adx-threshold_Description" xml:space="preserve"><value>Handluje tylko, gdy trend jest co najmniej tak silny.</value></data>
+  <data name="StrategyParam_SmaCrossStrategy_atr-stop-multiplier_Name" xml:space="preserve"><value>Mnożnik stopu ATR</value></data>
+  <data name="StrategyParam_SmaCrossStrategy_atr-stop-multiplier_Description" xml:space="preserve"><value>Odległość stopu jako wielokrotność 14-świecowego ATR.</value></data>
+  <data name="StrategyParam_SmaCrossStrategy_risk-percent_Name" xml:space="preserve"><value>Ryzyko na transakcję (%)</value></data>
+  <data name="StrategyParam_SmaCrossStrategy_risk-percent_Description" xml:space="preserve"><value>Część kapitału tracona, jeśli zadziała początkowy stop.</value></data>
+
+  <data name="Strategy_RsiMeanReversionStrategy_Name" xml:space="preserve"><value>Powrót do średniej RSI</value></data>
+  <data name="Strategy_RsiMeanReversionStrategy_Description" xml:space="preserve"><value>Godzinowy RSI: kupno przy wyprzedaniu, sprzedaż przy wykupieniu lub na stałym stop lossie. Tylko long.</value></data>
+  <data name="StrategyParam_RsiMeanReversionStrategy_rsi-period_Name" xml:space="preserve"><value>Okres RSI</value></data>
+  <data name="StrategyParam_RsiMeanReversionStrategy_rsi-period_Description" xml:space="preserve"><value>W świecach godzinowych.</value></data>
+  <data name="StrategyParam_RsiMeanReversionStrategy_oversold_Name" xml:space="preserve"><value>Poziom wyprzedania</value></data>
+  <data name="StrategyParam_RsiMeanReversionStrategy_oversold_Description" xml:space="preserve"><value>Kupno, gdy RSI zamknie się poniżej tego poziomu.</value></data>
+  <data name="StrategyParam_RsiMeanReversionStrategy_overbought_Name" xml:space="preserve"><value>Poziom wykupienia</value></data>
+  <data name="StrategyParam_RsiMeanReversionStrategy_overbought_Description" xml:space="preserve"><value>Sprzedaż, gdy RSI zamknie się powyżej tego poziomu.</value></data>
+  <data name="StrategyParam_RsiMeanReversionStrategy_stop-loss-percent_Name" xml:space="preserve"><value>Stop loss (%)</value></data>
+  <data name="StrategyParam_RsiMeanReversionStrategy_stop-loss-percent_Description" xml:space="preserve"><value>Wyjście, gdy cena spadnie o tyle poniżej ceny wejścia.</value></data>
+  <data name="StrategyParam_RsiMeanReversionStrategy_allocation-percent_Name" xml:space="preserve"><value>Alokacja (%)</value></data>
+  <data name="StrategyParam_RsiMeanReversionStrategy_allocation-percent_Description" xml:space="preserve"><value>Część kapitału zainwestowana w pozycję.</value></data>
+
+  <data name="Strategy_DonchianBreakoutStrategy_Name" xml:space="preserve"><value>Wybicie z kanału Donchiana (Turtle)</value></data>
+  <data name="Strategy_DonchianBreakoutStrategy_Description" xml:space="preserve"><value>Dzienne wybicie ponad maksimum z N dni; wyjście poniżej minimum z M dni lub na stopie ATR. Wielkość pozycji wg ryzyka. Tylko long.</value></data>
+  <data name="StrategyParam_DonchianBreakoutStrategy_entry-period_Name" xml:space="preserve"><value>Kanał wejścia (dni)</value></data>
+  <data name="StrategyParam_DonchianBreakoutStrategy_entry-period_Description" xml:space="preserve"><value>Kupno, gdy zamknięcie jest powyżej najwyższego maksimum z tylu poprzednich dni.</value></data>
+  <data name="StrategyParam_DonchianBreakoutStrategy_exit-period_Name" xml:space="preserve"><value>Kanał wyjścia (dni)</value></data>
+  <data name="StrategyParam_DonchianBreakoutStrategy_exit-period_Description" xml:space="preserve"><value>Sprzedaż, gdy zamknięcie jest poniżej najniższego minimum z tylu poprzednich dni.</value></data>
+  <data name="StrategyParam_DonchianBreakoutStrategy_atr-stop-multiplier_Name" xml:space="preserve"><value>Mnożnik stopu ATR</value></data>
+  <data name="StrategyParam_DonchianBreakoutStrategy_atr-stop-multiplier_Description" xml:space="preserve"><value>Początkowy stop poniżej ceny wejścia jako wielokrotność 20-dniowego ATR.</value></data>
+  <data name="StrategyParam_DonchianBreakoutStrategy_risk-percent_Name" xml:space="preserve"><value>Ryzyko na transakcję (%)</value></data>
+  <data name="StrategyParam_DonchianBreakoutStrategy_risk-percent_Description" xml:space="preserve"><value>Część kapitału tracona, jeśli zadziała początkowy stop; wyznacza wielkość pozycji.</value></data>
+
+  <data name="Strategy_MomentumTrendStrategy_Name" xml:space="preserve"><value>Momentum szeregu czasowego</value></data>
+  <data name="Strategy_MomentumTrendStrategy_Description" xml:space="preserve"><value>Trzyma pozycję, gdy stopa zwrotu z N dni jest dodatnia, a cena jest nad długą SMA; sprawdzane co K dni. Tylko long.</value></data>
+  <data name="StrategyParam_MomentumTrendStrategy_lookback-days_Name" xml:space="preserve"><value>Okres momentum (dni)</value></data>
+  <data name="StrategyParam_MomentumTrendStrategy_lookback-days_Description" xml:space="preserve"><value>Stopa zwrotu mierzona z tylu dni sesyjnych (126 ≈ 6 miesięcy).</value></data>
+  <data name="StrategyParam_MomentumTrendStrategy_trend-period_Name" xml:space="preserve"><value>SMA trendu (dni)</value></data>
+  <data name="StrategyParam_MomentumTrendStrategy_trend-period_Description" xml:space="preserve"><value>Trzyma pozycję tylko, gdy zamknięcie jest nad tą średnią kroczącą.</value></data>
+  <data name="StrategyParam_MomentumTrendStrategy_rebalance-days_Name" xml:space="preserve"><value>Sprawdzaj co (dni)</value></data>
+  <data name="StrategyParam_MomentumTrendStrategy_rebalance-days_Description" xml:space="preserve"><value>Dni sesyjne między decyzjami (21 ≈ co miesiąc).</value></data>
+  <data name="StrategyParam_MomentumTrendStrategy_allocation-percent_Name" xml:space="preserve"><value>Alokacja (%)</value></data>
+  <data name="StrategyParam_MomentumTrendStrategy_allocation-percent_Description" xml:space="preserve"><value>Część kapitału zainwestowana w czasie trzymania pozycji.</value></data>
+
+  <data name="Strategy_RsiPullbackStrategy_Name" xml:space="preserve"><value>Korekta RSI (Connors)</value></data>
+  <data name="Strategy_RsiPullbackStrategy_Description" xml:space="preserve"><value>W trendzie wzrostowym (nad długą SMA) kupuje gwałtowny spadek krótkiego (2–5 dni) RSI; wychodzi nad krótką SMA lub po N dniach. Tylko long.</value></data>
+  <data name="StrategyParam_RsiPullbackStrategy_rsi-period_Name" xml:space="preserve"><value>Okres RSI (dni)</value></data>
+  <data name="StrategyParam_RsiPullbackStrategy_rsi-period_Description" xml:space="preserve"><value>Bardzo krótki RSI reaguje już na kilka spadkowych dni.</value></data>
+  <data name="StrategyParam_RsiPullbackStrategy_entry-level_Name" xml:space="preserve"><value>Wejście, gdy RSI poniżej</value></data>
+  <data name="StrategyParam_RsiPullbackStrategy_entry-level_Description" xml:space="preserve"><value>Kupno, gdy RSI zamknie się poniżej tego poziomu.</value></data>
+  <data name="StrategyParam_RsiPullbackStrategy_trend-period_Name" xml:space="preserve"><value>SMA trendu (dni)</value></data>
+  <data name="StrategyParam_RsiPullbackStrategy_trend-period_Description" xml:space="preserve"><value>Kupuje tylko, gdy zamknięcie jest nad tą średnią kroczącą.</value></data>
+  <data name="StrategyParam_RsiPullbackStrategy_exit-period_Name" xml:space="preserve"><value>SMA wyjścia (dni)</value></data>
+  <data name="StrategyParam_RsiPullbackStrategy_exit-period_Description" xml:space="preserve"><value>Sprzedaż, gdy zamknięcie wzrośnie ponad tę krótką średnią kroczącą.</value></data>
+  <data name="StrategyParam_RsiPullbackStrategy_max-hold-days_Name" xml:space="preserve"><value>Maks. czas trzymania (dni)</value></data>
+  <data name="StrategyParam_RsiPullbackStrategy_max-hold-days_Description" xml:space="preserve"><value>Sprzedaż po tylu dniach, jeśli wyjście nie zadziałało wcześniej.</value></data>
+  <data name="StrategyParam_RsiPullbackStrategy_allocation-percent_Name" xml:space="preserve"><value>Alokacja (%)</value></data>
+  <data name="StrategyParam_RsiPullbackStrategy_allocation-percent_Description" xml:space="preserve"><value>Część kapitału zainwestowana w pozycję.</value></data>
+
+  <data name="Strategy_BollingerReversionStrategy_Name" xml:space="preserve"><value>Powrót do średniej (Bollinger)</value></data>
+  <data name="Strategy_BollingerReversionStrategy_Description" xml:space="preserve"><value>Godzinowo: kupno przy zamknięciu pod dolną wstęgą, sprzedaż na środkowej wstędze lub na stopie %. Tylko long.</value></data>
+  <data name="StrategyParam_BollingerReversionStrategy_band-period_Name" xml:space="preserve"><value>Okres wstęg (godziny)</value></data>
+  <data name="StrategyParam_BollingerReversionStrategy_band-period_Description" xml:space="preserve"><value>Średnia krocząca i odchylenie standardowe z tylu świec godzinowych.</value></data>
+  <data name="StrategyParam_BollingerReversionStrategy_band-width_Name" xml:space="preserve"><value>Szerokość wstęg (σ)</value></data>
+  <data name="StrategyParam_BollingerReversionStrategy_band-width_Description" xml:space="preserve"><value>Ile odchyleń standardowych poniżej średniej leży dolna wstęga.</value></data>
+  <data name="StrategyParam_BollingerReversionStrategy_stop-loss-percent_Name" xml:space="preserve"><value>Stop loss (%)</value></data>
+  <data name="StrategyParam_BollingerReversionStrategy_stop-loss-percent_Description" xml:space="preserve"><value>Wyjście, gdy cena spadnie o tyle poniżej ceny wejścia.</value></data>
+  <data name="StrategyParam_BollingerReversionStrategy_allocation-percent_Name" xml:space="preserve"><value>Alokacja (%)</value></data>
+  <data name="StrategyParam_BollingerReversionStrategy_allocation-percent_Description" xml:space="preserve"><value>Część kapitału zainwestowana w pozycję.</value></data>
+
+  <data name="Strategy_OpeningRangeBreakoutStrategy_Name" xml:space="preserve"><value>Wybicie z zakresu otwarcia</value></data>
+  <data name="Strategy_OpeningRangeBreakoutStrategy_Description" xml:space="preserve"><value>Intraday: kupno przy wybiciu ponad maksimum pierwszych N minut, stop na minimum zakresu, zamknięcie pozycji przed końcem sesji. Tylko long.</value></data>
+  <data name="StrategyParam_OpeningRangeBreakoutStrategy_range-minutes_Name" xml:space="preserve"><value>Zakres otwarcia (minuty)</value></data>
+  <data name="StrategyParam_OpeningRangeBreakoutStrategy_range-minutes_Description" xml:space="preserve"><value>Minuty po otwarciu o 9:30, które wyznaczają zakres.</value></data>
+  <data name="StrategyParam_OpeningRangeBreakoutStrategy_exit-minutes-before-close_Name" xml:space="preserve"><value>Wyjście przed zamknięciem (minuty)</value></data>
+  <data name="StrategyParam_OpeningRangeBreakoutStrategy_exit-minutes-before-close_Description" xml:space="preserve"><value>Sprzedaż najpóźniej tyle minut przed zamknięciem o 16:00.</value></data>
+  <data name="StrategyParam_OpeningRangeBreakoutStrategy_min-range-percent_Name" xml:space="preserve"><value>Minimalny zakres (%)</value></data>
+  <data name="StrategyParam_OpeningRangeBreakoutStrategy_min-range-percent_Description" xml:space="preserve"><value>Pomija dni, w których zakres otwarcia jest węższy niż ta część ceny (za mały ruch).</value></data>
+  <data name="StrategyParam_OpeningRangeBreakoutStrategy_allocation-percent_Name" xml:space="preserve"><value>Alokacja (%)</value></data>
+  <data name="StrategyParam_OpeningRangeBreakoutStrategy_allocation-percent_Description" xml:space="preserve"><value>Część kapitału zainwestowana w pozycję.</value></data>
+
+  <!-- Opcjonalne sekcje „Wyniki testów”: optymalizacja 2024-11-01..2025-10-31, sprawdzenie 2025-11-01..2026-10-23. -->
+  <data name="StrategyDoc_MomentumTrendStrategy_TestResults" xml:space="preserve"><value>Optymalizacja na AAPL, MSFT i SPY od listopada 2024 do października 2025, potem sprawdzenie na listopadzie 2025 – październiku 2026. To wyniki historyczne z rynku, który głównie rósł: powtórz oba kroki na swoich symbolach.
+• Najlepszy okres momentum: 63 dni (105 na MSFT); SMA trendu prawie nie miała znaczenia.
+• Rok sprawdzenia: AAPL +21,1%, MSFT −1,7%, SPY +2,4%. Kupno i trzymanie dało +27,1%, +1,9% i +11,2%.
+• Strategia głównie trzyma akcje, więc nie pobiła kupna i trzymania. Jej zaletą było mniejsze obsunięcie w roku optymalizacji: 14% wobec 33% przy trzymaniu AAPL.</value></data>
+  <data name="StrategyDoc_RsiPullbackStrategy_TestResults" xml:space="preserve"><value>Optymalizacja na AAPL, MSFT i SPY od listopada 2024 do października 2025, potem sprawdzenie na listopadzie 2025 – październiku 2026. To wyniki historyczne z rynku, który głównie rósł: powtórz oba kroki na swoich symbolach.
+• Najlepiej: okres RSI 4–5 i wejście przy 15–20, stąd domyślne 4 / 15.
+• Rok sprawdzenia dla 4 / 15: AAPL +8,9%, SPY +2,6% (RSI 2 / wejście 5: +6,3%). MSFT: brak przewagi (od −1,1% do +2,6%).
+• Obsunięcia zostały na poziomie 1,5–3%, ale strategia zawiera tylko 1–10 transakcji rocznie, więc pojedyncze wyniki niewiele znaczą.</value></data>
+  <data name="StrategyDoc_OpeningRangeBreakoutStrategy_TestResults" xml:space="preserve"><value>Optymalizacja na AAPL, MSFT i SPY od listopada 2024 do października 2025, potem sprawdzenie na listopadzie 2025 – październiku 2026. To wyniki historyczne z rynku, który głównie rósł: powtórz oba kroki na swoich symbolach.
+• Najlepszy zakres: 60 minut na AAPL i SPY (domyślny), 15 minut na MSFT; minimalny zakres między 0 a 0,5% prawie nie miał znaczenia.
+• Rok sprawdzenia: AAPL +5,6%, SPY +1,7%, MSFT +7,1% (15 minut). W płaskim roku MSFT trzymanie dało tylko +1,9% przy obsunięciu 31,5%.
+• Przy 50–160 transakcjach rocznie to najbardziej wiarygodne wyniki testów, ale przewaga poza okresem optymalizacji była mniejsza.</value></data>
+  <data name="StrategyDoc_BollingerReversionStrategy_TestResults" xml:space="preserve"><value>Optymalizacja na AAPL, MSFT i SPY od listopada 2024 do października 2025, potem sprawdzenie na listopadzie 2025 – październiku 2026. To wyniki historyczne z rynku, który głównie rósł: powtórz oba kroki na swoich symbolach.
+• Pojedyncze akcje: brak pewnej przewagi. AAPL tracił w roku optymalizacji; najlepsze ustawienie dla MSFT spadło z +28,9% do +3,8%, a kolejne traciły.
+• SPY: 20 godzin / 3σ dało +6,1%, a potem +3,6%; 10 godzin / 2σ +7,9%, a potem +7,7%.
+• Używaj jej raczej na indeksie niż na pojedynczej akcji.</value></data>
+  <data name="StrategyDoc_DonchianBreakoutStrategy_TestResults" xml:space="preserve"><value>Optymalizacja na AAPL, MSFT i SPY od listopada 2024 do października 2025, potem sprawdzenie na listopadzie 2025 – październiku 2026. To wyniki historyczne z rynku, który głównie rósł: powtórz oba kroki na swoich symbolach.
+• Słabo na wszystkich trzech: najlepsze wyniki sprawdzenia +2,3% (AAPL), +1,7% (SPY) i −2,3% (MSFT).
+• Tylko 1–4 transakcje rocznie: dzienne wybicia potrzebują dłuższych okresów albo większej liczby symboli, by coś pokazać.</value></data>
+  <data name="StrategyDoc_SmaCrossStrategy_TestResults" xml:space="preserve"><value>Optymalizacja na AAPL od października 2025 do października 2026, potem sprawdzenie na roku wcześniej (październik 2024 – październik 2025). To wyniki historyczne: powtórz oba kroki na swoich symbolach.
+• Wszystkie pięć najlepszych ustawień straciło 8–17% w roku sprawdzenia; w okresie optymalizacji dawały od −1,3% do +1%.
+• Najlepszy wynik optymalizacji dopasował się do szumu swojego okresu; nie używaj go bez sprawdzenia, które się utrzyma.</value></data>
+</root>

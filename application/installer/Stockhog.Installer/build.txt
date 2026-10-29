@@ -1,0 +1,1 @@
+﻿dotnet build "D:\development\my_projects\stockhog-app\application\installer\Stockhog.Installer\Stockhog.Installer.wixproj" -c Release -p:PublishDir="D:\development\my_projects\stockhog-app\dist" -p:ProductVersion=0.1.0

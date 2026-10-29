@@ -1,0 +1,23 @@
+<Solution>
+  <Folder Name="/benchmarks/">
+    <Project Path="benchmarks/Stockhog.Benchmarks/Stockhog.Benchmarks.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Stockhog.Application.Tests/Stockhog.Application.Tests.csproj" />
+    <Project Path="tests/Stockhog.Architecture.Tests/Stockhog.Architecture.Tests.csproj" />
+    <Project Path="tests/Stockhog.Domain.Tests/Stockhog.Domain.Tests.csproj" />
+    <Project Path="tests/Stockhog.Infrastructure.Tests/Stockhog.Infrastructure.Tests.csproj" />
+    <Project Path="tests/Stockhog.Presentation.Tests/Stockhog.Presentation.Tests.csproj" />
+  </Folder>
+  <Project Path="Stockhog.App/Stockhog.App.csproj" />
+  <Project Path="Stockhog.Application/Stockhog.Application.csproj" />
+  <Project Path="Stockhog.Domain/Stockhog.Domain.csproj" />
+  <Project Path="Stockhog.EngineRunner/Stockhog.EngineRunner.csproj" />
+  <Project Path="Stockhog.Infrastructure.Alpaca/Stockhog.Infrastructure.Alpaca.csproj" />
+  <Project Path="Stockhog.Infrastructure.Anthropic/Stockhog.Infrastructure.Anthropic.csproj" />
+  <Project Path="Stockhog.Infrastructure.Lean/Stockhog.Infrastructure.Lean.csproj" />
+  <Project Path="Stockhog.Infrastructure/Stockhog.Infrastructure.csproj" />
+  <Project Path="Stockhog.Presentation/Stockhog.Presentation.csproj" />
+  <Project Path="Stockhog.Strategies/Stockhog.Strategies.csproj" />
+  <Project Path="Stockhog.Wpf.Controls/Stockhog.Wpf.Controls.csproj" />
+</Solution>

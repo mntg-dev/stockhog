@@ -1,6 +1,6 @@
-# EmTrading
+# Stockhog
 
-[![application-ci](https://github.com/emskypl/em-trading/actions/workflows/application-ci.yml/badge.svg)](https://github.com/emskypl/em-trading/actions/workflows/application-ci.yml)
+[![application-ci](https://github.com/mntg-dev/stockhog/actions/workflows/application-ci.yml/badge.svg)](https://github.com/mntg-dev/stockhog/actions/workflows/application-ci.yml)
 
 A Windows desktop app for researching and trading US equities:
 - download market data from Alpaca;
@@ -24,19 +24,19 @@ A Windows desktop app for researching and trading US equities:
 
 ## Architecture
 
-Clean Architecture: dependencies point inwards, and the rules are enforced by [architecture tests](application/tests/EmTrading.Architecture.Tests/LayerDependencyTests.cs).
+Clean Architecture: dependencies point inwards, and the rules are enforced by [architecture tests](application/tests/Stockhog.Architecture.Tests/LayerDependencyTests.cs).
 
 ```mermaid
 flowchart TB
-    App["EmTrading.App<br/>composition root, XAML views"] --> Presentation
+    App["Stockhog.App<br/>composition root, XAML views"] --> Presentation
     App --> Infrastructure & Alpaca & Lean
-    Presentation["EmTrading.Presentation<br/>view models, localization"] --> Application
-    Presentation --> Controls["EmTrading.Wpf.Controls<br/>charts, KPI cards"]
+    Presentation["Stockhog.Presentation<br/>view models, localization"] --> Application
+    Presentation --> Controls["Stockhog.Wpf.Controls<br/>charts, KPI cards"]
     Alpaca["Infrastructure.Alpaca<br/>REST + WebSocket"] --> Infrastructure
     Lean["Infrastructure.Lean<br/>engine process, results"] --> Infrastructure
-    Infrastructure["EmTrading.Infrastructure<br/>EF Core, jobs, caching"] --> Application
-    Application["EmTrading.Application<br/>CQRS use cases, ports"] --> Domain["EmTrading.Domain<br/>aggregates, value objects"]
-    Runner["EmTrading.EngineRunner<br/>separate process"] --> Strategies["EmTrading.Strategies<br/>Lean algorithms"]
+    Infrastructure["Stockhog.Infrastructure<br/>EF Core, jobs, caching"] --> Application
+    Application["Stockhog.Application<br/>CQRS use cases, ports"] --> Domain["Stockhog.Domain<br/>aggregates, value objects"]
+    Runner["Stockhog.EngineRunner<br/>separate process"] --> Strategies["Stockhog.Strategies<br/>Lean algorithms"]
     Lean -. starts .-> Runner
 ```
 
@@ -58,17 +58,17 @@ flowchart LR
 
 | Skill | Where |
 |---|---|
-| **CQRS** (own dispatcher, no MediatR) | [Dispatcher](application/EmTrading.Application/Messaging/Dispatcher.cs): cached generic wrappers, one DI scope per request. Pipeline behaviors: [logging, validation, unit of work, caching](application/EmTrading.Application/Behaviors). Features are vertical slices, e.g. [StartOptimization](application/EmTrading.Application/Optimization/StartOptimization/StartOptimizationCommand.cs). |
-| **DDD** | Aggregates with state machines and domain events: [BacktestRun](application/EmTrading.Domain/Backtesting/BacktestRun.cs), [OptimizationRun](application/EmTrading.Domain/Optimization/OptimizationRun.cs), [Order](application/EmTrading.Domain/Trading/Order.cs) (idempotent fills), [MarketDataSet](application/EmTrading.Domain/MarketData/MarketDataSet.cs) (coverage gaps). Domain service: [RiskPolicy](application/EmTrading.Domain/Trading/RiskPolicy.cs). Events are published only after commit by the [unit of work](application/EmTrading.Infrastructure/Persistence/Repositories.cs). |
-| **Background workers** | [JobProcessor](application/EmTrading.Infrastructure/Jobs/JobProcessor.cs) over a [Channel-based queue](application/EmTrading.Infrastructure/Jobs/JobQueue.cs) (dedupe, cancel, progress). WebSocket [stream services](application/EmTrading.Infrastructure.Alpaca/Streaming/AlpacaStreamService.cs) with reconnect backoff. Reconciliation and daily-loss guard on `PeriodicTimer`. |
-| **Multithreading** | Parallel downloads and backtests. Parallel optimization trials sharing one aggregate behind an async lock: [ExecuteOptimization](application/EmTrading.Application/Optimization/ExecuteOptimization/ExecuteOptimizationCommand.cs). [Monte Carlo](application/EmTrading.Application/Analytics/MonteCarloSimulator.cs) with `Parallel.For` thread-local accumulators and per-block seeding, so it is deterministic. Parallel minute-to-daily [aggregation](application/EmTrading.Infrastructure.Lean/Data/LeanPriceBarReader.cs). |
-| **Producer/consumer** | Download pipeline in [MarketDataDownloader](application/EmTrading.Infrastructure/MarketData/MarketDataDownloader.cs). Live market data: socket reader → bounded drop-oldest channel → consumer, in [AlpacaMarketDataStream](application/EmTrading.Infrastructure.Alpaca/MarketData/AlpacaMarketDataStream.cs). |
-| **Async/await** | Engine process streaming and cancellation in [LeanBacktestEngine](application/EmTrading.Infrastructure.Lean/Engine/LeanBacktestEngine.cs). `IAsyncEnumerable` paging. CPU work moved off the UI thread with `Task.Run`. A submit that must not be cancelled half-way: [PlaceOrder](application/EmTrading.Application/Trading/Orders/PlaceOrderCommand.cs). |
-| **WPF / MVVM** | View-model-first shell, singleton pages, messenger. [ThrottledAction](application/EmTrading.Presentation/Common/ThrottledAction.cs) coalesces worker-thread updates. INotifyDataErrorInfo forms. Reusable [ScottPlot controls](application/EmTrading.Wpf.Controls/Charts) (equity/drawdown, candles with trades, heatmap, histogram). Runtime PL/EN through [Loc](application/EmTrading.Presentation/Localization/Loc.cs). |
-| **Caching** | [CachingBehavior](application/EmTrading.Application/Behaviors/CachingBehavior.cs) on HybridCache (tags, stampede protection, failures not cached). Invalidation through domain events, e.g. [prices](application/EmTrading.Application/MarketData/GetPriceBars/GetPriceBarsQuery.cs) and the account. The incremental data cache lives in `MarketDataSet`. |
-| **Resilience** | Polly retries, circuit breaker and timeouts. Shared [token-bucket rate limiter](application/EmTrading.Infrastructure.Alpaca/AlpacaRateLimiting.cs). [No retries for orders](application/EmTrading.Infrastructure.Alpaca/AlpacaDependencyInjection.cs) (`DisableForUnsafeHttpMethods`) plus idempotent client order ids. |
-| **Trading safety** | [Paper/live guard and arming, daily-loss halt, audit trail](application/EmTrading.Application/Trading/Safety/TradingSafety.cs). [Startup validation of the live opt-in](application/EmTrading.Infrastructure.Alpaca/AlpacaOptions.cs). |
-| **Testing** | 314 tests:<br>• unit tests: domain, handlers;<br>• integration: SQLite with real migrations, HTTP stubs, a scripted WebSocket fake;<br>• architecture and convention tests;<br>• pixel tests for charts.<br>Plus [BenchmarkDotNet](application/benchmarks/EmTrading.Benchmarks/MonteCarloBenchmarks.cs). |
+| **CQRS** (own dispatcher, no MediatR) | [Dispatcher](application/Stockhog.Application/Messaging/Dispatcher.cs): cached generic wrappers, one DI scope per request. Pipeline behaviors: [logging, validation, unit of work, caching](application/Stockhog.Application/Behaviors). Features are vertical slices, e.g. [StartOptimization](application/Stockhog.Application/Optimization/StartOptimization/StartOptimizationCommand.cs). |
+| **DDD** | Aggregates with state machines and domain events: [BacktestRun](application/Stockhog.Domain/Backtesting/BacktestRun.cs), [OptimizationRun](application/Stockhog.Domain/Optimization/OptimizationRun.cs), [Order](application/Stockhog.Domain/Trading/Order.cs) (idempotent fills), [MarketDataSet](application/Stockhog.Domain/MarketData/MarketDataSet.cs) (coverage gaps). Domain service: [RiskPolicy](application/Stockhog.Domain/Trading/RiskPolicy.cs). Events are published only after commit by the [unit of work](application/Stockhog.Infrastructure/Persistence/Repositories.cs). |
+| **Background workers** | [JobProcessor](application/Stockhog.Infrastructure/Jobs/JobProcessor.cs) over a [Channel-based queue](application/Stockhog.Infrastructure/Jobs/JobQueue.cs) (dedupe, cancel, progress). WebSocket [stream services](application/Stockhog.Infrastructure.Alpaca/Streaming/AlpacaStreamService.cs) with reconnect backoff. Reconciliation and daily-loss guard on `PeriodicTimer`. |
+| **Multithreading** | Parallel downloads and backtests. Parallel optimization trials sharing one aggregate behind an async lock: [ExecuteOptimization](application/Stockhog.Application/Optimization/ExecuteOptimization/ExecuteOptimizationCommand.cs). [Monte Carlo](application/Stockhog.Application/Analytics/MonteCarloSimulator.cs) with `Parallel.For` thread-local accumulators and per-block seeding, so it is deterministic. Parallel minute-to-daily [aggregation](application/Stockhog.Infrastructure.Lean/Data/LeanPriceBarReader.cs). |
+| **Producer/consumer** | Download pipeline in [MarketDataDownloader](application/Stockhog.Infrastructure/MarketData/MarketDataDownloader.cs). Live market data: socket reader → bounded drop-oldest channel → consumer, in [AlpacaMarketDataStream](application/Stockhog.Infrastructure.Alpaca/MarketData/AlpacaMarketDataStream.cs). |
+| **Async/await** | Engine process streaming and cancellation in [LeanBacktestEngine](application/Stockhog.Infrastructure.Lean/Engine/LeanBacktestEngine.cs). `IAsyncEnumerable` paging. CPU work moved off the UI thread with `Task.Run`. A submit that must not be cancelled half-way: [PlaceOrder](application/Stockhog.Application/Trading/Orders/PlaceOrderCommand.cs). |
+| **WPF / MVVM** | View-model-first shell, singleton pages, messenger. [ThrottledAction](application/Stockhog.Presentation/Common/ThrottledAction.cs) coalesces worker-thread updates. INotifyDataErrorInfo forms. Reusable [ScottPlot controls](application/Stockhog.Wpf.Controls/Charts) (equity/drawdown, candles with trades, heatmap, histogram). Runtime PL/EN through [Loc](application/Stockhog.Presentation/Localization/Loc.cs). |
+| **Caching** | [CachingBehavior](application/Stockhog.Application/Behaviors/CachingBehavior.cs) on HybridCache (tags, stampede protection, failures not cached). Invalidation through domain events, e.g. [prices](application/Stockhog.Application/MarketData/GetPriceBars/GetPriceBarsQuery.cs) and the account. The incremental data cache lives in `MarketDataSet`. |
+| **Resilience** | Polly retries, circuit breaker and timeouts. Shared [token-bucket rate limiter](application/Stockhog.Infrastructure.Alpaca/AlpacaRateLimiting.cs). [No retries for orders](application/Stockhog.Infrastructure.Alpaca/AlpacaDependencyInjection.cs) (`DisableForUnsafeHttpMethods`) plus idempotent client order ids. |
+| **Trading safety** | [Paper/live guard and arming, daily-loss halt, audit trail](application/Stockhog.Application/Trading/Safety/TradingSafety.cs). [Startup validation of the live opt-in](application/Stockhog.Infrastructure.Alpaca/AlpacaOptions.cs). |
+| **Testing** | 314 tests:<br>• unit tests: domain, handlers;<br>• integration: SQLite with real migrations, HTTP stubs, a scripted WebSocket fake;<br>• architecture and convention tests;<br>• pixel tests for charts.<br>Plus [BenchmarkDotNet](application/benchmarks/Stockhog.Benchmarks/MonteCarloBenchmarks.cs). |
 
 ## Getting started
 
@@ -76,16 +76,16 @@ Requirements: Windows and the .NET 10 SDK. Market data and trading need a free [
 
 ```powershell
 cd application
-dotnet user-secrets set "Alpaca:ApiKey" "<key>" --project EmTrading.App
-dotnet user-secrets set "Alpaca:ApiSecret" "<secret>" --project EmTrading.App
+dotnet user-secrets set "Alpaca:ApiKey" "<key>" --project Stockhog.App
+dotnet user-secrets set "Alpaca:ApiSecret" "<secret>" --project Stockhog.App
 # Paper trading account keys, if different from the keys above:
-dotnet user-secrets set "Alpaca:TradingApiKey" "<paper key>" --project EmTrading.App
-dotnet user-secrets set "Alpaca:TradingApiSecret" "<paper secret>" --project EmTrading.App
+dotnet user-secrets set "Alpaca:TradingApiKey" "<paper key>" --project Stockhog.App
+dotnet user-secrets set "Alpaca:TradingApiSecret" "<paper secret>" --project Stockhog.App
 
-dotnet run --project EmTrading.App
+dotnet run --project Stockhog.App
 ```
 
-Data, results and the SQLite database go to the folders under `Storage` in `appsettings.json`. Logs go to `%LOCALAPPDATA%\EmTrading\logs`. The UI starts in Polish; switch to English under **Settings → Language** (the change applies at once and is remembered).
+Data, results and the SQLite database go to the folders under `Storage` in `appsettings.json`. Logs go to `%LOCALAPPDATA%\Stockhog\logs`. The UI starts in Polish; switch to English under **Settings → Language** (the change applies at once and is remembered).
 
 ## How to use: a walkthrough
 
@@ -167,7 +167,7 @@ Example of a refused order: buying 100 AAPL at about $340 is worth $34,000, abov
 
 ### Configuration reference
 
-Settings live in `application/EmTrading.App/appsettings.json`; keys go to user secrets (see above).
+Settings live in `application/Stockhog.App/appsettings.json`; keys go to user secrets (see above).
 
 | Setting | Default | Meaning |
 |---|---|---|
@@ -200,9 +200,9 @@ Startup fails if any setting is missing. In live mode every order still goes thr
 
 ```powershell
 cd application
-dotnet test --solution EmTradingSolution.slnx
-dotnet test --solution EmTradingSolution.slnx --coverage --coverage-output-format cobertura --results-directory TestResults
-dotnet run -c Release --project benchmarks/EmTrading.Benchmarks -- --filter "*MonteCarlo*"
+dotnet test --solution StockhogSolution.slnx
+dotnet test --solution StockhogSolution.slnx --coverage --coverage-output-format cobertura --results-directory TestResults
+dotnet run -c Release --project benchmarks/Stockhog.Benchmarks -- --filter "*MonteCarlo*"
 ```
 
 CI builds, tests and publishes a coverage report on every push.

@@ -1,7 +1,7 @@
 import { useT } from '../i18n/I18nProvider'
 import { useLatestRelease } from '../hooks/useLatestRelease'
 
-const RELEASES_PAGE_URL = 'https://github.com/mntg-dev/em-trading/releases'
+const RELEASES_PAGE_URL = 'https://github.com/mntg-dev/stockhog/releases'
 
 function formatBytes(bytes: number) {
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`

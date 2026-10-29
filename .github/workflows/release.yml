@@ -25,7 +25,7 @@ jobs:
           dotnet-version: 10.0.x
 
       - name: Restore
-        run: dotnet restore EmTradingSolution.slnx
+        run: dotnet restore StockhogSolution.slnx
 
       - name: Restore local tools (wix)
         run: dotnet tool restore
@@ -35,16 +35,16 @@ jobs:
         # See https://www.firegiant.com/oss-maintenance-fee/
         run: dotnet wix eula accept wix7
 
-      - name: Publish EmTrading.App (self-contained, win-x64)
+      - name: Publish Stockhog.App (self-contained, win-x64)
         run: >
-          dotnet publish EmTrading.App/EmTrading.App.csproj
+          dotnet publish Stockhog.App/Stockhog.App.csproj
           -c Release -r win-x64 --self-contained true
           -p:PublishSingleFile=false
           -o ../dist
 
-      - name: Publish EmTrading.EngineRunner (self-contained, win-x64)
+      - name: Publish Stockhog.EngineRunner (self-contained, win-x64)
         run: >
-          dotnet publish EmTrading.EngineRunner/EmTrading.EngineRunner.csproj
+          dotnet publish Stockhog.EngineRunner/Stockhog.EngineRunner.csproj
           -c Release -r win-x64 --self-contained true
           -p:PublishSingleFile=false
           -o ../dist
@@ -53,7 +53,7 @@ jobs:
         shell: pwsh
         run: |
           $productVersion = "${{ github.ref_name }}" -replace '^v', ''
-          dotnet build installer/EmTrading.Installer/EmTrading.Installer.wixproj `
+          dotnet build installer/Stockhog.Installer/Stockhog.Installer.wixproj `
             -c Release `
             -p:PublishDir="$pwd/../dist" `
             -p:ProductVersion=$productVersion
@@ -62,14 +62,14 @@ jobs:
         shell: pwsh
         run: |
           $version = "${{ github.ref_name }}"
-          $zipName = "EmTrading-$version-win-x64.zip"
+          $zipName = "Stockhog-$version-win-x64.zip"
           Compress-Archive -Path dist/* -DestinationPath $zipName
           $hash = (Get-FileHash -Algorithm SHA256 $zipName).Hash.ToLower()
           "$hash  $zipName" | Out-File -Encoding utf8 "$zipName.sha256"
           echo "ZIP_NAME=$zipName" >> $env:GITHUB_ENV
 
-          $msiName = "EmTrading-$version-win-x64.msi"
-          Copy-Item "application/installer/EmTrading.Installer/bin/Release/EmTrading-Setup.msi" $msiName
+          $msiName = "Stockhog-$version-win-x64.msi"
+          Copy-Item "application/installer/Stockhog.Installer/bin/Release/Stockhog-Setup.msi" $msiName
           $msiHash = (Get-FileHash -Algorithm SHA256 $msiName).Hash.ToLower()
           "$msiHash  $msiName" | Out-File -Encoding utf8 "$msiName.sha256"
           echo "MSI_NAME=$msiName" >> $env:GITHUB_ENV
@@ -121,6 +121,8 @@ jobs:
 
           # Stable links that always point at the newest release.
           $short = "public, max-age=300"
+          Upload $env:MSI_NAME "latest/Stockhog-Setup.msi" "application/x-msi" $short -Overwrite
+          # The app was called EmTrading before; links to its installer get the current one too.
           Upload $env:MSI_NAME "latest/EmTrading-Setup.msi" "application/x-msi" $short -Overwrite
 
           function Describe($file) {

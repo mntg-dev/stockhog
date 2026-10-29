@@ -1,0 +1,79 @@
+<UserControl x:Class="Stockhog.App.Views.MarketDataView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:loc="clr-namespace:Stockhog.Presentation.Localization;assembly=Stockhog.Presentation"
+             xmlns:charts="clr-namespace:Stockhog.Wpf.Controls.Charts;assembly=Stockhog.Wpf.Controls"
+             xmlns:controls="clr-namespace:Stockhog.Wpf.Controls;assembly=Stockhog.Wpf.Controls">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="280" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <Border Style="{StaticResource Card}" Margin="0,0,12,0">
+            <StackPanel>
+                <TextBlock Text="{loc:Tr MarketData_Title}" Style="{StaticResource PageTitle}" />
+                <TextBlock Text="{loc:Tr Field_SymbolList}" Style="{StaticResource FieldLabel}" />
+                <controls:SymbolBox Text="{Binding SymbolList}" AllowMultiple="True"
+                                    SuggestionProvider="{StaticResource SymbolSuggestions}" ToolTip="{loc:Tr MarketData_SymbolsHint}"
+                                    AutomationProperties.Name="{loc:Tr Field_SymbolList}" />
+                <TextBlock Text="{loc:Tr Field_Timeframe}" Style="{StaticResource FieldLabel}" />
+                <ComboBox ItemsSource="{Binding Timeframes}" SelectedItem="{Binding SelectedTimeframe}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Converter={StaticResource LocalizedEnum}}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+                <TextBlock Text="{loc:Tr Field_StartDate}" Style="{StaticResource FieldLabel}" />
+                <DatePicker SelectedDate="{Binding StartDate}" />
+                <TextBlock Text="{loc:Tr Field_EndDate}" Style="{StaticResource FieldLabel}" />
+                <DatePicker SelectedDate="{Binding EndDate}" />
+                <Button Content="{loc:Tr MarketData_Download}" Command="{Binding DownloadCommand}" Style="{StaticResource PrimaryButton}" Margin="0,16,0,0" />
+                <TextBlock Text="{loc:Tr MarketData_DownloadHint}" TextWrapping="Wrap" Foreground="Gray" FontSize="11" Margin="0,8,0,0" />
+
+                <Separator Margin="0,16,0,4" />
+                <TextBlock Text="{loc:Tr MarketData_Symbols}" Style="{StaticResource SectionTitle}" />
+                <TextBlock Text="{Binding SymbolsStatus}" TextWrapping="Wrap" Foreground="Gray" FontSize="11" />
+                <Button Content="{loc:Tr MarketData_RefreshSymbols}" Command="{Binding RefreshSymbolsCommand}" Margin="0,8,0,0" />
+            </StackPanel>
+        </Border>
+
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="2*" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="3*" />
+            </Grid.RowDefinitions>
+            <StackPanel Style="{StaticResource Toolbar}">
+                <TextBlock Text="{loc:Tr MarketData_Stored}" Style="{StaticResource SectionTitle}" VerticalAlignment="Center" Margin="0,0,12,0" />
+                <Button Content="{loc:Tr Common_Refresh}" Command="{Binding RefreshCoverageCommand}" />
+            </StackPanel>
+            <DataGrid Grid.Row="1" ItemsSource="{Binding Coverage}" SelectedItem="{Binding SelectedCoverage}" SelectionMode="Single">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="{loc:Tr Field_Symbol}" Binding="{Binding Symbol}" Width="70" />
+                    <DataGridTextColumn Header="{loc:Tr Field_Timeframe}" Binding="{Binding Timeframe, Converter={StaticResource LocalizedEnum}}" Width="90" />
+                    <DataGridTextColumn Header="{loc:Tr MarketData_Days}" Binding="{Binding CoveredDays}" Width="60" />
+                    <DataGridTextColumn Header="{loc:Tr MarketData_LastDownload}" Binding="{Binding LastDownloadedAt.LocalDateTime, StringFormat=g}" Width="140" />
+                    <DataGridTextColumn Header="{loc:Tr MarketData_Ranges}" Binding="{Binding RangesText}" Width="*" />
+                </DataGrid.Columns>
+            </DataGrid>
+            <TextBlock Grid.Row="2" Margin="0,10,0,4" Foreground="Gray">
+                <TextBlock.Style>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="Text" Value="{Binding PreviewTitle}" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding PreviewTitle}" Value="{x:Null}">
+                                <Setter Property="Text" Value="{loc:Tr MarketData_SelectForPreview}" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+            <Border Grid.Row="3" Style="{StaticResource Card}" Padding="4">
+                <charts:PriceChart Bars="{Binding PreviewBars}" PriceLabel="{loc:Tr Chart_Price}" />
+            </Border>
+        </Grid>
+    </Grid>
+</UserControl>

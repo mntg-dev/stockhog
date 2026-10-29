@@ -8,16 +8,16 @@ Pushing a `v*` tag runs [release.yml](../.github/workflows/release.yml). That wo
 
 ```
 releases/
-  v1.2.0/EmTrading-v1.2.0-win-x64.msi (+ .sha256)   never overwritten, cached for a year
-  v1.2.0/EmTrading-v1.2.0-win-x64.zip (+ .sha256)
-  latest/EmTrading-Setup.msi                        replaced on every release, cached 5 min
+  v1.2.0/Stockhog-v1.2.0-win-x64.msi (+ .sha256)   never overwritten, cached for a year
+  v1.2.0/Stockhog-v1.2.0-win-x64.zip (+ .sha256)
+  latest/Stockhog-Setup.msi                        replaced on every release, cached 5 min
   latest.json                                       manifest read by the landing page
 ```
 
 Links to share:
 
-- Latest installer: `https://emtradingstorage.blob.core.windows.net/releases/latest/EmTrading-Setup.msi`
-- A specific version: `https://emtradingstorage.blob.core.windows.net/releases/v1.2.0/EmTrading-v1.2.0-win-x64.msi`
+- Latest installer: `https://emtradingstorage.blob.core.windows.net/releases/latest/Stockhog-Setup.msi`
+- A specific version: `https://emtradingstorage.blob.core.windows.net/releases/v1.2.0/Stockhog-v1.2.0-win-x64.msi`
 
 The workflow logs in to Azure with GitHub OIDC, so it stores no account key or SAS token. The steps below are the one-time setup that makes this work.
 
@@ -36,7 +36,7 @@ export MSYS_NO_PATHCONV=1
 RG="<resource-group-of-emtradingstorage>"   # az storage account show -n emtradingstorage --query resourceGroup -o tsv
 ACCOUNT="emtradingstorage"
 CONTAINER="releases"
-REPO="emskypl/em-trading"
+REPO="mntg-dev/stockhog"
 SUB_ID=$(az account show --query id -o tsv)
 TENANT_ID=$(az account show --query tenantId -o tsv)
 ```
@@ -46,10 +46,10 @@ TENANT_ID=$(az account show --query tenantId -o tsv)
 The release build needs these files, and they aren't in git yet:
 
 ```bash
-git add application/installer/EmTrading.Installer/EmTrading.Installer.wixproj \
-        application/installer/EmTrading.Installer/Package.wxs \
-        application/installer/EmTrading.Installer/License.rtf \
-        application/EmTrading.App/Assets/
+git add application/installer/Stockhog.Installer/Stockhog.Installer.wixproj \
+        application/installer/Stockhog.Installer/Package.wxs \
+        application/installer/Stockhog.Installer/License.rtf \
+        application/Stockhog.App/Assets/
 git commit -m "wix installer project"
 ```
 
@@ -95,7 +95,7 @@ az ad sp create --id "$APP_ID"
 
 Microsoft Entra federated credentials match the token subject exactly. A wildcard like `refs/tags/v*` doesn't work, so the trust is tied to a GitHub environment instead.
 
-This repo's tokens put the numeric owner and repo IDs in the subject, e.g. `repo:emskypl@24610604/em-trading@1340081797:environment:release`, not just `repo:emskypl/em-trading:...`. So the subject is built from those IDs:
+This repo's tokens put the numeric owner and repo IDs in the subject, e.g. `repo:mntg-dev@24610604/stockhog@1340081797:environment:release`, not just `repo:mntg-dev/stockhog:...`. So the subject is built from those IDs:
 
 ```bash
 SUBJECT=$(gh api "repos/$REPO" --jq '"repo:\(.owner.login)@\(.owner.id)/\(.name)@\(.id):environment:release"')
@@ -144,14 +144,14 @@ Then check that everything was published:
 
 ```bash
 curl -s https://emtradingstorage.blob.core.windows.net/releases/latest.json
-curl -sI https://emtradingstorage.blob.core.windows.net/releases/latest/EmTrading-Setup.msi | head -5
+curl -sI https://emtradingstorage.blob.core.windows.net/releases/latest/Stockhog-Setup.msi | head -5
 ```
 
 Finally, open the landing page in a private window. The download button should show the new version and link to the `.msi`.
 
 ### 9. Retire the old `$web` link
 
-Done: `$web/EmTrading-Setup.msi` has been removed and `$web` is empty. Use the `releases/latest/` link instead.
+Done: `$web/EmTrading-Setup.msi` (from before the app was renamed to Stockhog) has been removed and `$web` is empty. Use the `releases/latest/` link instead.
 
 Optional: the storage account's static-website feature is still turned on, but with `$web` empty it serves nothing. To turn it off: `az storage blob service-properties update --account-name "$ACCOUNT" --static-website false`.
 
@@ -181,7 +181,7 @@ At the moment Windows shows "Windows protected your PC" on first launch. To fix 
 1. Get a signing identity. Either:
    - **Azure Trusted Signing** (about $10/month; works from GitHub Actions without a key file). Check whether you're eligible as an individual in your country first.
    - an **OV code-signing certificate**, for example Certum's open-source developer certificate.
-2. In `release.yml`, sign `dist/EmTrading.App.exe` and `dist/EmTrading.EngineRunner.exe` after publishing and before the WiX step. Then sign the `.msi` after it's built, before the hashes are computed.
+2. In `release.yml`, sign `dist/Stockhog.App.exe` and `dist/Stockhog.EngineRunner.exe` after publishing and before the WiX step. Then sign the `.msi` after it's built, before the hashes are computed.
 3. Once signed builds ship, remove `smartScreenNote` from the landing page.
 
 SmartScreen trust for a new certificate builds up as more people download the app; it isn't instant.

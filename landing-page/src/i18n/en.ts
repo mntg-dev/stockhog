@@ -17,7 +17,7 @@ export const en = {
     download: 'Download for Windows',
     viewSource: 'View on GitHub',
     imageAlt:
-      'EmTrading paper trading page: watchlist with prices, minute candles, order ticket and positions',
+      'Stockhog paper trading page: watchlist with prices, minute candles, order ticket and positions',
   },
   features: {
     title: 'Everything you need before you risk real money',
@@ -88,7 +88,7 @@ export const en = {
     steps: [
       {
         title: 'Download market data',
-        desc: 'Pick your symbols; EmTrading fetches historical bars and keeps them up to date.',
+        desc: 'Pick your symbols; Stockhog fetches historical bars and keeps them up to date.',
       },
       {
         title: 'Backtest and optimize',
@@ -138,7 +138,7 @@ export const en = {
     quickStart: [
       'Run the installer (or unzip the portable archive)',
       'Add your Alpaca API keys to appsettings.json (Alpaca:ApiKey / Alpaca:ApiSecret), or set them as environment variables',
-      'Run EmTrading.App.exe',
+      'Run Stockhog.App.exe',
     ],
     smartScreenNote:
       'Windows SmartScreen may warn about an unrecognized app on first launch, since it isn’t code-signed yet. Click “More info”, then “Run anyway”.',
@@ -156,7 +156,7 @@ export const en = {
     items: [
       {
         q: 'Is this financial advice?',
-        a: 'No. EmTrading is a tool for research and testing. Nothing in the app or on this page is financial advice.',
+        a: 'No. Stockhog is a tool for research and testing. Nothing in the app or on this page is financial advice.',
       },
       {
         q: 'Paper or live trading?',

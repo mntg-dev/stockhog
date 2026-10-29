@@ -1,0 +1,130 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:loc="clr-namespace:Stockhog.Presentation.Localization;assembly=Stockhog.Presentation"
+                    xmlns:strategies="clr-namespace:Stockhog.Presentation.Strategies;assembly=Stockhog.Presentation">
+
+    <SolidColorBrush x:Key="PageBackground" Color="#F4F5F7" />
+    <SolidColorBrush x:Key="SidebarBackground" Color="#1F2937" />
+    <SolidColorBrush x:Key="BorderBrush" Color="#E0E0E3" />
+    <SolidColorBrush x:Key="AccentBrush" Color="#1565C0" />
+    <SolidColorBrush x:Key="PositiveBrush" Color="#2E7D32" />
+    <SolidColorBrush x:Key="NegativeBrush" Color="#C62828" />
+
+    <BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
+    <loc:LocalizedEnumConverter x:Key="LocalizedEnum" />
+    <loc:LocalizeKeyConverter x:Key="LocalizeKey" />
+    <strategies:StrategyTextConverter x:Key="StrategyText" />
+
+    <!-- A strategy in a combo box, by its name in the current language. -->
+    <DataTemplate x:Key="StrategyNameItem">
+        <TextBlock Text="{Binding Converter={StaticResource StrategyText}}" />
+    </DataTemplate>
+
+    <!-- Strategy items keep their English name for screen readers and UI automation. -->
+    <Style x:Key="StrategyComboItem" TargetType="ComboBoxItem" BasedOn="{StaticResource {x:Type ComboBoxItem}}">
+        <Setter Property="AutomationProperties.Name" Value="{Binding DisplayName}" />
+    </Style>
+
+    <Style x:Key="Card" TargetType="Border">
+        <Setter Property="Background" Value="White" />
+        <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="CornerRadius" Value="6" />
+        <Setter Property="Padding" Value="12" />
+    </Style>
+
+    <!-- Keeps content off the vertical scrollbar, but only while the scrollbar is shown. -->
+    <Style x:Key="FormScrollViewer" TargetType="ScrollViewer">
+        <Setter Property="VerticalScrollBarVisibility" Value="Auto" />
+        <Style.Triggers>
+            <Trigger Property="ComputedVerticalScrollBarVisibility" Value="Visible">
+                <Setter Property="Padding" Value="0,0,10,0" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="PageTitle" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="20" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="Margin" Value="0,0,0,12" />
+    </Style>
+
+    <Style x:Key="SectionTitle" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="13" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="Foreground" Value="#333" />
+        <Setter Property="Margin" Value="0,4,0,8" />
+    </Style>
+
+    <Style x:Key="FieldLabel" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="11" />
+        <Setter Property="Foreground" Value="Gray" />
+        <Setter Property="Margin" Value="0,8,0,2" />
+    </Style>
+
+    <Style TargetType="Button">
+        <Setter Property="Padding" Value="12,5" />
+        <Setter Property="MinHeight" Value="30" />
+    </Style>
+
+    <Style x:Key="PrimaryButton" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+        <Setter Property="Background" Value="{StaticResource AccentBrush}" />
+        <Setter Property="Foreground" Value="White" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="MinHeight" Value="36" />
+    </Style>
+
+    <Style x:Key="Toolbar" TargetType="StackPanel">
+        <Setter Property="Orientation" Value="Horizontal" />
+        <Setter Property="Margin" Value="0,0,0,8" />
+    </Style>
+
+    <Style TargetType="TextBox">
+        <Setter Property="Padding" Value="4" />
+    </Style>
+
+    <Style TargetType="DataGrid">
+        <Setter Property="AutoGenerateColumns" Value="False" />
+        <Setter Property="IsReadOnly" Value="True" />
+        <Setter Property="GridLinesVisibility" Value="Horizontal" />
+        <Setter Property="HorizontalGridLinesBrush" Value="#EEE" />
+        <Setter Property="HeadersVisibility" Value="Column" />
+        <Setter Property="Background" Value="White" />
+        <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}" />
+        <Setter Property="RowHeight" Value="26" />
+    </Style>
+
+    <!-- Sidebar navigation entries: icon + label, highlighted when selected. -->
+    <Style x:Key="NavItem" TargetType="ListBoxItem">
+        <Setter Property="Foreground" Value="#D1D5DB" />
+        <Setter Property="Cursor" Value="Hand" />
+        <!-- Screen readers get the localized label instead of the item's ToString(). -->
+        <Setter Property="AutomationProperties.Name">
+            <Setter.Value>
+                <MultiBinding Converter="{StaticResource LocalizeKey}">
+                    <Binding Path="TitleKey" />
+                    <Binding Path="Culture" Source="{x:Static loc:Loc.Instance}" />
+                </MultiBinding>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ListBoxItem">
+                    <Border x:Name="Bd" Background="Transparent" CornerRadius="6" Margin="8,2" Padding="12,9">
+                        <ContentPresenter />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Bd" Property="Background" Value="#374151" />
+                        </Trigger>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource AccentBrush}" />
+                            <Setter Property="Foreground" Value="White" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>
