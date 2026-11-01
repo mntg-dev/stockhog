@@ -1,0 +1,83 @@
+/*
+--- DESIGN SYSTEM
+
+- Font: Manrope (self-hosted variable font), weights 400 / 500 / 600 / 700 / 800
+- Font sizes (px, 1rem = 10px): 12 / 14 / 16 / 18 / 20 / 24 / 30 / 36 / 44 / 52 / 62 / 86
+- Line heights: 1.05 headings / 1.2 sub-headings / 1.6 paragraphs / 1.8 long text
+- Letter spacing: -0.5px headings / 0.75px uppercase labels
+
+- Primary: copper #d26a1a (decorative and large text only, 3.6:1 on white)
+- Tints: #fdf6ef (section backgrounds) / #fbeadb (icon circles) / #f6b27a (accents on navy)
+- Shades: #b0560f (buttons, links, labels: white text 5:1) / #4a2408 (gradient end)
+- Greys: #1f2937 ink and navy bands / #4b5563 body / #6b7280 muted (only on white and tint 1)
+- Profit / loss: #15803d / #c0392b, always with a sign or a label, never colour alone
+
+- Shadows: one for cards, one for screenshots
+- Radius: 9px buttons, images, chips / 16px cards
+- Spacing (px): 2 / 4 / 8 / 12 / 16 / 24 / 32 / 48 / 64 / 80 / 96 / 128
+*/
+
+:root {
+  --font: 'Manrope Variable', 'Manrope', system-ui, 'Segoe UI', sans-serif;
+
+  --fs-12: 1.2rem;
+  --fs-14: 1.4rem;
+  --fs-16: 1.6rem;
+  --fs-18: 1.8rem;
+  --fs-20: 2rem;
+  --fs-24: 2.4rem;
+  --fs-30: 3rem;
+  --fs-36: 3.6rem;
+  --fs-44: 4.4rem;
+  --fs-52: 5.2rem;
+  --fs-62: 6.2rem;
+  --fs-86: 8.6rem;
+
+  --lh-tight: 1.05;
+  --lh-head: 1.2;
+  --lh-body: 1.6;
+  --lh-loose: 1.8;
+  --ls-tight: -0.05rem;
+  --ls-wide: 0.075rem;
+
+  --c-primary: #d26a1a;
+  --c-tint-1: #fdf6ef;
+  --c-tint-2: #fbeadb;
+  --c-tint-3: #f6b27a;
+  --c-shade-1: #b0560f;
+  --c-shade-1-hover: #9a4a0c;
+  --c-shade-2: #4a2408;
+
+  --c-ink: #1f2937;
+  --c-body: #4b5563;
+  --c-muted: #6b7280;
+  --c-line: #e7ded5;
+  --c-on-dark: #d1d5db;
+  --c-on-dark-muted: #9ca3af;
+
+  --c-profit: #15803d;
+  --c-loss: #c0392b;
+
+  --shadow: 0 2.4rem 4.8rem rgba(31, 41, 55, 0.08);
+  --shadow-media: 0 3.2rem 6.4rem -1.2rem rgba(31, 41, 55, 0.28);
+  --radius-sm: 0.9rem;
+  --radius-md: 1.6rem;
+
+  --sp-4: 0.4rem;
+  --sp-8: 0.8rem;
+  --sp-12: 1.2rem;
+  --sp-16: 1.6rem;
+  --sp-24: 2.4rem;
+  --sp-32: 3.2rem;
+  --sp-48: 4.8rem;
+  --sp-64: 6.4rem;
+  --sp-80: 8rem;
+  --sp-96: 9.6rem;
+  --sp-128: 12.8rem;
+
+  --container: 120rem;
+  --header-height: 9.6rem;
+  --header-height-sticky: 8rem;
+  --ease: 0.3s cubic-bezier(0.2, 0.7, 0.2, 1);
+  --focus: var(--c-shade-1);
+}
