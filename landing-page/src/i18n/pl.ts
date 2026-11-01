@@ -4,67 +4,125 @@ export const pl: typeof en = {
   header: {
     nav: {
       features: 'Funkcje',
+      howItWorks: 'Jak to działa',
       screenshots: 'Zrzuty ekranu',
       pricing: 'Cennik',
-      download: 'Pobierz',
       faq: 'FAQ',
     },
-    cta: 'Pobierz dla Windows',
+    cta: 'Pobierz',
+    skipLink: 'Przejdź do treści',
+    openMenu: 'Otwórz menu',
+    closeMenu: 'Zamknij menu',
+    language: 'Język',
   },
   hero: {
-    eyebrow: 'Aplikacja desktopowa dla Windows',
+    badge: 'Darmowa · Open source · Windows',
     title: 'Testuj, optymalizuj i handluj akcjami z USA w jednej aplikacji',
     lead:
       'Pobieraj dane rynkowe, testuj strategie na silniku QuantConnect Lean, znajdź najlepsze parametry, zmierz ryzyko symulacją Monte Carlo i handluj na koncie demo z notowaniami na żywo.',
     download: 'Pobierz dla Windows',
     viewSource: 'Zobacz na GitHub',
     imageAlt:
-      'Strona handlu na koncie demo w Stockhog: lista obserwowanych instrumentów, świece minutowe, zlecenie i pozycje',
+      'Strona backtestu w Stockhog: ustawienia strategii, krzywa kapitału, wykres obsunięć i kluczowe wyniki dla AAPL',
+    proof: [
+      { value: '7', label: 'wbudowanych strategii' },
+      { value: '1 min', label: 'świece dla akcji z USA' },
+      { value: '0', label: 'telemetrii' },
+    ],
+    card: {
+      caption: 'Przykładowy przebieg, AAPL',
+      annualReturn: 'Zwrot roczny',
+      maxDrawdown: 'Maks. obsunięcie',
+    },
+  },
+  builtOn: {
+    label: 'Zbudowane na',
   },
   features: {
+    subheading: 'Funkcje',
     title: 'Wszystko, czego potrzebujesz, zanim zaryzykujesz prawdziwe pieniądze',
-    subtitle: 'Pełny proces od badania strategii do handlu, działający na Twoim komputerze.',
     items: [
       {
         title: 'Dane rynkowe',
-        desc:
-          'Pobieraj i aktualizuj historyczne notowania dla każdego instrumentu z USA — dociągane są tylko brakujące dni.',
+        desc: 'Pobieraj świece minutowe dla każdej akcji z USA i trzymaj je na bieżąco. Dociągane są tylko brakujące dni.',
       },
       {
         title: 'Backtesting',
-        desc: 'Testuj strategie na silniku QuantConnect Lean, z kilkoma backtestami uruchomionymi równolegle.',
+        desc: 'Uruchamiaj 7 wbudowanych strategii na silniku QuantConnect Lean, kilka backtestów równolegle.',
       },
       {
         title: 'Optymalizacja parametrów',
-        desc: 'Przeszukaj parametry strategii metodą grid-search i porównaj wyniki na interaktywnej mapie cieplnej.',
+        desc: 'Przeszukaj siatkę parametrów na mapie cieplnej, a potem sprawdź najlepsze na innym okresie.',
       },
       {
-        title: 'Analiza ryzyka Monte Carlo',
-        desc: 'Przelosuj historię transakcji, aby zobaczyć realny zakres możliwych obsunięć kapitału.',
+        title: 'Ryzyko Monte Carlo',
+        desc: 'Przelosuj swoje transakcje, aby zobaczyć realny zakres możliwych obsunięć kapitału.',
+      },
+      {
+        title: 'Porównanie instrumentów',
+        desc: 'Przetestuj jedną strategię na maksymalnie 100 instrumentach, a potem sortuj, filtruj i porównuj wyniki.',
+      },
+      {
+        title: 'Asystent AI',
+        desc: 'Zapytaj Claude o swoje przebiegi i pozycje. Może wypełnić zlecenie, ale nigdy go nie wysyła.',
       },
       {
         title: 'Handel demo',
-        desc: 'Handluj na koncie demo z notowaniami w czasie rzeczywistym, listą obserwowanych i zleceniem.',
+        desc: 'Handluj na koncie demo z notowaniami na żywo, świecami minutowymi, listą obserwowanych i zleceniem.',
       },
       {
-        title: 'Bezpieczeństwo na pierwszym miejscu',
+        title: 'Bezpieczeństwo przede wszystkim',
+        desc: 'Limity ryzyka, wyłącznik awaryjny i log audytowy chronią każde zlecenie. Handel na żywo trzeba świadomie włączyć.',
+      },
+    ],
+  },
+  howItWorks: {
+    subheading: 'Jak to działa',
+    title: 'Od pomysłu do sprawdzonej strategii w czterech krokach',
+    steps: [
+      {
+        title: 'Pobierz dane i uruchom backtest',
         desc:
-          'Limity ryzyka, wyłącznik awaryjny i log audytowy chronią każde zlecenie, a handel na żywo wymaga świadomego włączenia.',
+          'Wybierz instrument i strategię. Stockhog pobiera świece minutowe z Alpaca i uruchamia backtest na silniku Lean, a każda transakcja trafia do dziennika.',
+        file: 'backtest-trades.png',
+        imageAlt: 'Dziennik transakcji zakończonego backtestu, jeden wiersz na transakcję',
+      },
+      {
+        title: 'Optymalizuj i sprawdź na innym okresie',
+        desc:
+          'Przeszukaj siatkę parametrów i odczytaj wyniki z mapy cieplnej. Uruchom najlepsze próby na okresie, którego nie widziały, aby wyłapać przeuczenie.',
+        file: 'optimization.png',
+        imageAlt: 'Mapa cieplna optymalizacji parametrów z listą najlepszych prób',
+      },
+      {
+        title: 'Sprawdź odporność na obsunięcia',
+        desc:
+          'Symulacja Monte Carlo tysiące razy przetasowuje Twoje transakcje i pokazuje, jak głębokie może być obsunięcie kapitału.',
+        file: 'risk-analysis.png',
+        imageAlt: 'Rozkład obsunięć kapitału z symulacji Monte Carlo z percentylami',
+      },
+      {
+        title: 'Handluj na demo, na żywo tylko gdy zechcesz',
+        desc:
+          'Obserwuj notowania na żywo i handluj na koncie demo. Handel na żywo wymaga osobnych kluczy i wyraźnego uzbrojenia.',
+        file: 'paper-trading.png',
+        imageAlt: 'Strona handlu demo z listą obserwowanych, świecami minutowymi, zleceniem i pozycjami',
       },
     ],
   },
   screenshots: {
+    subheading: 'Zrzuty ekranu',
     title: 'Zobacz aplikację w akcji',
     items: [
-      {
-        key: 'paper-trading',
-        file: 'paper-trading.png',
-        caption: 'Lista obserwowanych, świece na żywo, zlecenie i pozycje',
-      },
       {
         key: 'backtest',
         file: 'backtest.png',
         caption: 'Wyniki backtestu z krzywą kapitału i kluczowymi wskaźnikami',
+      },
+      {
+        key: 'paper-trading',
+        file: 'paper-trading.png',
+        caption: 'Lista obserwowanych, świece na żywo, zlecenie i pozycje',
       },
       {
         key: 'backtest-trades',
@@ -82,31 +140,15 @@ export const pl: typeof en = {
         caption: 'Analiza ryzyka obsunięć metodą Monte Carlo',
       },
     ],
+    open: 'Otwórz w pełnym rozmiarze: {caption}',
     lightboxClose: 'Zamknij',
     lightboxNext: 'Następny zrzut ekranu',
     lightboxPrev: 'Poprzedni zrzut ekranu',
   },
-  howItWorks: {
-    title: 'Jak to działa',
-    steps: [
-      {
-        title: 'Pobierz dane rynkowe',
-        desc: 'Wybierz instrumenty — Stockhog pobiera historyczne notowania i trzyma je na bieżąco.',
-      },
-      {
-        title: 'Testuj i optymalizuj',
-        desc: 'Uruchom strategię, dostosuj jej parametry i porównaj wyniki jeden przy drugim.',
-      },
-      {
-        title: 'Handluj na demo, potem na żywo',
-        desc:
-          'Obserwuj notowania na żywo i handluj na koncie demo; przełącz na handel na żywo tylko, gdy sam zdecydujesz.',
-      },
-    ],
-  },
   pricing: {
-    title: 'Cennik',
-    subtitle: 'Backtesting bezpłatnie już teraz. Pro dodaje optymalizację, analizę ryzyka i handel na żywo.',
+    subheading: 'Cennik',
+    title: 'Free już dziś, Pro wkrótce',
+    lead: 'Backtesting bezpłatnie już teraz. Pro dodaje optymalizację, analizę ryzyka i handel na żywo.',
     free: {
       name: 'Free',
       price: '0 zł',
@@ -122,9 +164,9 @@ export const pl: typeof en = {
     },
     pro: {
       name: 'Pro',
-      price: 'Wkrótce',
-      period: '',
-      cta: 'Wkrótce',
+      price: 'Do ustalenia',
+      ribbon: 'Wkrótce',
+      cta: 'Obserwuj wydania na GitHub',
       items: [
         'Wszystko z Free',
         'Równoległa optymalizacja parametrów',
@@ -135,7 +177,8 @@ export const pl: typeof en = {
     },
   },
   download: {
-    title: 'Pobierz',
+    subheading: 'Pobierz',
+    title: 'Pobierz Stockhog dla Windows',
     requirementsTitle: 'Wymagania',
     requirements: ['Windows 10 lub 11, 64-bit', 'Darmowe konto Alpaca do danych rynkowych i handlu demo'],
     quickStartTitle: 'Szybki start',
@@ -147,7 +190,7 @@ export const pl: typeof en = {
     smartScreenNote:
       'Windows SmartScreen może ostrzec przed nierozpoznaną aplikacją przy pierwszym uruchomieniu, bo nie jest jeszcze podpisana cyfrowo. Kliknij „Więcej informacji”, a potem „Uruchom mimo to”.',
     loading: 'Sprawdzanie najnowszego wydania…',
-    errorFallback: 'Żadne wydanie nie zostało jeszcze opublikowane albo GitHub jest niedostępny. Zobacz wszystkie wydania na GitHub:',
+    errorFallback: 'Żadne wydanie nie zostało jeszcze opublikowane albo nie udało się pobrać informacji o wydaniu. Zobacz wszystkie wydania na GitHub.',
     allReleases: 'Zobacz wydania na GitHub',
     version: 'Wersja',
     publishedOn: 'Opublikowano',
@@ -156,6 +199,7 @@ export const pl: typeof en = {
     portable: 'Wersja przenośna .zip',
   },
   faq: {
+    subheading: 'FAQ',
     title: 'Najczęściej zadawane pytania',
     items: [
       {
@@ -172,7 +216,7 @@ export const pl: typeof en = {
       },
       {
         q: 'Gdzie są przechowywane moje dane i klucze API?',
-        a: 'Wszystko zostaje na Twoim komputerze: lokalne pliki i Twoje własne dane logowania do Alpaca. Aplikacja nie wysyła żadnej telemetrii.',
+        a: 'Na Twoim komputerze: lokalne pliki i Twoje własne dane logowania, a aplikacja nie wysyła telemetrii. Jeśli włączysz opcjonalnego asystenta AI, Twoje pytania i wyniki, które on czyta, trafiają do Anthropic z Twoim własnym kluczem API.',
       },
       {
         q: 'Jakie rynki są wspierane?',
@@ -185,7 +229,15 @@ export const pl: typeof en = {
     ],
   },
   footer: {
-    github: 'GitHub',
+    tagline: 'Testuj, optymalizuj i handluj akcjami z USA na własnym komputerze.',
+    product: 'Produkt',
+    resources: 'Zasoby',
+    builtOn: 'Zbudowane na',
+    language: 'Język',
+    releases: 'Wydania',
+    readme: 'Dokumentacja',
+    issues: 'Zgłoś problem',
+    github: 'Stockhog na GitHub',
     disclaimer:
       'To nie jest porada finansowa. Handel wiąże się z ryzykiem, a wyniki historyczne lub z backtestów nie gwarantują przyszłych rezultatów.',
     license: 'Licencja: zostanie ogłoszona.',

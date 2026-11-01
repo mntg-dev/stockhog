@@ -1,0 +1,172 @@
+/**************************/
+/* DOWNLOAD (CTA CARD) */
+/**************************/
+
+/* The gradient starts at shade 1, not the primary: white text needs 4.5:1. */
+.cta {
+  --focus: #fff;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-64);
+  padding: var(--sp-64);
+  border-radius: var(--radius-md);
+  background: linear-gradient(to right bottom, var(--c-shade-1), var(--c-shade-2));
+  box-shadow: 0 2.4rem 4.8rem rgba(74, 36, 8, 0.25);
+  color: #fff;
+}
+
+.cta .subheading {
+  color: var(--c-tint-1);
+}
+
+.cta .heading-secondary {
+  color: #fff;
+  margin-bottom: var(--sp-32);
+}
+
+.cta__meta {
+  font-size: var(--fs-18);
+  line-height: var(--lh-body);
+  font-weight: 500;
+  margin-bottom: var(--sp-32);
+}
+
+.cta__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-16) var(--sp-24);
+}
+
+.cta__btn {
+  background: #fff;
+  color: var(--c-shade-1-hover);
+}
+
+.cta__btn:hover {
+  background: var(--c-tint-1);
+}
+
+.cta__link {
+  font-size: var(--fs-16);
+  font-weight: 500;
+  color: #fff;
+  text-underline-offset: 0.3rem;
+}
+
+.cta__link:hover {
+  color: var(--c-tint-2);
+}
+
+.cta__skeleton {
+  display: block;
+  width: 32rem;
+  max-width: 100%;
+  height: 5.2rem;
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.cta__panel {
+  padding: var(--sp-32);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.cta__panel-title {
+  font-size: var(--fs-16);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: var(--ls-wide);
+  margin-bottom: var(--sp-16);
+}
+
+.cta__requirements {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-12);
+  margin-bottom: var(--sp-32);
+}
+
+.cta__requirements li {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-12);
+  font-size: var(--fs-16);
+  line-height: var(--lh-body);
+}
+
+.cta__requirements svg {
+  width: 2rem;
+  height: 2rem;
+  margin-top: 0.3rem;
+  flex-shrink: 0;
+}
+
+.cta__steps {
+  counter-reset: step;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-16);
+}
+
+.cta__steps li {
+  counter-increment: step;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-16);
+  font-size: var(--fs-16);
+  line-height: var(--lh-body);
+  overflow-wrap: anywhere;
+}
+
+.cta__steps li::before {
+  content: counter(step);
+  display: grid;
+  place-items: center;
+  width: 2.8rem;
+  height: 2.8rem;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: #fff;
+  color: var(--c-shade-1);
+  font-size: var(--fs-14);
+  font-weight: 800;
+}
+
+.cta__note {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-12);
+  max-width: 80rem;
+  margin-top: var(--sp-32);
+  font-size: var(--fs-16);
+  line-height: var(--lh-body);
+  color: var(--c-muted);
+}
+
+.cta__note svg {
+  width: 2rem;
+  height: 2rem;
+  margin-top: 0.3rem;
+  flex-shrink: 0;
+}
+
+@media (max-width: 59em) {
+  .cta {
+    grid-template-columns: 1fr;
+    gap: var(--sp-48);
+    padding: var(--sp-48);
+  }
+}
+
+@media (max-width: 34em) {
+  .cta {
+    padding: var(--sp-32) var(--sp-24);
+  }
+
+  .cta__btn {
+    width: 100%;
+  }
+}

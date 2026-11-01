@@ -1,5 +1,7 @@
 import { useRef, useState, type KeyboardEvent } from 'react'
+import { ChevronLeft, ChevronRight, X } from 'lucide-react'
 import { useT } from '../i18n/I18nProvider'
+import './Screenshots.css'
 
 export function Screenshots() {
   const { t } = useT()
@@ -24,47 +26,59 @@ export function Screenshots() {
   }
 
   return (
-    <section id="screenshots" className="screenshots" aria-labelledby="screenshots-title">
-      <div className="section-inner">
-        <h2 id="screenshots-title">{t.screenshots.title}</h2>
+    <section id="screenshots" className="section gallery" aria-labelledby="screenshots-title">
+      <div className="container">
+        <span className="subheading">{t.screenshots.subheading}</span>
+        <h2 id="screenshots-title" className="heading-secondary">
+          {t.screenshots.title}
+        </h2>
 
-        <div className="screenshot-tabs" role="tablist" aria-label={t.screenshots.title}>
+        <ul className="gallery__grid">
           {items.map((item, index) => (
-            <button
-              key={item.key}
-              type="button"
-              role="tab"
-              aria-selected={index === activeIndex}
-              className={index === activeIndex ? 'active' : ''}
-              onClick={() => setActiveIndex(index)}
-            >
-              {item.caption}
-            </button>
+            <li key={item.key} className="gallery__item">
+              <button
+                type="button"
+                className="gallery__button"
+                onClick={() => openLightbox(index)}
+                aria-label={t.screenshots.open.replace('{caption}', item.caption)}
+              >
+                <figure>
+                  <img src={`/screenshots/${item.file}`} alt="" width={2040} height={1290} loading="lazy" />
+                  <figcaption>{item.caption}</figcaption>
+                </figure>
+              </button>
+            </li>
           ))}
-        </div>
-
-        <button type="button" className="screenshot-preview" onClick={() => openLightbox(activeIndex)}>
-          <img src={`/screenshots/${active.file}`} alt={active.caption} width={2040} height={1290} loading="lazy" />
-        </button>
+        </ul>
       </div>
 
       <dialog ref={dialogRef} className="lightbox" onKeyDown={onDialogKeyDown} aria-label={active.caption}>
         <button
           type="button"
-          className="lightbox-close"
+          className="lightbox__btn lightbox__close"
           onClick={() => dialogRef.current?.close()}
           aria-label={t.screenshots.lightboxClose}
         >
-          &#10005;
+          <X aria-hidden="true" />
         </button>
-        <button type="button" className="lightbox-nav prev" onClick={() => show(-1)} aria-label={t.screenshots.lightboxPrev}>
-          &#8249;
+        <button
+          type="button"
+          className="lightbox__btn lightbox__prev"
+          onClick={() => show(-1)}
+          aria-label={t.screenshots.lightboxPrev}
+        >
+          <ChevronLeft aria-hidden="true" />
         </button>
         <img src={`/screenshots/${active.file}`} alt={active.caption} />
-        <button type="button" className="lightbox-nav next" onClick={() => show(1)} aria-label={t.screenshots.lightboxNext}>
-          &#8250;
+        <button
+          type="button"
+          className="lightbox__btn lightbox__next"
+          onClick={() => show(1)}
+          aria-label={t.screenshots.lightboxNext}
+        >
+          <ChevronRight aria-hidden="true" />
         </button>
-        <p className="lightbox-caption">{active.caption}</p>
+        <p className="lightbox__caption">{active.caption}</p>
       </dialog>
     </section>
   )

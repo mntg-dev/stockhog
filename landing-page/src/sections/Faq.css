@@ -1,0 +1,60 @@
+/**************************/
+/* FAQ */
+/**************************/
+
+.faq {
+  max-width: 88rem;
+}
+
+.faq .heading-secondary {
+  margin-bottom: var(--sp-64);
+}
+
+.faq__item {
+  border-bottom: 1px solid var(--c-line);
+}
+
+.faq__item:first-child {
+  border-top: 1px solid var(--c-line);
+}
+
+.faq__item summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--sp-24);
+  padding: var(--sp-24) 0;
+  font-size: var(--fs-20);
+  font-weight: 600;
+  line-height: var(--lh-head);
+  color: var(--c-ink);
+  cursor: pointer;
+  list-style: none;
+}
+
+.faq__item summary::-webkit-details-marker {
+  display: none;
+}
+
+.faq__item summary svg {
+  width: 2.4rem;
+  height: 2.4rem;
+  flex-shrink: 0;
+  color: var(--c-shade-1);
+  transition: transform var(--ease);
+}
+
+.faq__item[open] summary svg {
+  transform: rotate(45deg);
+}
+
+.faq__item summary:hover {
+  color: var(--c-shade-1);
+}
+
+.faq__item p {
+  max-width: 70rem;
+  padding-bottom: var(--sp-24);
+  font-size: var(--fs-18);
+  line-height: var(--lh-body);
+}

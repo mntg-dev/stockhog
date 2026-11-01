@@ -1,0 +1,229 @@
+/**************************/
+/* HERO */
+/**************************/
+
+.hero {
+  background: var(--c-tint-1);
+  padding: calc(var(--header-height) + var(--sp-48)) 0 var(--sp-128);
+  overflow: hidden;
+}
+
+.hero__inner {
+  display: grid;
+  grid-template-columns: 1fr 1.3fr;
+  gap: var(--sp-64);
+  align-items: center;
+  max-width: 130rem;
+  margin: 0 auto;
+  padding: 0 var(--sp-32);
+}
+
+.hero__badge {
+  display: inline-block;
+  margin-bottom: var(--sp-24);
+  padding: var(--sp-8) var(--sp-16);
+  border-radius: 100px;
+  background: var(--c-tint-2);
+  color: var(--c-shade-1);
+  font-size: var(--fs-14);
+  font-weight: 600;
+}
+
+.hero__lead {
+  font-size: var(--fs-20);
+  line-height: var(--lh-body);
+  margin-bottom: var(--sp-48);
+}
+
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-16);
+}
+
+/* Honest social proof: three facts about the app. */
+.hero__proof {
+  display: flex;
+  margin-top: var(--sp-64);
+}
+
+.hero__proof-item {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: var(--sp-8);
+  padding: 0 var(--sp-32);
+  border-left: 1px solid var(--c-line);
+}
+
+.hero__proof-item:first-child {
+  padding-left: 0;
+  border-left: none;
+}
+
+.hero__proof dd {
+  font-size: var(--fs-24);
+  font-weight: 800;
+  color: var(--c-shade-1);
+}
+
+.hero__proof dt {
+  font-size: var(--fs-14);
+  line-height: var(--lh-head);
+  color: var(--c-muted);
+}
+
+/* Screenshot over two copper circles */
+.hero__media {
+  position: relative;
+  isolation: isolate;
+}
+
+.hero__media::before,
+.hero__media::after {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  border-radius: 50%;
+}
+
+.hero__media::before {
+  width: 85%;
+  aspect-ratio: 1;
+  top: 50%;
+  left: 60%;
+  transform: translate(-50%, -50%);
+  background: var(--c-tint-2);
+}
+
+.hero__media::after {
+  width: 12rem;
+  aspect-ratio: 1;
+  top: -4.8rem;
+  left: -4.8rem;
+  background: var(--c-primary);
+  opacity: 0.9;
+}
+
+.hero__card {
+  position: absolute;
+  left: calc(-1 * var(--sp-32));
+  bottom: calc(-1 * var(--sp-48));
+  padding: var(--sp-16) var(--sp-24);
+  border-radius: var(--radius-md);
+  background: #fff;
+  box-shadow: var(--shadow);
+}
+
+.hero__card-caption {
+  font-size: var(--fs-12);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: var(--ls-wide);
+  color: var(--c-muted);
+  margin-bottom: var(--sp-12);
+}
+
+.hero__card-stats {
+  display: flex;
+  gap: var(--sp-32);
+}
+
+.hero__card-stats p {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
+
+.hero__card-stats span {
+  font-size: var(--fs-14);
+  color: var(--c-muted);
+}
+
+.hero__card-stats strong {
+  font-size: var(--fs-24);
+  font-weight: 800;
+}
+
+.profit {
+  color: var(--c-profit);
+}
+
+.loss {
+  color: var(--c-loss);
+}
+
+/**************************/
+/* BREAKPOINTS */
+/**************************/
+
+@media (max-width: 84em) {
+  .hero__inner {
+    max-width: var(--container);
+  }
+
+  .hero .heading-primary {
+    font-size: var(--fs-44);
+  }
+}
+
+@media (max-width: 75em) {
+  .hero__inner {
+    padding: 0 var(--sp-24);
+  }
+}
+
+/* Below 944px: one column, screenshot below the text */
+@media (max-width: 59em) {
+  .hero__inner {
+    grid-template-columns: 1fr;
+    gap: var(--sp-96);
+    text-align: center;
+  }
+
+  .hero__text {
+    max-width: 70rem;
+    margin: 0 auto;
+  }
+
+  .hero__actions,
+  .hero__proof {
+    justify-content: center;
+  }
+
+  .hero__media {
+    max-width: 80rem;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .hero__card {
+    left: var(--sp-24);
+    text-align: left;
+  }
+}
+
+@media (max-width: 44em) {
+  .hero__proof-item {
+    padding: 0 var(--sp-16);
+  }
+}
+
+@media (max-width: 34em) {
+  .hero__actions .btn {
+    width: 100%;
+  }
+
+  .hero__proof {
+    flex-direction: column;
+    gap: var(--sp-24);
+  }
+
+  .hero__proof-item {
+    padding: 0;
+    border-left: none;
+  }
+
+  .hero__card {
+    display: none;
+  }
+}

@@ -1,0 +1,95 @@
+/**************************/
+/* PRICING */
+/**************************/
+
+.plans {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-48);
+  max-width: 96rem;
+}
+
+.plan {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-48);
+  padding: var(--sp-48);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  transition:
+    transform var(--ease),
+    box-shadow var(--ease);
+}
+
+.plan:hover {
+  transform: translateY(-0.8rem);
+  box-shadow: var(--shadow);
+}
+
+.plan--free {
+  border: 2px solid var(--c-tint-2);
+}
+
+.plan--pro {
+  background: var(--c-tint-1);
+  box-shadow: var(--shadow);
+}
+
+.plan__name {
+  font-size: var(--fs-20);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: var(--ls-wide);
+  color: var(--c-shade-1);
+  margin-bottom: var(--sp-24);
+}
+
+.plan__price {
+  font-size: var(--fs-62);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: var(--ls-tight);
+  color: var(--c-ink);
+}
+
+.plan__price span {
+  font-size: var(--fs-18);
+  font-weight: 500;
+  letter-spacing: 0;
+  color: var(--c-muted);
+}
+
+.plan__cta {
+  margin-top: auto;
+}
+
+/* Diagonal ribbon, as on the reference "Best value" plan. */
+.plan__ribbon {
+  position: absolute;
+  top: 3.2rem;
+  right: -6.4rem;
+  width: 24rem;
+  padding: var(--sp-8) 0;
+  transform: rotate(45deg);
+  background: var(--c-shade-1);
+  color: #fff;
+  font-size: var(--fs-14);
+  font-weight: 700;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: var(--ls-wide);
+}
+
+@media (max-width: 44em) {
+  .plans {
+    grid-template-columns: 1fr;
+    max-width: 56rem;
+  }
+}
+
+@media (max-width: 34em) {
+  .plan {
+    padding: var(--sp-32);
+  }
+}

@@ -1,0 +1,49 @@
+/**************************/
+/* BUILT ON */
+/**************************/
+
+.built-on {
+  padding: var(--sp-48) 0 var(--sp-32);
+}
+
+.built-on__title {
+  font-size: var(--fs-14);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: var(--ls-wide);
+  text-align: center;
+  color: var(--c-muted);
+  margin-bottom: var(--sp-24);
+}
+
+.built-on__list {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--sp-24) var(--sp-48);
+}
+
+/* Wordmarks rather than logos, set in the page font. */
+.built-on__mark {
+  display: inline-block;
+  padding: var(--sp-8) 0;
+  font-size: var(--fs-24);
+  font-weight: 700;
+  letter-spacing: var(--ls-tight);
+  color: var(--c-muted);
+  text-decoration: none;
+  transition: color var(--ease);
+}
+
+.built-on__mark:hover {
+  color: var(--c-ink);
+}
+
+@media (max-width: 44em) {
+  .built-on__list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    justify-items: center;
+  }
+}

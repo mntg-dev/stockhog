@@ -1,0 +1,85 @@
+/**************************/
+/* HOW IT WORKS */
+/**************************/
+
+.steps {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-128);
+}
+
+/* Text and screenshot side by side, swapping sides on every other step. */
+.step {
+  display: grid;
+  grid-template-columns: 1fr 1.3fr;
+  gap: var(--sp-96);
+  align-items: center;
+}
+
+.step:nth-child(even) {
+  grid-template-columns: 1.3fr 1fr;
+}
+
+.step:nth-child(even) .step__text {
+  order: 2;
+}
+
+.step__number {
+  font-size: var(--fs-86);
+  font-weight: 800;
+  line-height: 1;
+  color: #ead9c8;
+  margin-bottom: var(--sp-16);
+}
+
+.step__desc {
+  font-size: var(--fs-18);
+  line-height: var(--lh-loose);
+}
+
+.step__img-box {
+  position: relative;
+  isolation: isolate;
+}
+
+.step__img-box::before,
+.step__img-box::after {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  top: 50%;
+  left: 50%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.step__img-box::before {
+  width: 70%;
+  background: var(--c-tint-2);
+}
+
+.step__img-box::after {
+  width: 52%;
+  background: #f8dcc3;
+}
+
+@media (max-width: 59em) {
+  .steps {
+    gap: var(--sp-96);
+  }
+
+  .step,
+  .step:nth-child(even) {
+    grid-template-columns: 1fr;
+    gap: var(--sp-64);
+  }
+
+  .step:nth-child(even) .step__text {
+    order: 0;
+  }
+
+  .step__img-box {
+    max-width: 80rem;
+  }
+}
