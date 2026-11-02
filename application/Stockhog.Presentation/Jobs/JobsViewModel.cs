@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Stockhog.Application.Abstractions.Jobs;
 using Stockhog.Application.Instruments;
+using Stockhog.Application.Screening;
 using Stockhog.Presentation.Common;
 using Stockhog.Presentation.Shell;
 using Microsoft.Extensions.Logging;
@@ -53,7 +54,9 @@ public sealed partial class JobsViewModel : PageViewModel
             _messenger.Send(new BacktestRunsChangedMessage());
         if (newlyFinished.Any(j => IsInstrumentRefresh(j) && j.Status == JobStatus.Succeeded))
             _messenger.Send(new InstrumentsChangedMessage());
-        if (newlyFinished.Any(j => !IsBacktest(j) && !IsOptimization(j) && !IsInstrumentRefresh(j) && j.Status == JobStatus.Succeeded))
+        if (newlyFinished.Any(j => IsScreener(j) && j.Status == JobStatus.Succeeded))
+            _messenger.Send(new ScreenerRunsChangedMessage());
+        if (newlyFinished.Any(j => !IsBacktest(j) && !IsOptimization(j) && !IsInstrumentRefresh(j) && !IsScreener(j) && j.Status == JobStatus.Succeeded))
             _messenger.Send(new MarketDataChangedMessage());
 
         // Optimizations save after every trial: tell their page when a job's progress moves, not on every refresh.
@@ -75,4 +78,6 @@ public sealed partial class JobsViewModel : PageViewModel
     private static bool IsOptimization(JobSnapshot job) => job.Key?.StartsWith("optimization:", StringComparison.Ordinal) == true;
 
     private static bool IsInstrumentRefresh(JobSnapshot job) => job.Key == InstrumentCacheKeys.RefreshJobKey;
+
+    private static bool IsScreener(JobSnapshot job) => job.Key == ScreenerKeys.RunJobKey;
 }

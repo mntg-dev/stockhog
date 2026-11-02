@@ -1,0 +1,163 @@
+<UserControl x:Class="Stockhog.App.Views.ScreenerView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:loc="clr-namespace:Stockhog.Presentation.Localization;assembly=Stockhog.Presentation">
+    <UserControl.Resources>
+        <DataTemplate x:Key="LocalizedEnumItem">
+            <TextBlock Text="{Binding Converter={StaticResource LocalizedEnum}}" />
+        </DataTemplate>
+        <DataTemplate x:Key="PresetItem">
+            <TextBlock>
+                <TextBlock.Text>
+                    <MultiBinding Converter="{StaticResource LocalizeKey}">
+                        <Binding Path="TitleKey" />
+                        <Binding Path="Culture" Source="{x:Static loc:Loc.Instance}" />
+                    </MultiBinding>
+                </TextBlock.Text>
+            </TextBlock>
+        </DataTemplate>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="300" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <!-- Criteria -->
+        <Border Style="{StaticResource Card}" Margin="0,0,12,0">
+            <ScrollViewer Style="{StaticResource FormScrollViewer}">
+                <StackPanel>
+                    <TextBlock Text="{loc:Tr Screener_Title}" Style="{StaticResource PageTitle}" />
+
+                    <TextBlock Text="{loc:Tr Screener_Preset}" Style="{StaticResource FieldLabel}" />
+                    <ComboBox ItemsSource="{Binding Presets}" SelectedItem="{Binding SelectedPreset}" ItemTemplate="{StaticResource PresetItem}" />
+
+                    <UniformGrid Columns="2" Margin="0,4,0,0">
+                        <StackPanel Margin="0,0,3,0">
+                            <TextBlock Text="{loc:Tr Screener_MinPrice}" Style="{StaticResource FieldLabel}" />
+                            <TextBox Text="{Binding MinPrice, TargetNullValue='', UpdateSourceTrigger=PropertyChanged}" />
+                        </StackPanel>
+                        <StackPanel Margin="3,0,0,0">
+                            <TextBlock Text="{loc:Tr Screener_MaxPrice}" Style="{StaticResource FieldLabel}" />
+                            <TextBox Text="{Binding MaxPrice, TargetNullValue='', UpdateSourceTrigger=PropertyChanged}" />
+                        </StackPanel>
+                    </UniformGrid>
+
+                    <TextBlock Text="{loc:Tr Screener_MinDollarVolume}" Style="{StaticResource FieldLabel}" />
+                    <TextBox Text="{Binding MinDollarVolumeMillions, UpdateSourceTrigger=PropertyChanged}" ToolTip="{loc:Tr Screener_MinDollarVolumeHint}" />
+
+                    <UniformGrid Columns="2">
+                        <StackPanel Margin="0,0,3,0">
+                            <TextBlock Text="{loc:Tr Screener_MinAtr}" Style="{StaticResource FieldLabel}" />
+                            <TextBox Text="{Binding MinAtrPercent, TargetNullValue='', UpdateSourceTrigger=PropertyChanged}" ToolTip="{loc:Tr Screener_AtrHint}" />
+                        </StackPanel>
+                        <StackPanel Margin="3,0,0,0">
+                            <TextBlock Text="{loc:Tr Screener_MaxAtr}" Style="{StaticResource FieldLabel}" />
+                            <TextBox Text="{Binding MaxAtrPercent, TargetNullValue='', UpdateSourceTrigger=PropertyChanged}" ToolTip="{loc:Tr Screener_AtrHint}" />
+                        </StackPanel>
+                    </UniformGrid>
+
+                    <UniformGrid Columns="2">
+                        <StackPanel Margin="0,0,3,0">
+                            <TextBlock Text="{loc:Tr Screener_MinTradingDays}" Style="{StaticResource FieldLabel}" TextTrimming="CharacterEllipsis"
+                                       ToolTip="{loc:Tr Screener_MinTradingDaysHint}" />
+                            <TextBox Text="{Binding MinTradingDays, UpdateSourceTrigger=PropertyChanged}" ToolTip="{loc:Tr Screener_MinTradingDaysHint}" />
+                        </StackPanel>
+                        <StackPanel Margin="3,0,0,0">
+                            <TextBlock Text="{loc:Tr Screener_MaxResults}" Style="{StaticResource FieldLabel}" />
+                            <TextBox Text="{Binding MaxResults, UpdateSourceTrigger=PropertyChanged}" />
+                        </StackPanel>
+                    </UniformGrid>
+
+                    <TextBlock Text="{loc:Tr Screener_SortBy}" Style="{StaticResource FieldLabel}" />
+                    <ComboBox ItemsSource="{Binding SortOptions}" SelectedItem="{Binding SortBy}" ItemTemplate="{StaticResource LocalizedEnumItem}" />
+
+                    <TextBlock Text="{loc:Tr Screener_Exchanges}" Style="{StaticResource FieldLabel}" />
+                    <ItemsControl ItemsSource="{Binding Exchanges}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <CheckBox Content="{Binding Code}" IsChecked="{Binding IsSelected}" Margin="0,2,12,2" />
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+
+                    <Button Content="{loc:Tr Screener_Run}" Command="{Binding RunCommand}" Style="{StaticResource PrimaryButton}" Margin="0,16,0,0" />
+                    <TextBlock Text="{loc:Tr Screener_RunHint}" TextWrapping="Wrap" Foreground="Gray" FontSize="11" Margin="0,8,0,0" />
+                </StackPanel>
+            </ScrollViewer>
+        </Border>
+
+        <!-- Results -->
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <WrapPanel Margin="0,0,0,6">
+                <TextBlock Text="{loc:Tr Screener_Results}" Style="{StaticResource SectionTitle}" VerticalAlignment="Center" Margin="0,0,16,0" />
+                <TextBlock Text="{loc:Tr Screener_History}" VerticalAlignment="Center" Margin="0,0,6,0" />
+                <ComboBox ItemsSource="{Binding Runs}" SelectedItem="{Binding SelectedRun}" MinWidth="220" VerticalAlignment="Center" Margin="0,0,12,0">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock>
+                                <Run Text="{Binding CreatedAt.LocalDateTime, StringFormat=g, Mode=OneWay}" />
+                                <Run Text="·" />
+                                <Run Text="{Binding Criteria.SortBy, Converter={StaticResource LocalizedEnum}, Mode=OneWay}" />
+                                <Run Text="·" />
+                                <Run Text="{Binding Matched, Mode=OneWay}" />
+                            </TextBlock>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+                <TextBlock Text="{Binding Summary}" Foreground="Gray" VerticalAlignment="Center" />
+            </WrapPanel>
+
+            <StackPanel Grid.Row="1" Style="{StaticResource Toolbar}">
+                <Button Content="{loc:Tr Common_Refresh}" Command="{Binding RefreshCommand}" Margin="0,0,6,0" />
+                <Button Content="{loc:Tr Screener_SendToCompare}" Command="{Binding SendToCompareCommand}"
+                        CommandParameter="{Binding SelectedItems, ElementName=ResultsGrid}" ToolTip="{loc:Tr Screener_SelectionHint}" Margin="0,0,6,0" />
+                <Button Content="{loc:Tr Screener_DownloadData}" Command="{Binding DownloadDataCommand}"
+                        CommandParameter="{Binding SelectedItems, ElementName=ResultsGrid}" ToolTip="{loc:Tr Screener_SelectionHint}" />
+            </StackPanel>
+
+            <Grid Grid.Row="2">
+                <DataGrid x:Name="ResultsGrid" ItemsSource="{Binding Symbols}" SelectionMode="Extended">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="#" Binding="{Binding Rank}" Width="40" />
+                        <DataGridTextColumn Header="{loc:Tr Field_Symbol}" Binding="{Binding Symbol}" Width="70" />
+                        <DataGridTextColumn Header="{loc:Tr Screener_Name}" Binding="{Binding Name}" Width="*" MinWidth="160" />
+                        <DataGridTextColumn Header="{loc:Tr Screener_Exchange}" Binding="{Binding Exchange}" Width="70" />
+                        <DataGridTextColumn Header="{loc:Tr Screener_LastClose}" Binding="{Binding Metrics.LastClose, StringFormat=N2}" Width="Auto" MinWidth="70" />
+                        <DataGridTextColumn Header="{loc:Tr Screener_DollarVolume}" Binding="{Binding Metrics.AverageDollarVolume, StringFormat=N0}" Width="Auto" MinWidth="110" />
+                        <DataGridTextColumn Header="{loc:Tr Screener_AtrPercent}" Binding="{Binding Metrics.AtrPercent, StringFormat=N2}" Width="Auto" MinWidth="60" />
+                        <DataGridTextColumn Header="{loc:Tr Screener_Return1M}" Binding="{Binding Metrics.Return1MPercent, StringFormat=N2}" Width="Auto" MinWidth="60" />
+                        <DataGridTextColumn Header="{loc:Tr Screener_Return6M}" Binding="{Binding Metrics.Return6MPercent, StringFormat=N2}" Width="Auto" MinWidth="60" />
+                        <DataGridTextColumn Header="{loc:Tr Screener_FromHigh}" Binding="{Binding Metrics.FromHighPercent, StringFormat=N2}" Width="Auto" MinWidth="60" />
+                        <DataGridTextColumn Header="{loc:Tr Screener_TradingDays}" Binding="{Binding Metrics.TradingDays}" Width="Auto" MinWidth="60" />
+                    </DataGrid.Columns>
+                </DataGrid>
+                <TextBlock Text="{loc:Tr Screener_Empty}" TextWrapping="Wrap" Foreground="Gray" Margin="16,48,16,0" HorizontalAlignment="Center"
+                           TextAlignment="Center" MaxWidth="460" IsHitTestVisible="False">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding HasSymbols}" Value="False">
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+            </Grid>
+        </Grid>
+    </Grid>
+</UserControl>

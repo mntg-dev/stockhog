@@ -112,6 +112,12 @@ public sealed record OpenBacktestRunMessage(BacktestRunSummary Run);
 /// <summary>Switch the shell to the page of the given type.</summary>
 public sealed record NavigateMessage(Type PageType);
 
+/// <summary>A screener run finished.</summary>
+public sealed record ScreenerRunsChangedMessage;
+
+/// <summary>Put these symbols into the compare page's symbol list, e.g. the result of a screener run.</summary>
+public sealed record CompareSymbolsMessage(IReadOnlyList<string> Symbols);
+
 /// <summary>An optimization was started, finished a trial, or ended.</summary>
 public sealed record OptimizationsChangedMessage;
 

@@ -8,6 +8,7 @@
              xmlns:logs="clr-namespace:Stockhog.Presentation.Logging;assembly=Stockhog.Presentation"
              xmlns:guide="clr-namespace:Stockhog.Presentation.Guide;assembly=Stockhog.Presentation"
              xmlns:compare="clr-namespace:Stockhog.Presentation.Compare;assembly=Stockhog.Presentation"
+             xmlns:screening="clr-namespace:Stockhog.Presentation.Screening;assembly=Stockhog.Presentation"
              xmlns:strategies="clr-namespace:Stockhog.Presentation.Strategies;assembly=Stockhog.Presentation"
              xmlns:assistant="clr-namespace:Stockhog.Presentation.Assistant;assembly=Stockhog.Presentation"
              xmlns:settings="clr-namespace:Stockhog.Presentation.Settings;assembly=Stockhog.Presentation"
@@ -25,6 +26,7 @@
             <DataTemplate DataType="{x:Type strategies:StrategiesViewModel}"><views:StrategiesView /></DataTemplate>
             <DataTemplate DataType="{x:Type backtesting:HistoryViewModel}"><views:HistoryView /></DataTemplate>
             <DataTemplate DataType="{x:Type compare:CompareViewModel}"><views:CompareView /></DataTemplate>
+            <DataTemplate DataType="{x:Type screening:ScreenerViewModel}"><views:ScreenerView /></DataTemplate>
             <DataTemplate DataType="{x:Type assistant:AssistantViewModel}"><views:AssistantView /></DataTemplate>
             <DataTemplate DataType="{x:Type optimization:OptimizationViewModel}"><views:OptimizationView /></DataTemplate>
             <DataTemplate DataType="{x:Type analytics:AnalysisViewModel}"><views:AnalysisView /></DataTemplate>

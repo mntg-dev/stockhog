@@ -23,7 +23,7 @@ namespace Stockhog.Presentation.Compare;
 /// Many symbols side by side: download data and run one strategy over a symbol list as background jobs, then rank
 /// the results by any metric, chart the best ones together, or hand them to the assistant.
 /// </summary>
-public sealed partial class CompareViewModel : PageViewModel, IRecipient<BacktestRunsChangedMessage>
+public sealed partial class CompareViewModel : PageViewModel, IRecipient<BacktestRunsChangedMessage>, IRecipient<CompareSymbolsMessage>
 {
     private static readonly char[] SymbolSeparators = [',', ';', ' '];
 
@@ -83,6 +83,13 @@ public sealed partial class CompareViewModel : PageViewModel, IRecipient<Backtes
     }
 
     public async void Receive(BacktestRunsChangedMessage message) => await RefreshAsync(CancellationToken.None);
+
+    /// <summary>Symbols from the screener replace the list; ranking then shows only them.</summary>
+    public void Receive(CompareSymbolsMessage message)
+    {
+        SymbolList = string.Join(", ", message.Symbols);
+        OnlyListedSymbols = true;
+    }
 
     private string[] Symbols() => SymbolList.Split(SymbolSeparators, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
 

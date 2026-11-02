@@ -660,4 +660,47 @@ Estimated value: {6} USD.</value></data>
   <data name="StrategyDoc_SmaCrossStrategy_TestResults" xml:space="preserve"><value>Optimized on AAPL from Oct 2025 to Oct 2026, then checked on the year before (Oct 2024 – Oct 2025). Past results: re-run both steps on your own symbols.
 • All five best settings lost 8–17% on the check year; on the optimization period they had made between −1.3% and +1%.
 • The best optimized result fitted the noise of its own period; don't use it without a check that holds up.</value></data>
+  <data name="Nav_Screener" xml:space="preserve"><value>Screener</value></data>
+  <data name="Screener_Title" xml:space="preserve"><value>Stock screener</value></data>
+  <data name="Screener_Preset" xml:space="preserve"><value>Preset</value></data>
+  <data name="ScreenerPreset_LiquidLargeCaps" xml:space="preserve"><value>Liquid large caps</value></data>
+  <data name="ScreenerPreset_LiquidMidCaps" xml:space="preserve"><value>Liquid mid caps</value></data>
+  <data name="ScreenerPreset_Momentum" xml:space="preserve"><value>Momentum (6 months)</value></data>
+  <data name="ScreenerPreset_Volatile" xml:space="preserve"><value>Volatile movers</value></data>
+  <data name="Screener_MinPrice" xml:space="preserve"><value>Min price ($)</value></data>
+  <data name="Screener_MaxPrice" xml:space="preserve"><value>Max price ($)</value></data>
+  <data name="Screener_MinDollarVolume" xml:space="preserve"><value>Min average dollar volume ($M a day)</value></data>
+  <data name="Screener_MinDollarVolumeHint" xml:space="preserve"><value>Average of close × volume over the last 20 sessions, in millions of dollars.</value></data>
+  <data name="Screener_MinAtr" xml:space="preserve"><value>Min ATR %</value></data>
+  <data name="Screener_MaxAtr" xml:space="preserve"><value>Max ATR %</value></data>
+  <data name="Screener_AtrHint" xml:space="preserve"><value>Average true range of the last 14 sessions as a percentage of the price: how much the stock moves in a day. Leave empty for no limit.</value></data>
+  <data name="Screener_MinTradingDays" xml:space="preserve"><value>Min history (sessions)</value></data>
+  <data name="Screener_MinTradingDaysHint" xml:space="preserve"><value>Sessions with data in the last year (about 250). Leaves out recent listings and stocks with gaps.</value></data>
+  <data name="Screener_MaxResults" xml:space="preserve"><value>Keep the best</value></data>
+  <data name="Screener_SortBy" xml:space="preserve"><value>Rank by</value></data>
+  <data name="Screener_Exchanges" xml:space="preserve"><value>Exchanges</value></data>
+  <data name="Screener_Run" xml:space="preserve"><value>Run the screener</value></data>
+  <data name="Screener_RunHint" xml:space="preserve"><value>Runs as a background job (see Jobs): a year of daily bars for every listed instrument, usually 1–2 minutes. Needs the instrument list from the Market data page.</value></data>
+  <data name="Screener_Results" xml:space="preserve"><value>Results</value></data>
+  <data name="Screener_History" xml:space="preserve"><value>Run:</value></data>
+  <data name="Screener_Summary" xml:space="preserve"><value>{0} of {1} instruments match (data as of {2:d})</value></data>
+  <data name="Screener_SendToCompare" xml:space="preserve"><value>Send to Compare</value></data>
+  <data name="Screener_DownloadData" xml:space="preserve"><value>Download minute data (1 year)</value></data>
+  <data name="Screener_SelectionHint" xml:space="preserve"><value>Uses the selected rows, or the top 100 when none is selected (Ctrl/Shift + click to select).</value></data>
+  <data name="Screener_Name" xml:space="preserve"><value>Name</value></data>
+  <data name="Screener_Exchange" xml:space="preserve"><value>Exchange</value></data>
+  <data name="Screener_LastClose" xml:space="preserve"><value>Last close</value></data>
+  <data name="Screener_DollarVolume" xml:space="preserve"><value>Avg $ volume</value></data>
+  <data name="Screener_AtrPercent" xml:space="preserve"><value>ATR %</value></data>
+  <data name="Screener_Return1M" xml:space="preserve"><value>1M %</value></data>
+  <data name="Screener_Return6M" xml:space="preserve"><value>6M %</value></data>
+  <data name="Screener_FromHigh" xml:space="preserve"><value>From 1Y high %</value></data>
+  <data name="Screener_TradingDays" xml:space="preserve"><value>Sessions</value></data>
+  <data name="Screener_Empty" xml:space="preserve"><value>No screener results yet. Pick a preset or set the criteria on the left, then run the screener.</value></data>
+  <data name="ScreenerSort_DollarVolume" xml:space="preserve"><value>Dollar volume</value></data>
+  <data name="ScreenerSort_Return6M" xml:space="preserve"><value>6-month return</value></data>
+  <data name="ScreenerSort_Return1M" xml:space="preserve"><value>1-month return</value></data>
+  <data name="ScreenerSort_AtrPercent" xml:space="preserve"><value>Volatility (ATR %)</value></data>
+  <data name="Status_ScreenerQueued" xml:space="preserve"><value>Screener queued; the results appear here when the job finishes.</value></data>
+  <data name="Status_ScreenerAlreadyRunning" xml:space="preserve"><value>The screener is already running; its results appear here when it finishes.</value></data>
 </root>

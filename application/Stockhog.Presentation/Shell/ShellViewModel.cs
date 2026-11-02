@@ -13,6 +13,7 @@ using Stockhog.Presentation.Localization;
 using Stockhog.Presentation.Logging;
 using Stockhog.Presentation.MarketData;
 using Stockhog.Presentation.Optimization;
+using Stockhog.Presentation.Screening;
 using Stockhog.Presentation.Settings;
 using Stockhog.Presentation.Strategies;
 using Stockhog.Presentation.Trading;
@@ -30,6 +31,7 @@ public sealed partial class ShellViewModel : ObservableObject, IRecipient<Naviga
         StrategiesViewModel strategies,
         HistoryViewModel history,
         CompareViewModel compare,
+        ScreenerViewModel screener,
         AssistantViewModel assistant,
         OptimizationViewModel optimization,
         AnalysisViewModel analysis,
@@ -47,6 +49,7 @@ public sealed partial class ShellViewModel : ObservableObject, IRecipient<Naviga
         Pages =
         [
             new NavigationItem("Nav_MarketData", "", marketData),
+            new NavigationItem("Nav_Screener", "", screener),
             new NavigationItem("Nav_Backtest", "", backtest),
             new NavigationItem("Nav_Strategies", "", strategies),
             new NavigationItem("Nav_History", "", history),
