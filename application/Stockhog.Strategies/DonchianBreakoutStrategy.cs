@@ -41,6 +41,9 @@ public class DonchianBreakoutStrategy : StrategyBase
     private decimal _riskPerTrade;
     private decimal _stopPrice;
 
+    /// <summary>The initial ATR stop set at the entry.</summary>
+    protected override decimal? CurrentStopPrice => _stopPrice > 0 ? _stopPrice : null;
+
     public override void Initialize()
     {
         _symbol = SetUpFromEngineParameters(Resolution.Minute);
@@ -104,10 +107,5 @@ public class DonchianBreakoutStrategy : StrategyBase
 
         MarketOrder(_symbol, shares, tag: $"Breakout above {_entryHigh.Period}-day high {breakoutLevel:0.00}");
         _stopPrice = price - stopDistance;
-    }
-
-    public override void OnEndOfAlgorithm()
-    {
-        Liquidate();
     }
 }

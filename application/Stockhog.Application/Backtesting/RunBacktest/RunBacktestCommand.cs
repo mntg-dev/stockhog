@@ -15,6 +15,12 @@ public sealed record RunBacktestCommand(
     /// <summary>Optional live progress for the caller; not part of the command's data.</summary>
     public IProgress<BacktestProgress>? Progress { get; init; }
 
+    /// <summary>
+    /// Set for a run that only asks what the strategy wants to do next (a signal); the engine then lets the strategy
+    /// decide on the last session's bars too.
+    /// </summary>
+    public bool ForSignal { get; init; }
+
     /// <summary>Set when the run is a trial of an optimization: links the run to it and gives it a unique, derived id.</summary>
     public OptimizationTrialReference? Trial { get; init; }
 }

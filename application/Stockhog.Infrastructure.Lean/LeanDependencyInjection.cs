@@ -1,6 +1,7 @@
 using Stockhog.Application.Backtesting;
 using Stockhog.Application.Backtesting.Strategies;
 using Stockhog.Application.MarketData.GetPriceBars;
+using Stockhog.Application.Signals;
 using Stockhog.Infrastructure.Http;
 using Stockhog.Infrastructure.Lean.Data;
 using Stockhog.Infrastructure.Lean.Engine;
@@ -37,6 +38,7 @@ public static class LeanDependencyInjection
 
         services.AddSingleton<IBacktestEngine, LeanBacktestEngine>();
         services.AddSingleton<IBacktestResultReader, LeanResultReader>();
+        services.AddSingleton<IStrategyStateReader, StrategyStateReader>();
         services.AddSingleton<IStrategyCatalog, LeanStrategyCatalog>();
 
         services.AddHostedService<LeanDataFolderInitializer>();

@@ -55,7 +55,7 @@ internal sealed class RunBacktestCommandHandler(
         // From here on the run exists in storage, so every outcome is saved, even if the caller has cancelled.
         try
         {
-            await engine.RunAsync(BacktestRequest.For(run), new RunProgress(run, command.Progress), cancellationToken);
+            await engine.RunAsync(BacktestRequest.For(run) with { ForSignal = command.ForSignal }, new RunProgress(run, command.Progress), cancellationToken);
             run.Complete(clock.GetUtcNow(), await ReadMetricsAsync(run, cancellationToken));
         }
         catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)

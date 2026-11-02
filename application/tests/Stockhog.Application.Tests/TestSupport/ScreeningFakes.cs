@@ -1,6 +1,9 @@
 using System.Collections.Concurrent;
 using Stockhog.Application.Scanning;
 using Stockhog.Application.Screening;
+using Stockhog.Application.Signals;
+using Stockhog.Domain.Backtesting;
+using Stockhog.Domain.MarketData;
 using Stockhog.Domain.Scanning;
 
 namespace Stockhog.Application.Tests.TestSupport;
@@ -98,4 +101,13 @@ internal sealed class InMemoryScanStore : IScanRunRepository, IScanReader
     }
 
     public Task<ScanRun?> FindAsync(ScanRunId id, CancellationToken cancellationToken = default) => GetAsync(id, cancellationToken);
+}
+
+internal sealed class FakeStrategyStateReader : IStrategyStateReader
+{
+    /// <summary>State returned for a run id; <c>null</c> means the run stored none.</summary>
+    public Func<string, StrategyEndState?> StateFor { get; set; } = _ => null;
+
+    public Task<StrategyEndState?> ReadAsync(Symbol symbol, BacktestRunId runId, CancellationToken cancellationToken = default) =>
+        Task.FromResult(StateFor(runId.Value));
 }

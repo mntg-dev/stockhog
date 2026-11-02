@@ -35,6 +35,9 @@ public class BollingerReversionStrategy : StrategyBase
     private decimal _allocation;
     private decimal _entryPrice;
 
+    /// <summary>The fixed stop loss below the entry.</summary>
+    protected override decimal? CurrentStopPrice => _entryPrice > 0 ? _entryPrice * (1 - _stopLoss) : null;
+
     public override void Initialize()
     {
         _symbol = SetUpFromEngineParameters(Resolution.Minute);
@@ -77,10 +80,5 @@ public class BollingerReversionStrategy : StrategyBase
         {
             Liquidate(symbol: _symbol, tag: "Stop loss");
         }
-    }
-
-    public override void OnEndOfAlgorithm()
-    {
-        Liquidate();
     }
 }

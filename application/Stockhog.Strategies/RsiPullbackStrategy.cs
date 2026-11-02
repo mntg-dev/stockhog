@@ -96,9 +96,4 @@ public class RsiPullbackStrategy : StrategyBase
             Liquidate(symbol: _symbol, tag: $"Held {_daysHeld} days");
         }
     }
-
-    public override void OnEndOfAlgorithm()
-    {
-        Liquidate();
-    }
 }

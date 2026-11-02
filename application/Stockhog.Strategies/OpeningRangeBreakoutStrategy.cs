@@ -44,6 +44,9 @@ public class OpeningRangeBreakoutStrategy : StrategyBase
     private decimal _rangeLow;
     private bool _tradedToday;
 
+    /// <summary>The low of the day's opening range.</summary>
+    protected override decimal? CurrentStopPrice => _rangeLow != decimal.MaxValue ? _rangeLow : null;
+
     public override void Initialize()
     {
         _symbol = SetUpFromEngineParameters(Resolution.Minute);
@@ -96,10 +99,5 @@ public class OpeningRangeBreakoutStrategy : StrategyBase
         _rangeHigh = decimal.MinValue;
         _rangeLow = decimal.MaxValue;
         _tradedToday = false;
-    }
-
-    public override void OnEndOfAlgorithm()
-    {
-        Liquidate();
     }
 }

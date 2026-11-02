@@ -49,7 +49,9 @@ internal sealed class LeanBacktestEngine(
             request.InitialCapital.Amount,
             storage.Value.DataFolder,
             resultsFolder,
-            request.Parameters.Values);
+            request.Parameters.Values,
+            BacktestJob.StateFilePath(resultsFolder, runId),
+            request.ForSignal);
         var jobPath = Path.Combine(resultsFolder, $"{runId}-job.json");
         await job.SaveAsync(jobPath, cancellationToken).ConfigureAwait(false);
 

@@ -51,6 +51,9 @@ public class SmaCrossStrategy : StrategyBase
     private decimal _stopLossPrice;
     private bool _isLong;
 
+    /// <summary>The trailing ATR stop.</summary>
+    protected override decimal? CurrentStopPrice => _stopLossPrice > 0 ? _stopLossPrice : null;
+
     public override void Initialize()
     {
         _symbol = SetUpFromEngineParameters(Resolution.Minute);
@@ -147,10 +150,5 @@ public class SmaCrossStrategy : StrategyBase
             if (currentPrice >= _stopLossPrice)
                 Liquidate(symbol: _symbol, tag: "Trailing Stop Short");
         }
-    }
-
-    public override void OnEndOfAlgorithm()
-    {
-        Liquidate();
     }
 }

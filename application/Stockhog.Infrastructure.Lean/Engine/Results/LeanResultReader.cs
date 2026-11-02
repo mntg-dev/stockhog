@@ -32,7 +32,7 @@ internal sealed class LeanResultReader(IOptions<StorageOptions> storage) : IBack
 
     /// <summary>
     /// Result files are named <c>{timestamp}_{SYMBOL}_{Strategy}.json</c>. Lean writes sibling files
-    /// (<c>-summary</c>, <c>-order-events</c>, <c>-log</c>) and the app writes <c>-job</c>; those are skipped.
+    /// (<c>-summary</c>, <c>-order-events</c>, <c>-log</c>) and the app writes <c>-job</c> and the strategy <c>-state</c>; those are skipped.
     /// </summary>
     internal static string? FindLatestResultFile(string resultsFolder, string symbol, string strategyName)
     {

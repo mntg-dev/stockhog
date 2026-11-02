@@ -80,9 +80,4 @@ public class MomentumTrendStrategy : StrategyBase
             Liquidate(symbol: _symbol, tag: momentum <= 0 ? $"Momentum {momentum:P1}" : "Below trend SMA");
         }
     }
-
-    public override void OnEndOfAlgorithm()
-    {
-        Liquidate();
-    }
 }
