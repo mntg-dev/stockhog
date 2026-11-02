@@ -37,6 +37,19 @@
             </Border>
             <CheckBox DockPanel.Dock="Right" IsChecked="{Binding TradingEnabled}" Content="{loc:Tr Trading_KillSwitch}"
                       VerticalAlignment="Center" ToolTip="{loc:Tr Trading_KillSwitchHint}" />
+            <TextBlock Text="{Binding PortfolioText}" DockPanel.Dock="Right" VerticalAlignment="Center" Margin="0,0,16,0"
+                   ToolTip="{loc:Tr Trading_PortfolioRiskHint}">
+            <TextBlock.Style>
+                <Style TargetType="TextBlock">
+                    <Setter Property="Foreground" Value="Gray" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding PortfolioAtLimit}" Value="True">
+                            <Setter Property="Foreground" Value="{StaticResource NegativeBrush}" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+        </TextBlock>
             <!-- Live only: orders are refused until armed for the session. -->
             <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" Margin="0,0,16,0" VerticalAlignment="Center"
                         Visibility="{Binding IsLive, Converter={StaticResource BooleanToVisibility}}">

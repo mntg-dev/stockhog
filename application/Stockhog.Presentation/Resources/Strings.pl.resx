@@ -797,4 +797,6 @@ Jeśli stop zostanie trafiony, strata wyniesie ok. {4:N2} USD ({5:N2}% kapitału
   <data name="Status_ProposalApproving" xml:space="preserve"><value>Składanie zlecenia {0}…</value></data>
   <data name="Status_ProposalApproved" xml:space="preserve"><value>Złożono zlecenie kupna {0} {1} ({2}).</value></data>
   <data name="Status_ProposalRejected" xml:space="preserve"><value>Odrzucono propozycję {0}.</value></data>
+  <data name="Trading_PortfolioRisk" xml:space="preserve"><value>Szczyt {0:N2} · obsunięcie {1:N1}% z {2:N0}% · pozycje {3}/{4} · zlecenia dziś {5}/{6}</value></data>
+  <data name="Trading_PortfolioRiskHint" xml:space="preserve"><value>Limity portfela (Trading:Risk w appsettings): nowe pozycje są odrzucane, gdy kapitał spadnie tak daleko poniżej szczytu, gdy tyle spółek jest już w portfelu albo po tylu zleceniach dziś. Osiągnięcie limitu obsunięcia wyłącza też handel.</value></data>
 </root>

@@ -112,6 +112,18 @@ public sealed partial class TradingViewModel : PageViewModel, IRecipient<Prefill
     public string DayProfitLossText => Account is { } a ? $"{a.DailyProfitLoss.ToString("+#,0.00;-#,0.00;0.00", Loc.Instance.Culture)} ({a.DailyProfitLossPercent:+0.00;-0.00;0.00}%)" : "–";
     public string BuyingPowerText => Account?.BuyingPower.ToString("N2", Loc.Instance.Culture) ?? "–";
     public string CashText => Account?.Cash.ToString("N2", Loc.Instance.Culture) ?? "–";
+
+    /// <summary>The account against the portfolio limits, e.g. "Peak 110,000.00 · drawdown 3.2% of 15% · 2/10 positions · 1/25 orders today".</summary>
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(PortfolioText), nameof(PortfolioAtLimit))]
+    private Application.Trading.Portfolio.PortfolioRisk? _portfolio;
+
+    public string PortfolioText => Portfolio is { } p
+        ? Loc.Format("Trading_PortfolioRisk", p.EquityPeak, p.DrawdownPercent, p.Limits.MaxDrawdownPercent, p.OpenPositions, p.Limits.MaxOpenPositions,
+            p.OrdersToday, p.Limits.MaxOrdersPerDay)
+        : string.Empty;
+
+    public bool PortfolioAtLimit => Portfolio is { } p && (p.DrawdownLimitReached || p.PositionLimitReached || p.OrderLimitReached);
     public bool IsPaper => !IsLive;
 
     public bool TradingEnabled
@@ -192,7 +204,9 @@ public sealed partial class TradingViewModel : PageViewModel, IRecipient<Prefill
         var positionsTask = _dispatcher.SendAsync(new GetPositionsQuery());
         var ordersTask = _dispatcher.SendAsync(new GetOrdersQuery(OpenOrdersOnly));
         var auditTask = _dispatcher.SendAsync(new GetAuditLogQuery());
-        await Task.WhenAll(accountTask, positionsTask, ordersTask, auditTask);
+        var portfolioTask = _dispatcher.SendAsync(new Application.Trading.Portfolio.GetPortfolioRiskQuery());
+        await Task.WhenAll(accountTask, positionsTask, ordersTask, auditTask, portfolioTask);
+        Portfolio = (await portfolioTask) is { IsSuccess: true } portfolio ? portfolio.Value : null;
 
         // The daily loss guard may have switched trading off in the background.
         RiskLimits = (await _dispatcher.SendAsync(new GetRiskLimitsQuery())).Value;
