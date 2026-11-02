@@ -62,7 +62,9 @@ internal sealed class AlpacaBrokerClient(HttpClient httpClient, IOptions<AlpacaO
             order.TimeInForce == TimeInForce.Gtc ? "gtc" : "day",
             order.LimitPrice is { } limit ? Format(limit) : null,
             order.StopPrice is { } stop ? Format(stop) : null,
-            order.Id.Value);
+            order.Id.Value,
+            order.StopLossPrice is null ? null : "oto",
+            order.StopLossPrice is { } stopLoss ? new StopLossDto(Format(stopLoss)) : null);
 
         var accepted = await SendAsync<OrderDto>(HttpMethod.Post, "v2/orders", request, cancellationToken).ConfigureAwait(false);
         return ToBrokerOrder(accepted!);
@@ -201,7 +203,12 @@ internal sealed class AlpacaBrokerClient(HttpClient httpClient, IOptions<AlpacaO
         [property: JsonPropertyName("time_in_force")] string TimeInForce,
         [property: JsonPropertyName("limit_price")] string? LimitPrice,
         [property: JsonPropertyName("stop_price")] string? StopPrice,
-        [property: JsonPropertyName("client_order_id")] string ClientOrderId);
+        [property: JsonPropertyName("client_order_id")] string ClientOrderId,
+        [property: JsonPropertyName("order_class"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] string? OrderClass,
+        [property: JsonPropertyName("stop_loss"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] StopLossDto? StopLoss);
+
+    /// <summary>The protective leg of an OTO order: a stop sell placed once the entry fills.</summary>
+    private sealed record StopLossDto([property: JsonPropertyName("stop_price")] string StopPrice);
 }
 
 internal sealed record OrderDto(

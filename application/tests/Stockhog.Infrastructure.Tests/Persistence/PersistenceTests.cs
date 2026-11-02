@@ -8,6 +8,7 @@ using Stockhog.Domain.Backtesting;
 using Stockhog.Domain.Common;
 using Stockhog.Domain.MarketData;
 using Stockhog.Domain.Optimization;
+using Stockhog.Domain.Proposals;
 using Stockhog.Domain.Scanning;
 using Stockhog.Domain.Signals;
 using Stockhog.Domain.Trading;
@@ -556,6 +557,39 @@ public sealed class PersistenceTests : IAsyncLifetime
         Assert.Equal((CandidateStatus.Failed, "No market data"), (read.Candidates[1].Status, read.Candidates[1].FailureReason));
         Assert.Empty(await new ScanRunRepository(check).ListUnfinishedAsync(ct));
         Assert.Equal([scan.Id], (await new ScanReader(check).ListAsync(5, ct)).Select(s => s.Id));
+    }
+
+    [Fact]
+    public async Task Proposals_and_the_stop_loss_of_their_orders_round_trip()
+    {
+        var ct = TestContext.Current.CancellationToken;
+        var signal = StrategySignal.Classify(new DateOnly(2026, 10, 30), 200m, 50m, 200m, new DateTime(2026, 10, 30, 16, 0, 0), "RSI dip", 190m, null, null, "run-7");
+        var proposal = TradeProposal.Create(
+            ProposalId.New(Symbol.Create("SPY"), T0), Symbol.Create("SPY"), StrategyName.Create("RsiPullbackStrategy"), signal,
+            new PositionSize(100, 190m, 1_000m, SizeLimit.Risk, false), 100_000m, 3.2m, ScanRunId.New(T0), T0, T0.AddHours(8));
+        var order = Order.Create(ClientOrderId.New(T0), Symbol.Create("SPY"), OrderSide.Buy, OrderType.Market, 100, null, null, TimeInForce.Day, T0, stopLossPrice: 190m);
+
+        await using (var db = CreateContext())
+        {
+            new ProposalRepository(db).Add(proposal);
+            db.Orders.Add(order);
+            await db.SaveChangesAsync(ct);
+        }
+
+        await using (var db = CreateContext())
+        {
+            var repository = new ProposalRepository(db);
+            var pending = Assert.Single(await repository.ListPendingAsync(ct));
+            pending.Submit(order.Id, T0.AddMinutes(5));
+            await db.SaveChangesAsync(ct);
+        }
+
+        await using var check = CreateContext();
+        var read = Assert.Single(await new ProposalReader(check).ListAsync(10, ct));
+        Assert.Equal((ProposalStatus.Submitted, order.Id, 100m, 190m, 3.2m), (read.Status, read.OrderId, read.Quantity, read.StopPrice, read.Score));
+        Assert.Equal(signal, read.Signal);
+        Assert.Equal(proposal.ScanId, read.ScanId);
+        Assert.Equal(190m, (await check.Orders.SingleAsync(ct)).StopLossPrice);
     }
 
     private static ScreenerResult ScreenerRun(DateTimeOffset createdAt, ScreenerCriteria criteria, params (string Symbol, decimal Close, decimal? Return6M)[] rows)

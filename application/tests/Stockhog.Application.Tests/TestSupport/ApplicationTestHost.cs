@@ -8,6 +8,7 @@ using Stockhog.Application.Instruments;
 using Stockhog.Application.MarketData;
 using Stockhog.Application.MarketData.GetPriceBars;
 using Stockhog.Application.Optimization;
+using Stockhog.Application.Proposals;
 using Stockhog.Application.Scanning;
 using Stockhog.Application.Screening;
 using Stockhog.Application.Signals;
@@ -68,6 +69,8 @@ internal sealed class ApplicationTestHost : IAsyncDisposable
         services.AddSingleton<IScanRunRepository>(Scans);
         services.AddSingleton<IScanReader>(Scans);
         services.AddSingleton<IStrategyStateReader>(States);
+        services.AddSingleton<IProposalRepository>(Proposals);
+        services.AddSingleton<IProposalReader>(Proposals);
         services.AddScoped<IUnitOfWork, InMemoryUnitOfWork>();
 
         _provider = services.BuildServiceProvider(new ServiceProviderOptions { ValidateScopes = true, ValidateOnBuild = true });
@@ -95,6 +98,7 @@ internal sealed class ApplicationTestHost : IAsyncDisposable
     public InMemoryScreenerResultStore ScreenerResults { get; } = new();
     public InMemoryScanStore Scans { get; } = new();
     public FakeStrategyStateReader States { get; } = new();
+    public InMemoryProposalStore Proposals { get; } = new();
 
     public IAssistantToolbox Toolbox => _provider.GetRequiredService<IAssistantToolbox>();
 

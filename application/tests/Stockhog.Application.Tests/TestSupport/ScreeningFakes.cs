@@ -1,9 +1,11 @@
 using System.Collections.Concurrent;
+using Stockhog.Application.Proposals;
 using Stockhog.Application.Scanning;
 using Stockhog.Application.Screening;
 using Stockhog.Application.Signals;
 using Stockhog.Domain.Backtesting;
 using Stockhog.Domain.MarketData;
+using Stockhog.Domain.Proposals;
 using Stockhog.Domain.Scanning;
 
 namespace Stockhog.Application.Tests.TestSupport;
@@ -110,4 +112,20 @@ internal sealed class FakeStrategyStateReader : IStrategyStateReader
 
     public Task<StrategyEndState?> ReadAsync(Symbol symbol, BacktestRunId runId, CancellationToken cancellationToken = default) =>
         Task.FromResult(StateFor(runId.Value));
+}
+
+internal sealed class InMemoryProposalStore : IProposalRepository, IProposalReader
+{
+    public List<TradeProposal> Proposals { get; } = [];
+
+    public void Add(TradeProposal proposal) => Proposals.Add(proposal);
+
+    public Task<TradeProposal?> GetAsync(ProposalId id, CancellationToken cancellationToken = default) =>
+        Task.FromResult(Proposals.FirstOrDefault(p => p.Id == id));
+
+    public Task<IReadOnlyList<TradeProposal>> ListPendingAsync(CancellationToken cancellationToken = default) =>
+        Task.FromResult<IReadOnlyList<TradeProposal>>(Proposals.Where(p => p.IsPending).ToList());
+
+    public Task<IReadOnlyList<TradeProposal>> ListAsync(int take, CancellationToken cancellationToken = default) =>
+        Task.FromResult<IReadOnlyList<TradeProposal>>(Proposals.OrderByDescending(p => p.CreatedAt).Take(take).ToList());
 }

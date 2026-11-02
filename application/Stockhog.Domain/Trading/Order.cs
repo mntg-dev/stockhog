@@ -20,6 +20,7 @@ public sealed class Order : AggregateRoot<ClientOrderId>
         decimal? limitPrice,
         decimal? stopPrice,
         TimeInForce timeInForce,
+        decimal? stopLossPrice,
         DateTimeOffset createdAt) : base(id)
     {
         Symbol = symbol;
@@ -29,6 +30,7 @@ public sealed class Order : AggregateRoot<ClientOrderId>
         LimitPrice = limitPrice;
         StopPrice = stopPrice;
         TimeInForce = timeInForce;
+        StopLossPrice = stopLossPrice;
         CreatedAt = createdAt;
         UpdatedAt = createdAt;
         Status = OrderStatus.New;
@@ -47,6 +49,12 @@ public sealed class Order : AggregateRoot<ClientOrderId>
     public decimal? LimitPrice { get; }
     public decimal? StopPrice { get; }
     public TimeInForce TimeInForce { get; }
+
+    /// <summary>
+    /// A protective stop the broker places once this buy fills (Alpaca OTO: one triggers other), so the position is
+    /// protected even when the app is not running. Its own order lives at the broker only.
+    /// </summary>
+    public decimal? StopLossPrice { get; }
 
     public OrderStatus Status { get; private set; }
 
@@ -83,7 +91,8 @@ public sealed class Order : AggregateRoot<ClientOrderId>
         decimal? limitPrice,
         decimal? stopPrice,
         TimeInForce timeInForce,
-        DateTimeOffset createdAt)
+        DateTimeOffset createdAt,
+        decimal? stopLossPrice = null)
     {
         if (quantity <= 0)
             throw new DomainException("Quantity must be positive.");
@@ -100,9 +109,20 @@ public sealed class Order : AggregateRoot<ClientOrderId>
             throw new DomainException(needsStop ? $"A {type} order needs a stop price." : $"A {type} order has no stop price.");
         if (limitPrice <= 0 || stopPrice <= 0)
             throw new DomainException("Prices must be positive.");
+        if (stopLossPrice is { } stopLoss)
+        {
+            if (stopLoss <= 0)
+                throw new DomainException("The stop loss must be positive.");
+            if (side != OrderSide.Buy)
+                throw new DomainException("A stop loss can only protect a buy.");
+            if (quantity != decimal.Truncate(quantity))
+                throw new DomainException("An order with a stop loss needs a whole number of shares.");
+            if (limitPrice is { } limit && stopLoss >= limit)
+                throw new DomainException("The stop loss must be below the limit price.");
+        }
 
-        var order = new Order(id, symbol, side, type, quantity, limitPrice, stopPrice, timeInForce, createdAt);
-        order.Raise(new OrderCreated(id, symbol, side, type, quantity, limitPrice, stopPrice, createdAt));
+        var order = new Order(id, symbol, side, type, quantity, limitPrice, stopPrice, timeInForce, stopLossPrice, createdAt);
+        order.Raise(new OrderCreated(id, symbol, side, type, quantity, limitPrice, stopPrice, createdAt) { StopLossPrice = stopLossPrice });
         return order;
     }
 
@@ -190,7 +210,10 @@ public sealed record OrderCreated(
     decimal Quantity,
     decimal? LimitPrice,
     decimal? StopPrice,
-    DateTimeOffset OccurredAt) : IDomainEvent;
+    DateTimeOffset OccurredAt) : IDomainEvent
+{
+    public decimal? StopLossPrice { get; init; }
+}
 
 public sealed record OrderSubmitted(ClientOrderId OrderId, Symbol Symbol, OrderSide Side, decimal Quantity, DateTimeOffset OccurredAt) : IDomainEvent;
 

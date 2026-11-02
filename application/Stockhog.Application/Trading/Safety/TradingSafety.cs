@@ -31,7 +31,8 @@ public enum AuditCategory
 {
     Order,
     Risk,
-    Session
+    Session,
+    Proposal
 }
 
 /// <summary>One line of the trading audit trail.</summary>
@@ -210,7 +211,8 @@ internal sealed class AuditOrderEvents(Audit audit) :
 {
     public Task HandleAsync(OrderCreated e, CancellationToken cancellationToken) =>
         audit.RecordAsync(AuditCategory.Order, "Created",
-            $"{e.Side} {e.Quantity} {e.Symbol} {e.Type}" + (e.LimitPrice is { } l ? $" limit {l}" : "") + (e.StopPrice is { } s ? $" stop {s}" : ""),
+            $"{e.Side} {e.Quantity} {e.Symbol} {e.Type}" + (e.LimitPrice is { } l ? $" limit {l}" : "") + (e.StopPrice is { } s ? $" stop {s}" : "")
+                + (e.StopLossPrice is { } loss ? $" with stop loss {loss}" : ""),
             e.OrderId.Value, e.Symbol.Value);
 
     public Task HandleAsync(OrderSubmitted e, CancellationToken cancellationToken) =>

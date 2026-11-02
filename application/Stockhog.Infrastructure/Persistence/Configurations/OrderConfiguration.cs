@@ -29,6 +29,7 @@ internal sealed class OrderConfiguration : IEntityTypeConfiguration<Order>
         builder.Property(o => o.Quantity);
         builder.Property(o => o.LimitPrice);
         builder.Property(o => o.StopPrice);
+        builder.Property(o => o.StopLossPrice);
         builder.Property(o => o.BrokerOrderId).HasMaxLength(64);
         builder.Property(o => o.FilledQuantity);
         builder.Property(o => o.AverageFillPrice);

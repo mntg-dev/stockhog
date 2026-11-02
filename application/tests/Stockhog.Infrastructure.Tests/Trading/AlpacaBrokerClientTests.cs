@@ -41,6 +41,27 @@ public class AlpacaBrokerClientTests
     }
 
     [Fact]
+    public async Task A_stop_loss_is_sent_as_the_protective_leg_of_an_oto_order()
+    {
+        var handler = new StubHandler(_ => Json(HttpStatusCode.OK, AcceptedOrder));
+        var client = CreateClient(handler, new AlpacaOptions { TradingApiKey = "paper", TradingApiSecret = "paper-secret" });
+        var protectedBuy = Order.Create(ClientOrderId.From("emt-3"), Symbol.Create("SPY"), OrderSide.Buy, OrderType.Market, 100, null, null, TimeInForce.Day, T0, stopLossPrice: 730.74m);
+        var plainBuy = Order.Create(ClientOrderId.From("emt-4"), Symbol.Create("SPY"), OrderSide.Buy, OrderType.Market, 100, null, null, TimeInForce.Day, T0);
+
+        await client.SubmitOrderAsync(protectedBuy, Ct);
+        await client.SubmitOrderAsync(plainBuy, Ct);
+
+        using var first = JsonDocument.Parse(handler.Requests[0].Body!);
+        Assert.Equal("oto", first.RootElement.GetProperty("order_class").GetString());
+        Assert.Equal("730.74", first.RootElement.GetProperty("stop_loss").GetProperty("stop_price").GetString());
+
+        // Without a stop loss nothing about order classes is sent, as before.
+        using var second = JsonDocument.Parse(handler.Requests[1].Body!);
+        Assert.False(second.RootElement.TryGetProperty("order_class", out _));
+        Assert.False(second.RootElement.TryGetProperty("stop_loss", out _));
+    }
+
+    [Fact]
     public async Task Market_orders_send_no_prices_and_fractional_quantities_as_text()
     {
         var handler = new StubHandler(_ => Json(HttpStatusCode.OK, AcceptedOrder));

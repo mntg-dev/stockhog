@@ -30,4 +30,18 @@ internal static class ExchangeCalendar
     /// </summary>
     public static DateOnly LastCompletedSession(TimeProvider clock) =>
         DateOnly.FromDateTime(TimeZoneInfo.ConvertTime(clock.GetUtcNow(), NewYork).DateTime).AddDays(-1);
+
+    /// <summary>
+    /// The close (16:00 New York) of the first weekday after <paramref name="session"/>: when an order meant for the
+    /// next session can no longer be placed. Exchange holidays are not known, which errs towards expiring early.
+    /// </summary>
+    public static DateTimeOffset NextSessionClose(DateOnly session)
+    {
+        var next = session.AddDays(1);
+        while (next.DayOfWeek is DayOfWeek.Saturday or DayOfWeek.Sunday)
+            next = next.AddDays(1);
+
+        var close = next.ToDateTime(new TimeOnly(16, 0));
+        return new DateTimeOffset(close, NewYork.GetUtcOffset(close)).ToUniversalTime();
+    }
 }

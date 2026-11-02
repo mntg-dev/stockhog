@@ -20,7 +20,8 @@ public sealed record PlaceOrderCommand(
     decimal Quantity,
     decimal? LimitPrice = null,
     decimal? StopPrice = null,
-    TimeInForce TimeInForce = TimeInForce.Day) : ICommand<PlacedOrder>
+    TimeInForce TimeInForce = TimeInForce.Day,
+    decimal? StopLossPrice = null) : ICommand<PlacedOrder>
 {
     public const decimal MaxQuantity = 1_000_000;
 }
@@ -55,6 +56,14 @@ internal sealed class PlaceOrderCommandValidator : AbstractValidator<PlaceOrderC
             .When(c => c.Type is OrderType.Stop or OrderType.StopLimit);
         RuleFor(c => c.StopPrice).Null().When(c => c.Type is OrderType.Market or OrderType.Limit)
             .WithMessage("This order type has no stop price.");
+
+        RuleFor(c => c.StopLossPrice)
+            .GreaterThan(0).WithMessage("The stop loss must be above zero.")
+            .When(c => c.StopLossPrice is not null);
+        RuleFor(c => c.Side).Equal(OrderSide.Buy).When(c => c.StopLossPrice is not null)
+            .WithMessage("A stop loss can only protect a buy.");
+        RuleFor(c => c.Quantity).Must(q => q == decimal.Truncate(q)).When(c => c.StopLossPrice is not null)
+            .WithMessage("An order with a stop loss needs a whole number of shares.");
     }
 }
 
@@ -113,8 +122,15 @@ internal sealed class PlaceOrderCommandHandler(
         }
 
         var now = clock.GetUtcNow();
+        // A stop loss at or above the price would be triggered (or refused) right away.
+        if (command.StopLossPrice is { } stopLoss && stopLoss >= price)
+        {
+            await audit.RecordAsync(AuditCategory.Risk, "Refused", $"{intent}: stop loss {stopLoss} is not below the price {price}.", symbol: symbol.Value);
+            return TradingErrors.RiskRejected([$"The stop loss {stopLoss:N2} must be below the current price {price:N2}."]);
+        }
+
         var order = Order.Create(ClientOrderId.New(now), symbol, command.Side, command.Type, command.Quantity,
-            command.LimitPrice, command.StopPrice, command.TimeInForce, now);
+            command.LimitPrice, command.StopPrice, command.TimeInForce, now, command.StopLossPrice);
         orders.Add(order);
         await unitOfWork.SaveChangesAsync(cancellationToken);
 

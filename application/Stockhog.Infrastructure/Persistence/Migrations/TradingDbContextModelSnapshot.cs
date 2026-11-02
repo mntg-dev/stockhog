@@ -237,6 +237,81 @@ namespace Stockhog.Infrastructure.Persistence.Migrations
                     b.ToTable("OptimizationRuns", (string)null);
                 });
 
+            modelBuilder.Entity("Stockhog.Domain.Proposals.TradeProposal", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(64)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("DecidedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("Equity")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("ExpiresAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("OrderId")
+                        .HasMaxLength(48)
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("Quantity")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Reason")
+                        .HasMaxLength(2000)
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("ReferencePrice")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("RiskAmount")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ScanId")
+                        .HasMaxLength(64)
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal?>("Score")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Signal")
+                        .IsRequired()
+                        .HasMaxLength(2000)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(16)
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("StopPrice")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Strategy")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("TEXT")
+                        .HasColumnName("StrategyName");
+
+                    b.Property<string>("Symbol")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedAt");
+
+                    b.HasIndex("Status");
+
+                    b.ToTable("TradeProposals", (string)null);
+                });
+
             modelBuilder.Entity("Stockhog.Domain.Scanning.ScanRun", b =>
                 {
                     b.Property<string>("Id")
@@ -347,6 +422,9 @@ namespace Stockhog.Infrastructure.Persistence.Migrations
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasMaxLength(16)
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal?>("StopLossPrice")
                         .HasColumnType("TEXT");
 
                     b.Property<decimal?>("StopPrice")
