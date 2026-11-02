@@ -115,6 +115,12 @@ public sealed record NavigateMessage(Type PageType);
 /// <summary>A screener run finished.</summary>
 public sealed record ScreenerRunsChangedMessage;
 
+/// <summary>A scan started, evaluated a candidate, or ended.</summary>
+public sealed record ScansChangedMessage;
+
+/// <summary>Put these symbols into the scanner's symbol list, e.g. the result of a screener run.</summary>
+public sealed record ScanSymbolsMessage(IReadOnlyList<string> Symbols, Guid? ScreenerRunId);
+
 /// <summary>Put these symbols into the compare page's symbol list, e.g. the result of a screener run.</summary>
 public sealed record CompareSymbolsMessage(IReadOnlyList<string> Symbols);
 

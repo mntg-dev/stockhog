@@ -124,6 +124,9 @@
 
             <StackPanel Grid.Row="1" Style="{StaticResource Toolbar}">
                 <Button Content="{loc:Tr Common_Refresh}" Command="{Binding RefreshCommand}" Margin="0,0,6,0" />
+                <Button Content="{loc:Tr Screener_SendToScanner}" Command="{Binding SendToScannerCommand}"
+                        CommandParameter="{Binding SelectedItems, ElementName=ResultsGrid}" ToolTip="{loc:Tr Screener_SelectionHint}"
+                        Style="{StaticResource PrimaryButton}" Margin="0,0,6,0" />
                 <Button Content="{loc:Tr Screener_SendToCompare}" Command="{Binding SendToCompareCommand}"
                         CommandParameter="{Binding SelectedItems, ElementName=ResultsGrid}" ToolTip="{loc:Tr Screener_SelectionHint}" Margin="0,0,6,0" />
                 <Button Content="{loc:Tr Screener_DownloadData}" Command="{Binding DownloadDataCommand}"

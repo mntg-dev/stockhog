@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Stockhog.Application.Abstractions.Jobs;
 using Stockhog.Application.Instruments;
+using Stockhog.Application.Scanning;
 using Stockhog.Application.Screening;
 using Stockhog.Presentation.Common;
 using Stockhog.Presentation.Shell;
@@ -24,6 +25,7 @@ public sealed partial class JobsViewModel : PageViewModel
     private readonly ThrottledAction _refresh;
     private readonly HashSet<Guid> _seenFinished = [];
     private readonly Dictionary<Guid, int> _optimizationProgress = [];
+    private readonly Dictionary<Guid, int> _scanProgress = [];
 
     public JobsViewModel(IJobQueue queue, IJobMonitor monitor, IMessenger messenger, StatusViewModel status, ILogger<JobsViewModel> logger)
         : base(status, logger)
@@ -50,7 +52,7 @@ public sealed partial class JobsViewModel : PageViewModel
         ActiveCount = Jobs.Count(j => j.IsActive);
 
         var newlyFinished = Jobs.Where(j => !j.IsActive && _seenFinished.Add(j.Id)).ToList();
-        if (newlyFinished.Any(j => IsBacktest(j) || IsOptimization(j)))
+        if (newlyFinished.Any(j => IsBacktest(j) || IsOptimization(j) || IsScan(j)))
             _messenger.Send(new BacktestRunsChangedMessage());
         if (newlyFinished.Any(j => IsInstrumentRefresh(j) && j.Status == JobStatus.Succeeded))
             _messenger.Send(new InstrumentsChangedMessage());
@@ -71,6 +73,18 @@ public sealed partial class JobsViewModel : PageViewModel
 
         if (optimizationsChanged)
             _messenger.Send(new OptimizationsChangedMessage());
+
+        // Scans save after every candidate, like optimizations.
+        var scansChanged = false;
+        foreach (var job in Jobs.Where(IsScan))
+        {
+            if (!_scanProgress.TryGetValue(job.Id, out var seen) || seen != job.Progress || newlyFinished.Contains(job))
+                scansChanged = true;
+            _scanProgress[job.Id] = job.Progress;
+        }
+
+        if (scansChanged)
+            _messenger.Send(new ScansChangedMessage());
     }
 
     private static bool IsBacktest(JobSnapshot job) => job.Key?.StartsWith("backtest:", StringComparison.Ordinal) == true;
@@ -78,6 +92,8 @@ public sealed partial class JobsViewModel : PageViewModel
     private static bool IsOptimization(JobSnapshot job) => job.Key?.StartsWith("optimization:", StringComparison.Ordinal) == true;
 
     private static bool IsInstrumentRefresh(JobSnapshot job) => job.Key == InstrumentCacheKeys.RefreshJobKey;
+
+    private static bool IsScan(JobSnapshot job) => job.Key?.StartsWith(ScanKeys.JobKeyPrefix, StringComparison.Ordinal) == true;
 
     private static bool IsScreener(JobSnapshot job) => job.Key == ScreenerKeys.RunJobKey;
 }

@@ -10,6 +10,7 @@ using Stockhog.Presentation.Jobs;
 using Stockhog.Presentation.Logging;
 using Stockhog.Presentation.MarketData;
 using Stockhog.Presentation.Optimization;
+using Stockhog.Presentation.Scanning;
 using Stockhog.Presentation.Screening;
 using Stockhog.Presentation.Settings;
 using Stockhog.Presentation.Shell;
@@ -38,6 +39,7 @@ public static class PresentationDependencyInjection
         services.AddSingleton<HistoryViewModel>();
         services.AddSingleton<CompareViewModel>();
         services.AddSingleton<ScreenerViewModel>();
+        services.AddSingleton<ScannerViewModel>();
         services.AddSingleton<AssistantViewModel>();
         services.AddSingleton<IAssistantActions>(sp => sp.GetRequiredService<AssistantViewModel>());
         services.AddSingleton<OptimizationViewModel>();

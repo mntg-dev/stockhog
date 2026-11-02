@@ -705,4 +705,48 @@ Estimated value: {6} USD.</value></data>
   <data name="Status_ScreenerAlreadyRunning" xml:space="preserve"><value>The screener is already running; its results appear here when it finishes.</value></data>
   <data name="Screener_StocksOnly" xml:space="preserve"><value>Stocks only (no ETFs or funds)</value></data>
   <data name="Screener_StocksOnlyHint" xml:space="preserve"><value>Leaves out ETFs, ETNs, leveraged and inverse products and other funds. Recognized by name, so a few may slip through or a closed-end fund company may be left out.</value></data>
+  <data name="Nav_Scanner" xml:space="preserve"><value>Scanner</value></data>
+  <data name="Screener_SendToScanner" xml:space="preserve"><value>Send to Scanner</value></data>
+  <data name="Scanner_Title" xml:space="preserve"><value>Strategy scanner</value></data>
+  <data name="Scanner_SymbolsHint" xml:space="preserve"><value>Up to 100 symbols separated by commas, e.g. from the screener.</value></data>
+  <data name="Scanner_UseScreener" xml:space="preserve"><value>Use the latest screener result</value></data>
+  <data name="Scanner_Strategies" xml:space="preserve"><value>Strategies</value></data>
+  <data name="Scanner_Parallel" xml:space="preserve"><value>Backtests at once</value></data>
+  <data name="Scanner_ParallelHint" xml:space="preserve"><value>Engine processes running in parallel. More is faster but uses more CPU and memory.</value></data>
+  <data name="Scanner_Checks" xml:space="preserve"><value>Checks</value></data>
+  <data name="Scanner_MinTrades" xml:space="preserve"><value>Min trades</value></data>
+  <data name="Scanner_MaxDrawdown" xml:space="preserve"><value>Max Monte Carlo DD %</value></data>
+  <data name="Scanner_MaxDrawdownHint" xml:space="preserve"><value>Limit for the 95th percentile drawdown when the trades are reshuffled 1,000 times: the drawdown you should be ready for, not just the one that happened.</value></data>
+  <data name="Scanner_BothHalves" xml:space="preserve"><value>Profitable in both halves of the period</value></data>
+  <data name="Scanner_BothHalvesHint" xml:space="preserve"><value>Rejects results that came from one lucky stretch: the strategy must make money in the first and in the second half.</value></data>
+  <data name="Scanner_Start" xml:space="preserve"><value>Start the scan</value></data>
+  <data name="Scanner_StartHint" xml:space="preserve"><value>Runs as a background job (see Jobs): first the minute data of every symbol (only missing days; the first time this can take a while), then one backtest per symbol and strategy with the strategy's default parameters. The backtests also appear in History.</value></data>
+  <data name="Scanner_Results" xml:space="preserve"><value>Results</value></data>
+  <data name="Scanner_Summary" xml:space="preserve"><value>{0} passed · {1} of {2} done</value></data>
+  <data name="Scanner_Stop" xml:space="preserve"><value>Stop the scan</value></data>
+  <data name="Scanner_OnlyPassed" xml:space="preserve"><value>Only passed</value></data>
+  <data name="Scanner_Passed" xml:space="preserve"><value>Passed</value></data>
+  <data name="Scanner_Score" xml:space="preserve"><value>Score</value></data>
+  <data name="Scanner_FirstHalf" xml:space="preserve"><value>1st half %</value></data>
+  <data name="Scanner_SecondHalf" xml:space="preserve"><value>2nd half %</value></data>
+  <data name="Scanner_MonteCarloDrawdown" xml:space="preserve"><value>MC DD 95% %</value></data>
+  <data name="Scanner_BuyAndHold" xml:space="preserve"><value>Buy &amp; hold %</value></data>
+  <data name="Scanner_Why" xml:space="preserve"><value>Failed checks</value></data>
+  <data name="Scanner_Empty" xml:space="preserve"><value>No scan yet. Pick symbols (e.g. from the screener) and strategies on the left, then start the scan.</value></data>
+  <data name="ScanRejection_TooFewTrades" xml:space="preserve"><value>Too few trades</value></data>
+  <data name="ScanRejection_NotProfitable" xml:space="preserve"><value>Not profitable</value></data>
+  <data name="ScanRejection_LosingHalf" xml:space="preserve"><value>Lost money in one half</value></data>
+  <data name="ScanRejection_DrawdownTooDeep" xml:space="preserve"><value>Drawdown too deep</value></data>
+  <data name="ScanStatus_Queued" xml:space="preserve"><value>Queued</value></data>
+  <data name="ScanStatus_Running" xml:space="preserve"><value>Running</value></data>
+  <data name="ScanStatus_Completed" xml:space="preserve"><value>Completed</value></data>
+  <data name="ScanStatus_Failed" xml:space="preserve"><value>Failed</value></data>
+  <data name="ScanStatus_Cancelled" xml:space="preserve"><value>Cancelled</value></data>
+  <data name="CandidateStatus_Pending" xml:space="preserve"><value>Pending</value></data>
+  <data name="CandidateStatus_Running" xml:space="preserve"><value>Running</value></data>
+  <data name="CandidateStatus_Evaluated" xml:space="preserve"><value>Evaluated</value></data>
+  <data name="CandidateStatus_Failed" xml:space="preserve"><value>Failed</value></data>
+  <data name="CandidateStatus_Cancelled" xml:space="preserve"><value>Cancelled</value></data>
+  <data name="Status_ScanStarted" xml:space="preserve"><value>Scan started: {0} backtests queued as one job.</value></data>
+  <data name="Status_ScanStopping" xml:space="preserve"><value>Stopping the scan; evaluated candidates are kept.</value></data>
 </root>

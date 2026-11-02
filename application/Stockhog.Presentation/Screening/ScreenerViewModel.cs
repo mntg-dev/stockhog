@@ -7,7 +7,9 @@ using Stockhog.Application.MarketData.QueueMarketDataDownloads;
 using Stockhog.Application.Screening;
 using Stockhog.Application.Screening.QueueScreener;
 using Stockhog.Domain.MarketData;
+using Stockhog.Domain.Scanning;
 using Stockhog.Presentation.Compare;
+using Stockhog.Presentation.Scanning;
 using Stockhog.Presentation.Localization;
 using Stockhog.Presentation.Shell;
 using Microsoft.Extensions.Logging;
@@ -143,6 +145,18 @@ public sealed partial class ScreenerViewModel : PageViewModel, IRecipient<Screen
 
         _messenger.Send(new NavigateMessage(typeof(CompareViewModel)));
         _messenger.Send(new CompareSymbolsMessage(symbols));
+    }
+
+    /// <summary>The selected rows (or the top of the list) on the Scanner page, to test every strategy on them.</summary>
+    [RelayCommand]
+    private void SendToScanner(IList? selectedRows)
+    {
+        var symbols = SymbolsFor(selectedRows, ScanRun.MaxSymbols);
+        if (symbols.Count == 0)
+            return;
+
+        _messenger.Send(new NavigateMessage(typeof(ScannerViewModel)));
+        _messenger.Send(new ScanSymbolsMessage(symbols, SelectedRun?.Id));
     }
 
     /// <summary>A year of minute data for the selected rows (or the top of the list), as background jobs.</summary>

@@ -705,4 +705,48 @@ Szacowana wartość: {6} USD.</value></data>
   <data name="Status_ScreenerAlreadyRunning" xml:space="preserve"><value>Screener już działa; wyniki pojawią się tutaj po jego zakończeniu.</value></data>
   <data name="Screener_StocksOnly" xml:space="preserve"><value>Tylko akcje (bez ETF-ów i funduszy)</value></data>
   <data name="Screener_StocksOnlyHint" xml:space="preserve"><value>Pomija ETF-y, ETN-y, produkty lewarowane i odwrotne oraz inne fundusze. Rozpoznawane po nazwie, więc pojedyncze mogą się prześlizgnąć albo zostać pominięta spółka funduszu zamkniętego.</value></data>
+  <data name="Nav_Scanner" xml:space="preserve"><value>Skaner</value></data>
+  <data name="Screener_SendToScanner" xml:space="preserve"><value>Wyślij do Skanera</value></data>
+  <data name="Scanner_Title" xml:space="preserve"><value>Skaner strategii</value></data>
+  <data name="Scanner_SymbolsHint" xml:space="preserve"><value>Do 100 symboli oddzielonych przecinkami, np. ze screenera.</value></data>
+  <data name="Scanner_UseScreener" xml:space="preserve"><value>Użyj ostatniego wyniku screenera</value></data>
+  <data name="Scanner_Strategies" xml:space="preserve"><value>Strategie</value></data>
+  <data name="Scanner_Parallel" xml:space="preserve"><value>Backtesty naraz</value></data>
+  <data name="Scanner_ParallelHint" xml:space="preserve"><value>Procesy silnika działające równolegle. Więcej to szybciej, ale większe zużycie CPU i pamięci.</value></data>
+  <data name="Scanner_Checks" xml:space="preserve"><value>Kryteria</value></data>
+  <data name="Scanner_MinTrades" xml:space="preserve"><value>Min. liczba transakcji</value></data>
+  <data name="Scanner_MaxDrawdown" xml:space="preserve"><value>Maks. obsunięcie MC %</value></data>
+  <data name="Scanner_MaxDrawdownHint" xml:space="preserve"><value>Limit 95. percentyla obsunięcia po 1000 przetasowaniach transakcji: obsunięcie, na które trzeba być gotowym, a nie tylko to, które się zdarzyło.</value></data>
+  <data name="Scanner_BothHalves" xml:space="preserve"><value>Zysk w obu połowach okresu</value></data>
+  <data name="Scanner_BothHalvesHint" xml:space="preserve"><value>Odrzuca wyniki z jednego szczęśliwego okresu: strategia musi zarobić i w pierwszej, i w drugiej połowie.</value></data>
+  <data name="Scanner_Start" xml:space="preserve"><value>Uruchom skan</value></data>
+  <data name="Scanner_StartHint" xml:space="preserve"><value>Działa jako zadanie w tle (patrz Zadania): najpierw dane minutowe każdego symbolu (tylko brakujące dni; za pierwszym razem może to potrwać), potem jeden backtest na symbol i strategię z domyślnymi parametrami strategii. Backtesty pojawiają się też w Historii.</value></data>
+  <data name="Scanner_Results" xml:space="preserve"><value>Wyniki</value></data>
+  <data name="Scanner_Summary" xml:space="preserve"><value>Przeszło {0} · gotowe {1} z {2}</value></data>
+  <data name="Scanner_Stop" xml:space="preserve"><value>Zatrzymaj skan</value></data>
+  <data name="Scanner_OnlyPassed" xml:space="preserve"><value>Tylko te, które przeszły</value></data>
+  <data name="Scanner_Passed" xml:space="preserve"><value>Przeszło</value></data>
+  <data name="Scanner_Score" xml:space="preserve"><value>Ocena</value></data>
+  <data name="Scanner_FirstHalf" xml:space="preserve"><value>1. połowa %</value></data>
+  <data name="Scanner_SecondHalf" xml:space="preserve"><value>2. połowa %</value></data>
+  <data name="Scanner_MonteCarloDrawdown" xml:space="preserve"><value>Obs. MC 95% %</value></data>
+  <data name="Scanner_BuyAndHold" xml:space="preserve"><value>Kup i trzymaj %</value></data>
+  <data name="Scanner_Why" xml:space="preserve"><value>Niespełnione kryteria</value></data>
+  <data name="Scanner_Empty" xml:space="preserve"><value>Brak skanów. Wybierz po lewej symbole (np. ze screenera) i strategie, a potem uruchom skan.</value></data>
+  <data name="ScanRejection_TooFewTrades" xml:space="preserve"><value>Za mało transakcji</value></data>
+  <data name="ScanRejection_NotProfitable" xml:space="preserve"><value>Brak zysku</value></data>
+  <data name="ScanRejection_LosingHalf" xml:space="preserve"><value>Strata w jednej połowie</value></data>
+  <data name="ScanRejection_DrawdownTooDeep" xml:space="preserve"><value>Za głębokie obsunięcie</value></data>
+  <data name="ScanStatus_Queued" xml:space="preserve"><value>W kolejce</value></data>
+  <data name="ScanStatus_Running" xml:space="preserve"><value>W toku</value></data>
+  <data name="ScanStatus_Completed" xml:space="preserve"><value>Zakończony</value></data>
+  <data name="ScanStatus_Failed" xml:space="preserve"><value>Nieudany</value></data>
+  <data name="ScanStatus_Cancelled" xml:space="preserve"><value>Anulowany</value></data>
+  <data name="CandidateStatus_Pending" xml:space="preserve"><value>Oczekuje</value></data>
+  <data name="CandidateStatus_Running" xml:space="preserve"><value>W toku</value></data>
+  <data name="CandidateStatus_Evaluated" xml:space="preserve"><value>Oceniony</value></data>
+  <data name="CandidateStatus_Failed" xml:space="preserve"><value>Nieudany</value></data>
+  <data name="CandidateStatus_Cancelled" xml:space="preserve"><value>Anulowany</value></data>
+  <data name="Status_ScanStarted" xml:space="preserve"><value>Uruchomiono skan: {0} backtestów w jednym zadaniu.</value></data>
+  <data name="Status_ScanStopping" xml:space="preserve"><value>Zatrzymywanie skanu; ocenieni kandydaci zostaną zachowani.</value></data>
 </root>
