@@ -6,6 +6,7 @@ using Stockhog.Application.Abstractions.Jobs;
 using Stockhog.Application.Abstractions.Messaging;
 using Stockhog.Application.Backtesting;
 using Stockhog.Application.Backtesting.Strategies;
+using Stockhog.Application.Proposals;
 using Stockhog.Application.Scanning;
 using Stockhog.Application.Scanning.CheckSignals;
 using Stockhog.Application.Scanning.StartScan;
@@ -14,6 +15,7 @@ using Stockhog.Domain.Backtesting;
 using Stockhog.Domain.Scanning;
 using Stockhog.Presentation.Backtesting;
 using Stockhog.Presentation.Localization;
+using Stockhog.Presentation.Proposals;
 using Stockhog.Presentation.Settings;
 using Stockhog.Presentation.Shell;
 using Microsoft.Extensions.Logging;
@@ -192,6 +194,29 @@ public sealed partial class ScannerViewModel : PageViewModel, IRecipient<ScansCh
             Status.Show(result.Error);
         else
             Status.Show(Loc.Format(result.Value.WasQueued ? "Status_SignalsQueued" : "Status_SignalsAlreadyRunning", result.Value.Candidates));
+    }
+
+    /// <summary>Buy proposals from the fresh entries of the selected scan, shown on the Proposals page for approval.</summary>
+    [RelayCommand]
+    private async Task CreateProposalsAsync(CancellationToken cancellationToken)
+    {
+        if (SelectedScan is not { } scan)
+            return;
+
+        var created = await _dispatcher.SendAsync(new CreateProposalsCommand(scan.Id), cancellationToken);
+        if (created.IsFailure)
+        {
+            Status.Show(created.Error);
+            return;
+        }
+
+        var skipped = string.Join("; ", created.Value.Skipped.Select(s => $"{s.Symbol}: {s.Reason}"));
+        Status.Show(created.Value.Skipped.Count == 0
+            ? Loc.Format("Status_ProposalsCreated", created.Value.ProposalIds.Count)
+            : Loc.Format("Status_ProposalsCreatedSkipped", created.Value.ProposalIds.Count, skipped));
+        _messenger.Send(new ProposalsChangedMessage());
+        if (created.Value.ProposalIds.Count > 0)
+            _messenger.Send(new NavigateMessage(typeof(ProposalsViewModel)));
     }
 
     /// <summary>Cancels the selected scan's job; candidates already evaluated are kept.</summary>

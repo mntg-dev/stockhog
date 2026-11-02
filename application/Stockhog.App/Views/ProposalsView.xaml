@@ -1,0 +1,71 @@
+<UserControl x:Class="Stockhog.App.Views.ProposalsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:loc="clr-namespace:Stockhog.Presentation.Localization;assembly=Stockhog.Presentation">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="{loc:Tr Proposals_Title}" Style="{StaticResource PageTitle}" />
+        <TextBlock Grid.Row="1" Text="{loc:Tr Proposals_Intro}" TextWrapping="Wrap" Foreground="Gray" MaxWidth="900" HorizontalAlignment="Left" Margin="0,0,0,10" />
+
+        <StackPanel Grid.Row="2" Style="{StaticResource Toolbar}">
+            <Button Content="{loc:Tr Common_Refresh}" Command="{Binding RefreshCommand}" Margin="0,0,6,0" />
+            <Button Content="{loc:Tr Proposals_Approve}" Command="{Binding ApproveCommand}" Style="{StaticResource PrimaryButton}"
+                    ToolTip="{loc:Tr Proposals_ApproveHint}" Margin="0,0,6,0" />
+            <Button Content="{loc:Tr Proposals_Reject}" Command="{Binding RejectCommand}" Margin="0,0,12,0" />
+            <TextBlock VerticalAlignment="Center" Foreground="Gray">
+                <Run Text="{loc:Tr Proposals_Pending}" /><Run Text=" " /><Run Text="{Binding PendingCount, Mode=OneWay}" />
+            </TextBlock>
+        </StackPanel>
+
+        <Grid Grid.Row="3">
+            <DataGrid ItemsSource="{Binding Proposals}" SelectedItem="{Binding SelectedProposal}" SelectionMode="Single">
+                <DataGrid.RowStyle>
+                    <Style TargetType="DataGridRow">
+                        <Setter Property="Foreground" Value="Gray" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsPending}" Value="True">
+                                <Setter Property="Foreground" Value="Black" />
+                                <Setter Property="FontWeight" Value="SemiBold" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGrid.RowStyle>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="{loc:Tr History_Status}" Binding="{Binding Status, Converter={StaticResource LocalizedEnum}}" Width="Auto" MinWidth="90" />
+                    <DataGridTextColumn Header="{loc:Tr Field_Symbol}" Binding="{Binding Symbol}" Width="70" MinWidth="70" />
+                    <DataGridTextColumn Header="{loc:Tr Field_Strategy}" Binding="{Binding StrategyName, Converter={StaticResource StrategyText}}" Width="170" MinWidth="170" />
+                    <DataGridTextColumn Header="{loc:Tr Proposals_Quantity}" Binding="{Binding Quantity, StringFormat=N0}" Width="Auto" MinWidth="60" />
+                    <DataGridTextColumn Header="{loc:Tr Proposals_ReferencePrice}" Binding="{Binding ReferencePrice, StringFormat=N2}" Width="Auto" MinWidth="70" />
+                    <DataGridTextColumn Header="{loc:Tr Scanner_StopPrice}" Binding="{Binding StopPrice, StringFormat=N2}" Width="Auto" MinWidth="60" />
+                    <DataGridTextColumn Header="{loc:Tr Proposals_Value}" Binding="{Binding Notional, StringFormat=N0}" Width="Auto" MinWidth="80" />
+                    <DataGridTextColumn Header="{loc:Tr Proposals_Risk}" Binding="{Binding RiskAmount, StringFormat=N0}" Width="Auto" MinWidth="60" />
+                    <DataGridTextColumn Header="{loc:Tr Proposals_RiskPercent}" Binding="{Binding RiskPercentOfEquity, StringFormat=N2}" Width="Auto" MinWidth="60" />
+                    <DataGridTextColumn Header="{loc:Tr Scanner_Score}" Binding="{Binding Score, StringFormat=N2}" Width="Auto" MinWidth="55" />
+                    <DataGridTextColumn Header="{loc:Tr Proposals_SignalOf}" Binding="{Binding SignalAsOf, StringFormat=d}" Width="Auto" MinWidth="80" />
+                    <DataGridTextColumn Header="{loc:Tr Proposals_Expires}" Binding="{Binding ExpiresAt.LocalDateTime, StringFormat=g}" Width="Auto" MinWidth="110" />
+                    <DataGridTextColumn Header="{loc:Tr Proposals_Why}" Binding="{Binding EntryTag}" Width="Auto" MinWidth="160" />
+                    <DataGridTextColumn Header="{loc:Tr Proposals_Reason}" Binding="{Binding Reason}" Width="Auto" MinWidth="160" />
+                </DataGrid.Columns>
+            </DataGrid>
+            <TextBlock Text="{loc:Tr Proposals_Empty}" TextWrapping="Wrap" Foreground="Gray" Margin="16,48,16,0" HorizontalAlignment="Center"
+                       TextAlignment="Center" MaxWidth="520" IsHitTestVisible="False">
+                <TextBlock.Style>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="Visibility" Value="Collapsed" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding HasProposals}" Value="False">
+                                <Setter Property="Visibility" Value="Visible" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+        </Grid>
+    </Grid>
+</UserControl>

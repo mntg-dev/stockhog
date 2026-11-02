@@ -762,4 +762,39 @@ Szacowana wartość: {6} USD.</value></data>
   <data name="SignalKind_Short" xml:space="preserve"><value>Krótka</value></data>
   <data name="Status_SignalsQueued" xml:space="preserve"><value>Sprawdzanie sygnałów na dziś dla {0} par w tle.</value></data>
   <data name="Status_SignalsAlreadyRunning" xml:space="preserve"><value>Sygnały tego skanu są już sprawdzane ({0} par).</value></data>
+  <data name="Nav_Proposals" xml:space="preserve"><value>Propozycje</value></data>
+  <data name="Proposals_Title" xml:space="preserve"><value>Propozycje transakcji</value></data>
+  <data name="Proposals_Intro" xml:space="preserve"><value>Zakupy proponowane na podstawie świeżych sygnałów strategii (Skaner → Sprawdź sygnały na dziś → Utwórz propozycje). Każda ma taką wielkość, by trafienie w stop kosztowało ok. 1% kapitału, nie więcej niż 20% kapitału i w granicach limitów ryzyka, oraz stop-loss, który broker utrzymuje także przy zamkniętej aplikacji. Nic nie jest wysyłane bez Twojego zatwierdzenia; propozycja wygasa z zamknięciem sesji, na którą jest przeznaczona.</value></data>
+  <data name="Proposals_Approve" xml:space="preserve"><value>Zatwierdź i kup</value></data>
+  <data name="Proposals_ApproveHint" xml:space="preserve"><value>Sprawdza, czy cena jest nadal w granicach 3% od propozycji i powyżej stopu, potem składa zlecenie kupna po rynku ze stop-lossem. Obowiązują zwykłe kontrole ryzyka i audyt.</value></data>
+  <data name="Proposals_Reject" xml:space="preserve"><value>Odrzuć</value></data>
+  <data name="Proposals_Pending" xml:space="preserve"><value>Czeka na decyzję:</value></data>
+  <data name="Proposals_Quantity" xml:space="preserve"><value>Akcje</value></data>
+  <data name="Proposals_ReferencePrice" xml:space="preserve"><value>Cena</value></data>
+  <data name="Proposals_Value" xml:space="preserve"><value>Wartość $</value></data>
+  <data name="Proposals_Risk" xml:space="preserve"><value>Ryzyko $</value></data>
+  <data name="Proposals_RiskPercent" xml:space="preserve"><value>Ryzyko % kapitału</value></data>
+  <data name="Proposals_SignalOf" xml:space="preserve"><value>Sygnał z</value></data>
+  <data name="Proposals_Expires" xml:space="preserve"><value>Wygasa</value></data>
+  <data name="Proposals_Why" xml:space="preserve"><value>Powód wejścia</value></data>
+  <data name="Proposals_Reason" xml:space="preserve"><value>Uwaga</value></data>
+  <data name="Proposals_Empty" xml:space="preserve"><value>Brak propozycji. Na stronie Skaner sprawdź sygnały na dziś dla skanu, a potem utwórz propozycje z jego świeżych wejść.</value></data>
+  <data name="Proposals_ConfirmApproveTitle" xml:space="preserve"><value>Zatwierdź propozycję</value></data>
+  <data name="Proposals_ConfirmApprove" xml:space="preserve"><value>Kupić {0:N0} {1} po rynku (ostatnie zamknięcie {2:N2}) ze stop-lossem na {3:N2}?
+
+Jeśli stop zostanie trafiony, strata wyniesie ok. {4:N2} USD ({5:N2}% kapitału).</value></data>
+  <data name="Proposals_RejectTitle" xml:space="preserve"><value>Odrzuć propozycję</value></data>
+  <data name="Proposals_RejectPrompt" xml:space="preserve"><value>Odrzucić propozycję {0}? Możesz podać powód (opcjonalnie).</value></data>
+  <data name="ProposalStatus_Pending" xml:space="preserve"><value>Oczekuje</value></data>
+  <data name="ProposalStatus_Submitted" xml:space="preserve"><value>Kupiono</value></data>
+  <data name="ProposalStatus_Rejected" xml:space="preserve"><value>Odrzucona</value></data>
+  <data name="ProposalStatus_Expired" xml:space="preserve"><value>Wygasła</value></data>
+  <data name="ProposalStatus_Failed" xml:space="preserve"><value>Nieudana</value></data>
+  <data name="Scanner_CreateProposals" xml:space="preserve"><value>Utwórz propozycje</value></data>
+  <data name="Scanner_CreateProposalsHint" xml:space="preserve"><value>Zamienia świeże sygnały kupna par, które przeszły, w propozycje na stronie Propozycje, z wielkością wyliczoną z ryzyka. Nic nie jest kupowane bez Twojego zatwierdzenia.</value></data>
+  <data name="Status_ProposalsCreated" xml:space="preserve"><value>Utworzono {0} propozycji.</value></data>
+  <data name="Status_ProposalsCreatedSkipped" xml:space="preserve"><value>Utworzono {0} propozycji. Pominięto: {1}</value></data>
+  <data name="Status_ProposalApproving" xml:space="preserve"><value>Składanie zlecenia {0}…</value></data>
+  <data name="Status_ProposalApproved" xml:space="preserve"><value>Złożono zlecenie kupna {0} {1} ({2}).</value></data>
+  <data name="Status_ProposalRejected" xml:space="preserve"><value>Odrzucono propozycję {0}.</value></data>
 </root>

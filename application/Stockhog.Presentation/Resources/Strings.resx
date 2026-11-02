@@ -762,4 +762,39 @@ Estimated value: {6} USD.</value></data>
   <data name="SignalKind_Short" xml:space="preserve"><value>Short</value></data>
   <data name="Status_SignalsQueued" xml:space="preserve"><value>Checking today's signals of {0} pair(s) as a background job.</value></data>
   <data name="Status_SignalsAlreadyRunning" xml:space="preserve"><value>Signals of this scan are already being checked ({0} pairs).</value></data>
+  <data name="Nav_Proposals" xml:space="preserve"><value>Proposals</value></data>
+  <data name="Proposals_Title" xml:space="preserve"><value>Trade proposals</value></data>
+  <data name="Proposals_Intro" xml:space="preserve"><value>Buys suggested from fresh strategy signals (Scanner → Check today's signals → Create proposals). Each is sized so that hitting its stop costs about 1% of equity, capped at 20% of equity and by your risk limits, and carries a stop loss the broker keeps even when the app is closed. Nothing is sent until you approve; a proposal expires at the close of the session it is meant for.</value></data>
+  <data name="Proposals_Approve" xml:space="preserve"><value>Approve and buy</value></data>
+  <data name="Proposals_ApproveHint" xml:space="preserve"><value>Checks that the price is still within 3% of the proposal and above the stop, then places a market buy with the stop loss. The usual risk checks and audit apply.</value></data>
+  <data name="Proposals_Reject" xml:space="preserve"><value>Reject</value></data>
+  <data name="Proposals_Pending" xml:space="preserve"><value>Waiting for a decision:</value></data>
+  <data name="Proposals_Quantity" xml:space="preserve"><value>Shares</value></data>
+  <data name="Proposals_ReferencePrice" xml:space="preserve"><value>Price</value></data>
+  <data name="Proposals_Value" xml:space="preserve"><value>Value $</value></data>
+  <data name="Proposals_Risk" xml:space="preserve"><value>Risk $</value></data>
+  <data name="Proposals_RiskPercent" xml:space="preserve"><value>Risk % of equity</value></data>
+  <data name="Proposals_SignalOf" xml:space="preserve"><value>Signal of</value></data>
+  <data name="Proposals_Expires" xml:space="preserve"><value>Expires</value></data>
+  <data name="Proposals_Why" xml:space="preserve"><value>Entry reason</value></data>
+  <data name="Proposals_Reason" xml:space="preserve"><value>Note</value></data>
+  <data name="Proposals_Empty" xml:space="preserve"><value>No proposals yet. On the Scanner page, check today's signals of a scan, then create proposals from its fresh entries.</value></data>
+  <data name="Proposals_ConfirmApproveTitle" xml:space="preserve"><value>Approve the proposal</value></data>
+  <data name="Proposals_ConfirmApprove" xml:space="preserve"><value>Buy {0:N0} {1} at market (last close {2:N2}) with a stop loss at {3:N2}?
+
+If the stop is hit, the loss is about {4:N2} USD ({5:N2}% of equity).</value></data>
+  <data name="Proposals_RejectTitle" xml:space="preserve"><value>Reject the proposal</value></data>
+  <data name="Proposals_RejectPrompt" xml:space="preserve"><value>Reject the {0} proposal? You can add a reason (optional).</value></data>
+  <data name="ProposalStatus_Pending" xml:space="preserve"><value>Pending</value></data>
+  <data name="ProposalStatus_Submitted" xml:space="preserve"><value>Bought</value></data>
+  <data name="ProposalStatus_Rejected" xml:space="preserve"><value>Rejected</value></data>
+  <data name="ProposalStatus_Expired" xml:space="preserve"><value>Expired</value></data>
+  <data name="ProposalStatus_Failed" xml:space="preserve"><value>Failed</value></data>
+  <data name="Scanner_CreateProposals" xml:space="preserve"><value>Create proposals</value></data>
+  <data name="Scanner_CreateProposalsHint" xml:space="preserve"><value>Turns the fresh buy signals of the passed pairs into proposals on the Proposals page, sized by risk. Nothing is bought without your approval.</value></data>
+  <data name="Status_ProposalsCreated" xml:space="preserve"><value>{0} proposal(s) created.</value></data>
+  <data name="Status_ProposalsCreatedSkipped" xml:space="preserve"><value>{0} proposal(s) created. Skipped: {1}</value></data>
+  <data name="Status_ProposalApproving" xml:space="preserve"><value>Placing the {0} order…</value></data>
+  <data name="Status_ProposalApproved" xml:space="preserve"><value>Buy order for {0} {1} placed ({2}).</value></data>
+  <data name="Status_ProposalRejected" xml:space="preserve"><value>{0} proposal rejected.</value></data>
 </root>

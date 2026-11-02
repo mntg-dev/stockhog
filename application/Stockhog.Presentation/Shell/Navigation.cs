@@ -115,6 +115,9 @@ public sealed record NavigateMessage(Type PageType);
 /// <summary>A screener run finished.</summary>
 public sealed record ScreenerRunsChangedMessage;
 
+/// <summary>Proposals were created, approved, rejected or expired.</summary>
+public sealed record ProposalsChangedMessage;
+
 /// <summary>A scan started, evaluated a candidate, or ended.</summary>
 public sealed record ScansChangedMessage;
 
