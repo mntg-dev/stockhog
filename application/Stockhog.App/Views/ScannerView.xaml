@@ -112,6 +112,8 @@
                 <Button Content="{loc:Tr Common_Refresh}" Command="{Binding RefreshCommand}" Margin="0,0,6,0" />
                 <Button Content="{loc:Tr History_Open}" Command="{Binding OpenSelectedCommand}"
                         CommandParameter="{Binding SelectedItems, ElementName=CandidatesGrid}" Margin="0,0,6,0" />
+                <Button Content="{loc:Tr Scanner_CheckSignals}" Command="{Binding CheckSignalsCommand}" ToolTip="{loc:Tr Scanner_CheckSignalsHint}"
+                        Style="{StaticResource PrimaryButton}" Margin="0,0,6,0" />
                 <Button Content="{loc:Tr Scanner_Stop}" Command="{Binding StopCommand}" IsEnabled="{Binding CanStop}" Margin="0,0,12,0" />
                 <CheckBox Content="{loc:Tr Scanner_OnlyPassed}" IsChecked="{Binding OnlyPassed}" VerticalAlignment="Center" />
             </StackPanel>
@@ -135,6 +137,10 @@
                         <DataGridCheckBoxColumn Header="{loc:Tr Scanner_Passed}" Binding="{Binding Passed, Mode=OneWay}" Width="60" MinWidth="60" />
                         <DataGridTextColumn Header="{loc:Tr Field_Symbol}" Binding="{Binding Symbol}" Width="70" MinWidth="70" />
                         <DataGridTextColumn Header="{loc:Tr Field_Strategy}" Binding="{Binding StrategyName, Converter={StaticResource StrategyText}}" Width="170" MinWidth="170" />
+                        <DataGridTextColumn Header="{loc:Tr Scanner_Signal}" Binding="{Binding Signal.Kind, Converter={StaticResource LocalizedEnum}}" Width="Auto" MinWidth="80" />
+                        <DataGridTextColumn Header="{loc:Tr Scanner_SignalSince}" Binding="{Binding Signal.EntryTime, StringFormat=d}" Width="Auto" MinWidth="80" />
+                        <DataGridTextColumn Header="{loc:Tr Scanner_LastPrice}" Binding="{Binding Signal.LastPrice, StringFormat=N2}" Width="Auto" MinWidth="65" />
+                        <DataGridTextColumn Header="{loc:Tr Scanner_StopPrice}" Binding="{Binding Signal.StopPrice, StringFormat=N2}" Width="Auto" MinWidth="55" />
                         <DataGridTextColumn Header="{loc:Tr Scanner_Score}" Binding="{Binding Score, StringFormat=N2}" Width="Auto" MinWidth="55" />
                         <DataGridTextColumn Header="{loc:Tr Compare_NetProfit}" Binding="{Binding NetProfitPercent, StringFormat=N2}" Width="Auto" MinWidth="60" />
                         <DataGridTextColumn Header="{loc:Tr Scanner_FirstHalf}" Binding="{Binding FirstHalfReturnPercent, StringFormat=N2}" Width="Auto" MinWidth="55" />

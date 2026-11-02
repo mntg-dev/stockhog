@@ -1,6 +1,7 @@
 using Stockhog.Application.Abstractions.Messaging;
 using Stockhog.Application.Abstractions.Results;
 using Stockhog.Domain.Scanning;
+using Stockhog.Domain.Signals;
 using FluentValidation;
 
 namespace Stockhog.Application.Scanning;
@@ -52,7 +53,9 @@ public sealed record ScanCandidateRow(
     int? TotalTrades,
     decimal? WinRatePercent,
     ScanRejection Rejections,
-    string? FailureReason)
+    string? FailureReason,
+    StrategySignal? Signal = null,
+    DateTimeOffset? SignalCheckedAt = null)
 {
     public static ScanCandidateRow From(ScanCandidate candidate)
     {
@@ -77,7 +80,9 @@ public sealed record ScanCandidateRow(
             metrics?.TotalTrades,
             metrics?.WinRatePercent,
             evaluation?.Rejections ?? ScanRejection.None,
-            candidate.FailureReason);
+            candidate.FailureReason,
+            candidate.Signal,
+            candidate.SignalCheckedAt);
     }
 }
 

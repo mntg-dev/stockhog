@@ -3,6 +3,7 @@ using System.Text.Json.Serialization;
 using Stockhog.Domain.Backtesting;
 using Stockhog.Domain.MarketData;
 using Stockhog.Domain.Scanning;
+using Stockhog.Domain.Signals;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
@@ -74,6 +75,10 @@ internal sealed class ScanRunConfiguration : IEntityTypeConfiguration<ScanRun>
                 .HasConversion(new NullableJsonValueConverter<CandidateEvaluation>())
                 .HasMaxLength(1500);
             candidate.Property(c => c.FailureReason).HasMaxLength(2000);
+            candidate.Property(c => c.Signal)
+                .HasConversion(new NullableJsonValueConverter<StrategySignal>())
+                .HasMaxLength(2000);
+            candidate.Property(c => c.SignalCheckedAt);
 
             candidate.Ignore(c => c.Index);
             candidate.Ignore(c => c.IsFinished);

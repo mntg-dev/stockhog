@@ -628,6 +628,13 @@ namespace Stockhog.Infrastructure.Persistence.Migrations
                                 .HasMaxLength(128)
                                 .HasColumnType("TEXT");
 
+                            b1.Property<string>("Signal")
+                                .HasMaxLength(2000)
+                                .HasColumnType("TEXT");
+
+                            b1.Property<DateTime?>("SignalCheckedAt")
+                                .HasColumnType("TEXT");
+
                             b1.Property<string>("Status")
                                 .IsRequired()
                                 .HasMaxLength(16)

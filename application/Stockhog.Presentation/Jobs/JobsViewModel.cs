@@ -93,7 +93,10 @@ public sealed partial class JobsViewModel : PageViewModel
 
     private static bool IsInstrumentRefresh(JobSnapshot job) => job.Key == InstrumentCacheKeys.RefreshJobKey;
 
-    private static bool IsScan(JobSnapshot job) => job.Key?.StartsWith(ScanKeys.JobKeyPrefix, StringComparison.Ordinal) == true;
+    /// <summary>A scan or a check of a scan's signals: both update the scanner page as they go.</summary>
+    private static bool IsScan(JobSnapshot job) =>
+        job.Key?.StartsWith(ScanKeys.JobKeyPrefix, StringComparison.Ordinal) == true
+        || job.Key?.StartsWith(ScanKeys.SignalsJobKeyPrefix, StringComparison.Ordinal) == true;
 
     private static bool IsScreener(JobSnapshot job) => job.Key == ScreenerKeys.RunJobKey;
 }

@@ -7,6 +7,7 @@ using Stockhog.Application.Abstractions.Messaging;
 using Stockhog.Application.Backtesting;
 using Stockhog.Application.Backtesting.Strategies;
 using Stockhog.Application.Scanning;
+using Stockhog.Application.Scanning.CheckSignals;
 using Stockhog.Application.Scanning.StartScan;
 using Stockhog.Application.Screening;
 using Stockhog.Domain.Backtesting;
@@ -179,6 +180,20 @@ public sealed partial class ScannerViewModel : PageViewModel, IRecipient<ScansCh
         await RefreshAsync(cancellationToken);
     }
 
+    /// <summary>What each passed pair of the selected scan wants to do today, as a background job.</summary>
+    [RelayCommand]
+    private async Task CheckSignalsAsync(CancellationToken cancellationToken)
+    {
+        if (SelectedScan is not { } scan)
+            return;
+
+        var result = await _dispatcher.SendAsync(new CheckScanSignalsCommand(scan.Id), cancellationToken);
+        if (result.IsFailure)
+            Status.Show(result.Error);
+        else
+            Status.Show(Loc.Format(result.Value.WasQueued ? "Status_SignalsQueued" : "Status_SignalsAlreadyRunning", result.Value.Candidates));
+    }
+
     /// <summary>Cancels the selected scan's job; candidates already evaluated are kept.</summary>
     [RelayCommand]
     private void Stop()
@@ -202,9 +217,13 @@ public sealed partial class ScannerViewModel : PageViewModel, IRecipient<ScansCh
             return;
         }
 
-        var selectedId = SelectedScan?.Id;
+        var previous = SelectedScan;
         Scans = scans.Value;
-        SelectedScan = Scans.FirstOrDefault(s => s.Id == selectedId) ?? Scans.FirstOrDefault();
+        SelectedScan = Scans.FirstOrDefault(s => s.Id == previous?.Id) ?? Scans.FirstOrDefault();
+
+        // A signal check changes the candidates but not the summary, so an equal summary does not reload them by itself.
+        if (Equals(previous, SelectedScan))
+            await LoadDetailsAsync(SelectedScan, cancellationToken);
     }
 
     /// <summary>Shows the backtest behind the selected candidate on the Backtest page.</summary>

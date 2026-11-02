@@ -9,6 +9,7 @@ using Stockhog.Domain.Common;
 using Stockhog.Domain.MarketData;
 using Stockhog.Domain.Optimization;
 using Stockhog.Domain.Scanning;
+using Stockhog.Domain.Signals;
 using Stockhog.Domain.Trading;
 using Stockhog.Infrastructure.Persistence;
 using Microsoft.Data.Sqlite;
@@ -535,6 +536,14 @@ public sealed class PersistenceTests : IAsyncLifetime
             await db.SaveChangesAsync(ct);
         }
 
+        var signal = StrategySignal.Classify(new DateOnly(2026, 10, 30), 200m, 40m, 195m, new DateTime(2026, 10, 30, 9, 31, 0), "Entry", 190m, null, null, "run-9");
+        await using (var db = CreateContext())
+        {
+            var loaded = (await new ScanRunRepository(db).GetAsync(scan.Id, ct))!;
+            loaded.RecordSignal(0, signal, T0.AddDays(1));
+            await db.SaveChangesAsync(ct);
+        }
+
         await using var check = CreateContext();
         var read = (await new ScanReader(check).FindAsync(scan.Id, ct))!;
         Assert.Equal(ScanStatus.Completed, read.Status);
@@ -542,6 +551,8 @@ public sealed class PersistenceTests : IAsyncLifetime
         Assert.Equal((50_000m, 2, screener), (read.InitialCapital.Amount, read.MaxParallel, read.ScreenerRunId));
         Assert.Equal(evaluation, read.Candidates[0].Evaluation);
         Assert.Equal("20261102-120000000_AAPL_SmaCrossStrategy", read.Candidates[0].RunId?.Value);
+        Assert.Equal(signal, read.Candidates[0].Signal);
+        Assert.Equal(T0.AddDays(1), read.Candidates[0].SignalCheckedAt);
         Assert.Equal((CandidateStatus.Failed, "No market data"), (read.Candidates[1].Status, read.Candidates[1].FailureReason));
         Assert.Empty(await new ScanRunRepository(check).ListUnfinishedAsync(ct));
         Assert.Equal([scan.Id], (await new ScanReader(check).ListAsync(5, ct)).Select(s => s.Id));

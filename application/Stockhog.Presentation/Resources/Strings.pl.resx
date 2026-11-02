@@ -749,4 +749,17 @@ Szacowana wartość: {6} USD.</value></data>
   <data name="CandidateStatus_Cancelled" xml:space="preserve"><value>Anulowany</value></data>
   <data name="Status_ScanStarted" xml:space="preserve"><value>Uruchomiono skan: {0} backtestów w jednym zadaniu.</value></data>
   <data name="Status_ScanStopping" xml:space="preserve"><value>Zatrzymywanie skanu; ocenieni kandydaci zostaną zachowani.</value></data>
+  <data name="Scanner_CheckSignals" xml:space="preserve"><value>Sprawdź sygnały na dziś</value></data>
+  <data name="Scanner_CheckSignalsHint" xml:space="preserve"><value>Uruchamia każdą parę, która przeszła, do ostatniej sesji i odczytuje, co strategia trzyma teraz: świeże wejście (kup), trzymanie, świeże wyjście (sprzedaj) albo nic. Działa jako zadanie w tle.</value></data>
+  <data name="Scanner_Signal" xml:space="preserve"><value>Sygnał</value></data>
+  <data name="Scanner_SignalSince" xml:space="preserve"><value>Wejście</value></data>
+  <data name="Scanner_LastPrice" xml:space="preserve"><value>Ostatnia cena</value></data>
+  <data name="Scanner_StopPrice" xml:space="preserve"><value>Stop</value></data>
+  <data name="SignalKind_Flat" xml:space="preserve"><value>Brak pozycji</value></data>
+  <data name="SignalKind_Entry" xml:space="preserve"><value>Kup (nowy)</value></data>
+  <data name="SignalKind_Holding" xml:space="preserve"><value>Trzymaj</value></data>
+  <data name="SignalKind_Exit" xml:space="preserve"><value>Sprzedaj (nowy)</value></data>
+  <data name="SignalKind_Short" xml:space="preserve"><value>Krótka</value></data>
+  <data name="Status_SignalsQueued" xml:space="preserve"><value>Sprawdzanie sygnałów na dziś dla {0} par w tle.</value></data>
+  <data name="Status_SignalsAlreadyRunning" xml:space="preserve"><value>Sygnały tego skanu są już sprawdzane ({0} par).</value></data>
 </root>

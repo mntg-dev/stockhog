@@ -26,11 +26,18 @@ public static class ScanKeys
 {
     /// <summary>Prefix of a scan's job key, followed by the scan id.</summary>
     public const string JobKeyPrefix = "scan:";
+
+    /// <summary>Prefix of the job key of a scan's signal check, followed by the scan id.</summary>
+    public const string SignalsJobKeyPrefix = "signals:";
 }
 
 public static class ScanErrors
 {
     public static Error NotFound(string id) => Error.NotFound("Scan.NotFound", $"Scan {id} does not exist.");
+
+    public static Error NothingToCheck(string id) => Error.Failure(
+        "Scan.NothingToCheck",
+        $"Scan {id} has no evaluated candidates to check signals for.");
 
     public static Error AlreadyFinished(string id, ScanStatus status) =>
         new("Scan.AlreadyFinished", $"Scan {id} is already {status}.", ErrorType.Conflict);

@@ -98,6 +98,24 @@ public class ScanRunTests
     }
 
     [Fact]
+    public void Signals_are_recorded_on_evaluated_candidates_even_after_the_scan_finished()
+    {
+        var scan = Create(["AAPL", "MSFT"], ["SmaCrossStrategy"]);
+        scan.Start(T0);
+        scan.StartCandidate(0);
+        scan.CompleteCandidate(0, BacktestRunId.From("run-1"), Evaluation(Good), T0);
+        scan.FailCandidate(1, "No market data", T0);
+        var signal = Signals.StrategySignal.Classify(new DateOnly(2026, 10, 30), 100m, 0, 0, null, null, null, null, null, "run-2");
+
+        scan.RecordSignal(0, signal, T0.AddDays(1));
+
+        Assert.Equal(ScanStatus.Completed, scan.Status);
+        Assert.Equal(signal, scan.Candidates[0].Signal);
+        Assert.Equal(T0.AddDays(1), scan.Candidates[0].SignalCheckedAt);
+        Assert.Throws<DomainException>(() => scan.RecordSignal(1, signal, T0));
+    }
+
+    [Fact]
     public void Thresholds_flag_every_failed_check()
     {
         var thresholds = ScanThresholds.Create(minTrades: 6, maxDrawdownPercent: 25m, requireBothHalvesProfitable: true);

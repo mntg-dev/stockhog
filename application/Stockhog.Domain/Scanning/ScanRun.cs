@@ -1,6 +1,7 @@
 using Stockhog.Domain.Backtesting;
 using Stockhog.Domain.Common;
 using Stockhog.Domain.MarketData;
+using Stockhog.Domain.Signals;
 
 namespace Stockhog.Domain.Scanning;
 
@@ -46,6 +47,11 @@ public sealed class ScanCandidate : Entity<int>
     public CandidateEvaluation? Evaluation { get; private set; }
     public string? FailureReason { get; private set; }
 
+    /// <summary>The strategy's latest decision on the symbol, from the newest signal check; null until checked.</summary>
+    public StrategySignal? Signal { get; private set; }
+
+    public DateTimeOffset? SignalCheckedAt { get; private set; }
+
     public bool IsFinished => Status is CandidateStatus.Evaluated or CandidateStatus.Failed or CandidateStatus.Cancelled;
 
     public bool Passed => Evaluation?.Passed == true;
@@ -78,6 +84,13 @@ public sealed class ScanCandidate : Entity<int>
     {
         if (!IsFinished)
             Status = CandidateStatus.Cancelled;
+    }
+
+    internal void RecordSignal(StrategySignal signal, DateTimeOffset at)
+    {
+        EnsureStatus(CandidateStatus.Evaluated, "record a signal for");
+        Signal = signal;
+        SignalCheckedAt = at;
     }
 
     private void EnsureStatus(CandidateStatus expected, string action)
@@ -216,6 +229,12 @@ public sealed class ScanRun : AggregateRoot<ScanRunId>
         Candidate(index).Fail(reason);
         FinishIfAllCandidatesFinished(at);
     }
+
+    /// <summary>
+    /// Stores what the strategy wants to do today on an evaluated candidate. Allowed after the scan has finished: signals
+    /// are checked again on later days.
+    /// </summary>
+    public void RecordSignal(int index, StrategySignal signal, DateTimeOffset at) => Candidate(index).RecordSignal(signal, at);
 
     public void Cancel(DateTimeOffset at)
     {

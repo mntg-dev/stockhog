@@ -749,4 +749,17 @@ Estimated value: {6} USD.</value></data>
   <data name="CandidateStatus_Cancelled" xml:space="preserve"><value>Cancelled</value></data>
   <data name="Status_ScanStarted" xml:space="preserve"><value>Scan started: {0} backtests queued as one job.</value></data>
   <data name="Status_ScanStopping" xml:space="preserve"><value>Stopping the scan; evaluated candidates are kept.</value></data>
+  <data name="Scanner_CheckSignals" xml:space="preserve"><value>Check today's signals</value></data>
+  <data name="Scanner_CheckSignalsHint" xml:space="preserve"><value>Runs each passed pair up to the latest session and reads what the strategy holds now: a fresh entry (buy), a holding, a fresh exit (sell) or nothing. Runs as a background job.</value></data>
+  <data name="Scanner_Signal" xml:space="preserve"><value>Signal</value></data>
+  <data name="Scanner_SignalSince" xml:space="preserve"><value>Entered</value></data>
+  <data name="Scanner_LastPrice" xml:space="preserve"><value>Last price</value></data>
+  <data name="Scanner_StopPrice" xml:space="preserve"><value>Stop</value></data>
+  <data name="SignalKind_Flat" xml:space="preserve"><value>Flat</value></data>
+  <data name="SignalKind_Entry" xml:space="preserve"><value>Buy (new)</value></data>
+  <data name="SignalKind_Holding" xml:space="preserve"><value>Holding</value></data>
+  <data name="SignalKind_Exit" xml:space="preserve"><value>Sell (new)</value></data>
+  <data name="SignalKind_Short" xml:space="preserve"><value>Short</value></data>
+  <data name="Status_SignalsQueued" xml:space="preserve"><value>Checking today's signals of {0} pair(s) as a background job.</value></data>
+  <data name="Status_SignalsAlreadyRunning" xml:space="preserve"><value>Signals of this scan are already being checked ({0} pairs).</value></data>
 </root>
