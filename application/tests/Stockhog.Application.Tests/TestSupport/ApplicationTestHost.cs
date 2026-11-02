@@ -8,6 +8,7 @@ using Stockhog.Application.Instruments;
 using Stockhog.Application.MarketData;
 using Stockhog.Application.MarketData.GetPriceBars;
 using Stockhog.Application.Optimization;
+using Stockhog.Application.Screening;
 using Stockhog.Application.Trading;
 using Stockhog.Application.Trading.Safety;
 using Microsoft.Extensions.DependencyInjection;
@@ -60,6 +61,8 @@ internal sealed class ApplicationTestHost : IAsyncDisposable
         services.AddSingleton<IAssistantCredentials>(AssistantCredentials);
         services.AddSingleton<IAssistantClient>(new FakeAssistantClient(AssistantCredentials));
         services.AddSingleton<IAssistantActions>(AssistantActions);
+        services.AddSingleton<IDailyBarSource>(DailyBars);
+        services.AddSingleton<IScreenerResultStore>(ScreenerResults);
         services.AddScoped<IUnitOfWork, InMemoryUnitOfWork>();
 
         _provider = services.BuildServiceProvider(new ServiceProviderOptions { ValidateScopes = true, ValidateOnBuild = true });
@@ -83,6 +86,8 @@ internal sealed class ApplicationTestHost : IAsyncDisposable
     public InMemoryInstrumentStore Instruments { get; } = new();
     public InMemoryAssistantCredentials AssistantCredentials { get; } = new();
     public RecordingAssistantActions AssistantActions { get; } = new();
+    public FakeDailyBarSource DailyBars { get; } = new();
+    public InMemoryScreenerResultStore ScreenerResults { get; } = new();
 
     public IAssistantToolbox Toolbox => _provider.GetRequiredService<IAssistantToolbox>();
 

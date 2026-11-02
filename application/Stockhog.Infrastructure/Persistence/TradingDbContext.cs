@@ -21,6 +21,10 @@ internal sealed class TradingDbContext(DbContextOptions<TradingDbContext> option
 
     public DbSet<InstrumentRecord> Instruments => Set<InstrumentRecord>();
 
+    public DbSet<ScreenerRunRecord> ScreenerRuns => Set<ScreenerRunRecord>();
+
+    public DbSet<ScreenerRowRecord> ScreenerRows => Set<ScreenerRowRecord>();
+
     protected override void OnModelCreating(ModelBuilder modelBuilder) =>
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(TradingDbContext).Assembly);
 

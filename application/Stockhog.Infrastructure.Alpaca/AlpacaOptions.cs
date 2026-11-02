@@ -45,6 +45,13 @@ public sealed class AlpacaOptions
     [Required]
     public string Feed { get; set; } = "iex";
 
+    /// <summary>
+    /// Feed of the screener's daily bars. "sip" (all US exchanges) gives real volumes and is allowed on the free plan
+    /// for data older than 15 minutes, which the screener never asks for; "iex" volumes cover one exchange only.
+    /// </summary>
+    [Required]
+    public string ScreenerFeed { get; set; } = "sip";
+
     /// <summary>Plan limit for API calls; 200 on the free plan.</summary>
     [Range(1, 10_000)]
     public int RequestsPerMinute { get; set; } = 200;

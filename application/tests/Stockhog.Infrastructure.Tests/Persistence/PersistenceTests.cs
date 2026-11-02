@@ -3,6 +3,7 @@ using Stockhog.Application.Abstractions.Persistence;
 using Stockhog.Application.Trading.Safety;
 using Stockhog.Application.Abstractions.Events;
 using Stockhog.Application.Instruments;
+using Stockhog.Application.Screening;
 using Stockhog.Domain.Backtesting;
 using Stockhog.Domain.Common;
 using Stockhog.Domain.MarketData;
@@ -447,6 +448,62 @@ public sealed class PersistenceTests : IAsyncLifetime
         var reader = new InstrumentStore(check);
         Assert.Equal(["AAPL", "SPY"], (await reader.ListAsync(ct)).Select(i => i.Symbol));
         Assert.Equal(new InstrumentCatalogStatus(2, T0.AddDays(1)), await reader.GetStatusAsync(ct));
+    }
+
+    [Fact]
+    public async Task Screener_runs_round_trip_with_their_criteria_and_ranked_symbols()
+    {
+        var ct = TestContext.Current.CancellationToken;
+        var criteria = ScreenerCriteria.Volatile with { MaxPrice = 250m, Exchanges = ["NASDAQ"] };
+        var first = ScreenerRun(T0, criteria, ("MSFT", 300m, 1.5m), ("AAPL", 200m, null));
+        var second = ScreenerRun(T0.AddDays(1), ScreenerCriteria.LiquidLargeCaps, ("SPY", 500m, 4m));
+
+        await using (var db = CreateContext())
+        {
+            var store = new ScreenerResultStore(db);
+            Assert.Null(await store.GetAsync(null, ct));
+            await store.SaveAsync(first, ct);
+            await store.SaveAsync(second, ct);
+        }
+
+        await using var check = CreateContext();
+        var reader = new ScreenerResultStore(check);
+
+        Assert.Equal([second.Summary.Id, first.Summary.Id], (await reader.ListRunsAsync(10, ct)).Select(r => r.Id));
+        Assert.Equal(second.Summary.Id, (await reader.GetAsync(null, ct))!.Summary.Id);
+
+        var loaded = (await reader.GetAsync(first.Summary.Id, ct))!;
+        Assert.Equal(criteria.SortBy, loaded.Summary.Criteria.SortBy);
+        Assert.Equal((criteria.MinAtrPercent, criteria.MaxPrice, criteria.MinTradingDays), (loaded.Summary.Criteria.MinAtrPercent, loaded.Summary.Criteria.MaxPrice, loaded.Summary.Criteria.MinTradingDays));
+        Assert.Equal(["NASDAQ"], loaded.Summary.Criteria.Exchanges);
+        Assert.Equal(first.Summary with { Criteria = loaded.Summary.Criteria }, loaded.Summary);
+        Assert.Equal(first.Symbols, loaded.Symbols);
+    }
+
+    [Fact]
+    public async Task Only_the_newest_screener_runs_are_kept()
+    {
+        var ct = TestContext.Current.CancellationToken;
+        await using (var db = CreateContext())
+        {
+            var store = new ScreenerResultStore(db);
+            for (var i = 0; i < ScreenerResultStore.KeepRuns + 2; i++)
+                await store.SaveAsync(ScreenerRun(T0.AddMinutes(i), ScreenerCriteria.LiquidLargeCaps, ("AAPL", 200m, 1m)), ct);
+        }
+
+        await using var check = CreateContext();
+        var runs = await new ScreenerResultStore(check).ListRunsAsync(100, ct);
+        Assert.Equal(ScreenerResultStore.KeepRuns, runs.Count);
+        Assert.Equal(T0.AddMinutes(2), runs[^1].CreatedAt);
+        Assert.Equal(ScreenerResultStore.KeepRuns, await check.ScreenerRows.CountAsync(ct));
+    }
+
+    private static ScreenerResult ScreenerRun(DateTimeOffset createdAt, ScreenerCriteria criteria, params (string Symbol, decimal Close, decimal? Return6M)[] rows)
+    {
+        var symbols = rows.Select((r, i) => new ScreenedSymbol(i + 1, $"{r.Symbol} Inc.", "NASDAQ",
+            new SymbolMetrics(r.Symbol, new DateOnly(2026, 10, 14), r.Close, 1_000_000m * r.Close, 2.5m, -1.25m, r.Return6M, -3.1m, 250))).ToList();
+        var summary = new ScreenerRunSummary(Guid.CreateVersion7(createdAt), createdAt, new DateOnly(2026, 10, 14), criteria, 5000, 4800, symbols.Count);
+        return new ScreenerResult(summary, symbols);
     }
 
     private static OptimizationRun CreateOptimization(DateTimeOffset createdAt)

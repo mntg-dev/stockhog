@@ -4,6 +4,7 @@ using Stockhog.Application.Backtesting;
 using Stockhog.Application.Instruments;
 using Stockhog.Application.MarketData;
 using Stockhog.Application.Optimization;
+using Stockhog.Application.Screening;
 using Stockhog.Application.Trading;
 using Stockhog.Application.Trading.Safety;
 using Stockhog.Infrastructure.Configuration;
@@ -66,6 +67,7 @@ public static class InfrastructureDependencyInjection
         services.AddScoped<IOrderRepository, OrderRepository>();
         services.AddScoped<IOrderReader, OrderReader>();
         services.AddScoped<IInstrumentStore, InstrumentStore>();
+        services.AddScoped<IScreenerResultStore, ScreenerResultStore>();
 
         services.AddHostedService<DatabaseInitializer>();
     }

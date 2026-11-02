@@ -1,4 +1,5 @@
 using Stockhog.Application.Instruments;
+using Stockhog.Application.Screening;
 using Stockhog.Application.Trading;
 using Stockhog.Application.Trading.Safety;
 using Stockhog.Infrastructure.Alpaca.Instruments;
@@ -37,6 +38,12 @@ public static class AlpacaDependencyInjection
             .ConfigurePrimaryHttpMessageHandler(HttpClientDefaults.CreatePrimaryHandler);
         client.AddStandardResilienceHandler(HttpClientDefaults.ConfigureResilience);
         client.AddHttpMessageHandler<AlpacaRateLimitingHandler>();
+
+        // Daily bars of many symbols at once, for the screener.
+        var dailyBars = services.AddHttpClient<IDailyBarSource, AlpacaDailyBarsClient>(ConfigureDataClient)
+            .ConfigurePrimaryHttpMessageHandler(HttpClientDefaults.CreatePrimaryHandler);
+        dailyBars.AddStandardResilienceHandler(HttpClientDefaults.ConfigureResilience);
+        dailyBars.AddHttpMessageHandler<AlpacaRateLimitingHandler>();
 
         // The asset list lives on the trading API (paper or live host, same list) and uses the trading keys.
         var assets = services.AddHttpClient<IInstrumentSource, AlpacaAssetsClient>((sp, http) =>
