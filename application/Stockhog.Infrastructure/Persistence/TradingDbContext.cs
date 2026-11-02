@@ -1,6 +1,7 @@
 using Stockhog.Domain.Backtesting;
 using Stockhog.Domain.MarketData;
 using Stockhog.Domain.Optimization;
+using Stockhog.Domain.Scanning;
 using Stockhog.Domain.Trading;
 using Stockhog.Infrastructure.Persistence.Converters;
 using Microsoft.EntityFrameworkCore;
@@ -20,6 +21,8 @@ internal sealed class TradingDbContext(DbContextOptions<TradingDbContext> option
     public DbSet<AuditRecord> AuditLog => Set<AuditRecord>();
 
     public DbSet<InstrumentRecord> Instruments => Set<InstrumentRecord>();
+
+    public DbSet<ScanRun> ScanRuns => Set<ScanRun>();
 
     public DbSet<ScreenerRunRecord> ScreenerRuns => Set<ScreenerRunRecord>();
 

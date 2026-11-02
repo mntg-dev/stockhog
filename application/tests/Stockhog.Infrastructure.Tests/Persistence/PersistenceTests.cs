@@ -8,6 +8,7 @@ using Stockhog.Domain.Backtesting;
 using Stockhog.Domain.Common;
 using Stockhog.Domain.MarketData;
 using Stockhog.Domain.Optimization;
+using Stockhog.Domain.Scanning;
 using Stockhog.Domain.Trading;
 using Stockhog.Infrastructure.Persistence;
 using Microsoft.Data.Sqlite;
@@ -496,6 +497,54 @@ public sealed class PersistenceTests : IAsyncLifetime
         Assert.Equal(ScreenerResultStore.KeepRuns, runs.Count);
         Assert.Equal(T0.AddMinutes(2), runs[^1].CreatedAt);
         Assert.Equal(ScreenerResultStore.KeepRuns, await check.ScreenerRows.CountAsync(ct));
+    }
+
+    [Fact]
+    public async Task Scan_with_candidates_and_evaluations_round_trips_and_lists_unfinished()
+    {
+        var ct = TestContext.Current.CancellationToken;
+        var metrics = new PerformanceMetrics(20m, 8m, 1.2m, 12, 55m, 1.6m);
+        var evaluation = new CandidateEvaluation(metrics, 8m, 11.1m, 10.5m, 25m, ScanRejection.LosingHalf | ScanRejection.DrawdownTooDeep);
+        var screener = Guid.CreateVersion7(T0);
+        var scan = ScanRun.Create(
+            ScanRunId.New(T0),
+            [Symbol.Create("AAPL"), Symbol.Create("MSFT")],
+            [StrategyName.Create("SmaCrossStrategy")],
+            DateRange.Create(new DateOnly(2024, 11, 1), new DateOnly(2026, 10, 30)),
+            Money.Usd(50_000m),
+            ScanThresholds.Create(4, 30m, false),
+            maxParallel: 2,
+            screener,
+            T0);
+
+        await using (var db = CreateContext())
+        {
+            new ScanRunRepository(db).Add(scan);
+            await db.SaveChangesAsync(ct);
+        }
+
+        await using (var db = CreateContext())
+        {
+            var repository = new ScanRunRepository(db);
+            Assert.Single(await repository.ListUnfinishedAsync(ct));
+            var loaded = (await repository.GetAsync(scan.Id, ct))!;
+            loaded.Start(T0);
+            loaded.StartCandidate(0);
+            loaded.CompleteCandidate(0, BacktestRunId.From("20261102-120000000_AAPL_SmaCrossStrategy"), evaluation, T0.AddMinutes(1));
+            loaded.FailCandidate(1, "No market data", T0.AddMinutes(2));
+            await db.SaveChangesAsync(ct);
+        }
+
+        await using var check = CreateContext();
+        var read = (await new ScanReader(check).FindAsync(scan.Id, ct))!;
+        Assert.Equal(ScanStatus.Completed, read.Status);
+        Assert.Equal(ScanThresholds.Create(4, 30m, false), read.Thresholds);
+        Assert.Equal((50_000m, 2, screener), (read.InitialCapital.Amount, read.MaxParallel, read.ScreenerRunId));
+        Assert.Equal(evaluation, read.Candidates[0].Evaluation);
+        Assert.Equal("20261102-120000000_AAPL_SmaCrossStrategy", read.Candidates[0].RunId?.Value);
+        Assert.Equal((CandidateStatus.Failed, "No market data"), (read.Candidates[1].Status, read.Candidates[1].FailureReason));
+        Assert.Empty(await new ScanRunRepository(check).ListUnfinishedAsync(ct));
+        Assert.Equal([scan.Id], (await new ScanReader(check).ListAsync(5, ct)).Select(s => s.Id));
     }
 
     private static ScreenerResult ScreenerRun(DateTimeOffset createdAt, ScreenerCriteria criteria, params (string Symbol, decimal Close, decimal? Return6M)[] rows)

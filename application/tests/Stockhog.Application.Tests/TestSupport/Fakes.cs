@@ -217,10 +217,17 @@ internal sealed class InMemoryDatabase :
         }
     }
 
-    public void Add(MarketDataSet set) => MarketDataSets.Add(set);
+    public void Add(MarketDataSet set)
+    {
+        lock (Sync)
+            MarketDataSets.Add(set);
+    }
 
-    public Task<MarketDataSet?> GetAsync(MarketDataSetId id, CancellationToken cancellationToken = default) =>
-        Task.FromResult(MarketDataSets.FirstOrDefault(s => s.Id == id));
+    public Task<MarketDataSet?> GetAsync(MarketDataSetId id, CancellationToken cancellationToken = default)
+    {
+        lock (Sync)
+            return Task.FromResult(MarketDataSets.FirstOrDefault(s => s.Id == id));
+    }
 
     public Task<IReadOnlyList<MarketDataCoverage>> ListAsync(CancellationToken cancellationToken = default) =>
         Task.FromResult<IReadOnlyList<MarketDataCoverage>>(MarketDataSets
@@ -261,7 +268,8 @@ internal sealed class FakeMarketDataDownloader : IMarketDataDownloader
 
     public Task<MarketDataDownloadResult> DownloadAsync(MarketDataRequest request, IProgress<int>? progress = null, CancellationToken cancellationToken = default)
     {
-        Requests.Add(request);
+        lock (Requests)
+            Requests.Add(request);
         progress?.Report(50);
         progress?.Report(100);
         var bars = BarsFor(request);
@@ -322,7 +330,10 @@ internal sealed class FakeStrategyCatalog : IStrategyCatalog
         new StrategyParameterDescriptor("risk-percent", "Risk per trade (%)", StrategyParameterKind.Decimal, 1, 0.1m, 10, null, null)
     ]);
 
-    public IReadOnlyList<StrategyDescriptor> GetAll() => [SmaCross];
+    /// <summary>More strategies for tests that need several, e.g. scans.</summary>
+    public List<StrategyDescriptor> Extra { get; } = [];
+
+    public IReadOnlyList<StrategyDescriptor> GetAll() => [SmaCross, .. Extra];
 
     public StrategyDescriptor? Find(string name) => GetAll().FirstOrDefault(s => s.Name == name);
 }

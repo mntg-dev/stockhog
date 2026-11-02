@@ -237,6 +237,78 @@ namespace Stockhog.Infrastructure.Persistence.Migrations
                     b.ToTable("OptimizationRuns", (string)null);
                 });
 
+            modelBuilder.Entity("Stockhog.Domain.Scanning.ScanRun", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(64)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("FailureReason")
+                        .HasMaxLength(2000)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("FinishedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("MaxParallel")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<Guid?>("ScreenerRunId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("StartedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(16)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Thresholds")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("TEXT");
+
+                    b.ComplexProperty(typeof(Dictionary<string, object>), "InitialCapital", "Stockhog.Domain.Scanning.ScanRun.InitialCapital#Money", b1 =>
+                        {
+                            b1.IsRequired();
+
+                            b1.Property<decimal>("Amount")
+                                .HasColumnType("TEXT")
+                                .HasColumnName("InitialCapital");
+
+                            b1.Property<string>("Currency")
+                                .IsRequired()
+                                .HasMaxLength(3)
+                                .HasColumnType("TEXT")
+                                .HasColumnName("Currency");
+                        });
+
+                    b.ComplexProperty(typeof(Dictionary<string, object>), "Period", "Stockhog.Domain.Scanning.ScanRun.Period#DateRange", b1 =>
+                        {
+                            b1.IsRequired();
+
+                            b1.Property<DateOnly>("End")
+                                .HasColumnType("TEXT")
+                                .HasColumnName("PeriodEnd");
+
+                            b1.Property<DateOnly>("Start")
+                                .HasColumnType("TEXT")
+                                .HasColumnName("PeriodStart");
+                        });
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedAt");
+
+                    b.HasIndex("Status");
+
+                    b.ToTable("ScanRuns", (string)null);
+                });
+
             modelBuilder.Entity("Stockhog.Domain.Trading.Order", b =>
                 {
                     b.Property<string>("Id")
@@ -530,6 +602,57 @@ namespace Stockhog.Infrastructure.Persistence.Migrations
                         });
 
                     b.Navigation("Trials");
+                });
+
+            modelBuilder.Entity("Stockhog.Domain.Scanning.ScanRun", b =>
+                {
+                    b.OwnsMany("Stockhog.Domain.Scanning.ScanCandidate", "Candidates", b1 =>
+                        {
+                            b1.Property<string>("ScanRunId")
+                                .HasMaxLength(64)
+                                .HasColumnType("TEXT");
+
+                            b1.Property<int>("Id")
+                                .HasColumnType("INTEGER")
+                                .HasColumnName("Index");
+
+                            b1.Property<string>("Evaluation")
+                                .HasMaxLength(1500)
+                                .HasColumnType("TEXT");
+
+                            b1.Property<string>("FailureReason")
+                                .HasMaxLength(2000)
+                                .HasColumnType("TEXT");
+
+                            b1.Property<string>("RunId")
+                                .HasMaxLength(128)
+                                .HasColumnType("TEXT");
+
+                            b1.Property<string>("Status")
+                                .IsRequired()
+                                .HasMaxLength(16)
+                                .HasColumnType("TEXT");
+
+                            b1.Property<string>("Strategy")
+                                .IsRequired()
+                                .HasMaxLength(64)
+                                .HasColumnType("TEXT")
+                                .HasColumnName("StrategyName");
+
+                            b1.Property<string>("Symbol")
+                                .IsRequired()
+                                .HasMaxLength(10)
+                                .HasColumnType("TEXT");
+
+                            b1.HasKey("ScanRunId", "Id");
+
+                            b1.ToTable("ScanCandidates", (string)null);
+
+                            b1.WithOwner()
+                                .HasForeignKey("ScanRunId");
+                        });
+
+                    b.Navigation("Candidates");
                 });
 
             modelBuilder.Entity("Stockhog.Infrastructure.Persistence.ScreenerRowRecord", b =>

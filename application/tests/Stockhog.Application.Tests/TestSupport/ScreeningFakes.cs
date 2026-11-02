@@ -1,5 +1,7 @@
 using System.Collections.Concurrent;
+using Stockhog.Application.Scanning;
 using Stockhog.Application.Screening;
+using Stockhog.Domain.Scanning;
 
 namespace Stockhog.Application.Tests.TestSupport;
 
@@ -63,4 +65,37 @@ internal sealed class InMemoryScreenerResultStore : IScreenerResultStore
         Task.FromResult(id is null
             ? Results.OrderByDescending(r => r.Summary.CreatedAt).FirstOrDefault()
             : Results.FirstOrDefault(r => r.Summary.Id == id));
+}
+
+internal sealed class InMemoryScanStore : IScanRunRepository, IScanReader
+{
+    private readonly object _sync = new();
+
+    public List<ScanRun> Scans { get; } = [];
+
+    public void Add(ScanRun run)
+    {
+        lock (_sync)
+            Scans.Add(run);
+    }
+
+    public Task<ScanRun?> GetAsync(ScanRunId id, CancellationToken cancellationToken = default)
+    {
+        lock (_sync)
+            return Task.FromResult(Scans.FirstOrDefault(s => s.Id == id));
+    }
+
+    public Task<IReadOnlyList<ScanRun>> ListUnfinishedAsync(CancellationToken cancellationToken = default)
+    {
+        lock (_sync)
+            return Task.FromResult<IReadOnlyList<ScanRun>>(Scans.Where(s => !s.IsFinished).ToList());
+    }
+
+    public Task<IReadOnlyList<ScanRun>> ListAsync(int take, CancellationToken cancellationToken = default)
+    {
+        lock (_sync)
+            return Task.FromResult<IReadOnlyList<ScanRun>>(Scans.OrderByDescending(s => s.CreatedAt).Take(take).ToList());
+    }
+
+    public Task<ScanRun?> FindAsync(ScanRunId id, CancellationToken cancellationToken = default) => GetAsync(id, cancellationToken);
 }

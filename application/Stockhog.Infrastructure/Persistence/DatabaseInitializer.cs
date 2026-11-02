@@ -1,6 +1,7 @@
 using Stockhog.Application.Abstractions.Messaging;
 using Stockhog.Application.Backtesting.FailInterruptedBacktests;
 using Stockhog.Application.Optimization;
+using Stockhog.Application.Scanning;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -34,6 +35,10 @@ internal sealed class DatabaseInitializer(
         var optimizations = await dispatcher.SendAsync(new FailInterruptedOptimizationsCommand(), cancellationToken);
         if (optimizations is { IsSuccess: true, Value: > 0 })
             logger.LogWarning("Marked {Count} interrupted optimization(s) as failed", optimizations.Value);
+
+        var scans = await dispatcher.SendAsync(new FailInterruptedScansCommand(), cancellationToken);
+        if (scans is { IsSuccess: true, Value: > 0 })
+            logger.LogWarning("Marked {Count} interrupted scan(s) as failed", scans.Value);
     }
 
     public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;
