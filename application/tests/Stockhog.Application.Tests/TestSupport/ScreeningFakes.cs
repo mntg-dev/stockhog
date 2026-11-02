@@ -3,6 +3,7 @@ using Stockhog.Application.Proposals;
 using Stockhog.Application.Scanning;
 using Stockhog.Application.Screening;
 using Stockhog.Application.Signals;
+using Stockhog.Application.Trading.Portfolio;
 using Stockhog.Domain.Backtesting;
 using Stockhog.Domain.MarketData;
 using Stockhog.Domain.Proposals;
@@ -128,4 +129,26 @@ internal sealed class InMemoryProposalStore : IProposalRepository, IProposalRead
 
     public Task<IReadOnlyList<TradeProposal>> ListAsync(int take, CancellationToken cancellationToken = default) =>
         Task.FromResult<IReadOnlyList<TradeProposal>>(Proposals.OrderByDescending(p => p.CreatedAt).Take(take).ToList());
+}
+
+internal sealed class InMemoryEquityPeakStore : IEquityPeakStore
+{
+    public Dictionary<string, EquityPeak> Peaks { get; } = [];
+
+    public Task<EquityPeak?> GetAsync(string accountNumber, CancellationToken cancellationToken = default)
+    {
+        lock (Peaks)
+            return Task.FromResult(Peaks.GetValueOrDefault(accountNumber));
+    }
+
+    public Task SaveAsync(EquityPeak peak, CancellationToken cancellationToken = default)
+    {
+        lock (Peaks)
+        {
+            if (!Peaks.TryGetValue(peak.AccountNumber, out var current) || peak.Equity > current.Equity)
+                Peaks[peak.AccountNumber] = peak;
+        }
+
+        return Task.CompletedTask;
+    }
 }

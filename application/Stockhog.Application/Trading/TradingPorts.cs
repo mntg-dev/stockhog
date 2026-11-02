@@ -113,6 +113,9 @@ public interface IOrderRepository
 
     /// <summary>Orders not yet in a final state: new (maybe never submitted), submitted or partially filled.</summary>
     Task<IReadOnlyList<Order>> ListUnfinishedAsync(CancellationToken cancellationToken = default);
+
+    /// <summary>Orders created at or after <paramref name="since"/>, in any state.</summary>
+    Task<int> CountCreatedSinceAsync(DateTimeOffset since, CancellationToken cancellationToken = default);
 }
 
 public interface IOrderReader

@@ -178,6 +178,10 @@ internal sealed class DailyLossGuardService(
                 var result = await dispatcher.SendAsync(new EnforceDailyLossLimitCommand(), stoppingToken);
                 if (result is { IsSuccess: true, Value: true })
                     logger.LogWarning("Daily loss limit reached: trading switched off");
+
+                var portfolio = await dispatcher.SendAsync(new Application.Trading.Portfolio.EnforcePortfolioLimitsCommand(), stoppingToken);
+                if (portfolio is { IsSuccess: true, Value: true })
+                    logger.LogWarning("Drawdown limit reached: trading switched off");
             }
         }
         catch (OperationCanceledException) when (stoppingToken.IsCancellationRequested)

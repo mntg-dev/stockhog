@@ -592,6 +592,25 @@ public sealed class PersistenceTests : IAsyncLifetime
         Assert.Equal(190m, (await check.Orders.SingleAsync(ct)).StopLossPrice);
     }
 
+    [Fact]
+    public async Task The_equity_peak_only_moves_up_and_is_kept_per_account()
+    {
+        var ct = TestContext.Current.CancellationToken;
+        var services = new Microsoft.Extensions.DependencyInjection.ServiceCollection()
+            .AddDbContext<TradingDbContext>(options => options.UseSqlite(_connection))
+            .BuildServiceProvider();
+        var store = new EquityPeakStore(services.GetRequiredService<Microsoft.Extensions.DependencyInjection.IServiceScopeFactory>());
+
+        await store.SaveAsync(new Application.Trading.Portfolio.EquityPeak("PA1", 100_000m, T0), ct);
+        await store.SaveAsync(new Application.Trading.Portfolio.EquityPeak("PA1", 90_000m, T0.AddDays(1)), ct);
+        await store.SaveAsync(new Application.Trading.Portfolio.EquityPeak("PA1", 105_000m, T0.AddDays(2)), ct);
+        await store.SaveAsync(new Application.Trading.Portfolio.EquityPeak("LIVE1", 5_000m, T0), ct);
+
+        Assert.Equal((105_000m, T0.AddDays(2)), ((await store.GetAsync("PA1", ct))!.Equity, (await store.GetAsync("PA1", ct))!.At));
+        Assert.Equal(5_000m, (await store.GetAsync("LIVE1", ct))!.Equity);
+        Assert.Null(await store.GetAsync("OTHER", ct));
+    }
+
     private static ScreenerResult ScreenerRun(DateTimeOffset createdAt, ScreenerCriteria criteria, params (string Symbol, decimal Close, decimal? Return6M)[] rows)
     {
         var symbols = rows.Select((r, i) => new ScreenedSymbol(i + 1, $"{r.Symbol} Inc.", "NASDAQ",

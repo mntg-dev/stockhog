@@ -8,6 +8,7 @@ using Stockhog.Application.Proposals;
 using Stockhog.Application.Scanning;
 using Stockhog.Application.Screening;
 using Stockhog.Application.Trading;
+using Stockhog.Application.Trading.Portfolio;
 using Stockhog.Application.Trading.Safety;
 using Stockhog.Infrastructure.Configuration;
 using Stockhog.Infrastructure.Jobs;
@@ -88,6 +89,7 @@ public static class InfrastructureDependencyInjection
 
         services.AddSingleton<IRiskLimitsStore, RiskLimitsStore>();
         services.AddSingleton<IAuditLog, AuditLog>();
+        services.AddSingleton<IEquityPeakStore, EquityPeakStore>();
         services.AddSingleton<QuoteCache>();
         services.AddSingleton<IQuoteCache>(sp => sp.GetRequiredService<QuoteCache>());
     }

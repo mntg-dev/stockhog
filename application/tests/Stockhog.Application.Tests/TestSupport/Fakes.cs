@@ -197,6 +197,12 @@ internal sealed class InMemoryDatabase :
             return Task.FromResult(Orders.FirstOrDefault(o => o.Id == id));
     }
 
+    public Task<int> CountCreatedSinceAsync(DateTimeOffset since, CancellationToken cancellationToken = default)
+    {
+        lock (Sync)
+            return Task.FromResult(Orders.Count(o => o.CreatedAt >= since));
+    }
+
     Task<IReadOnlyList<Order>> IOrderRepository.ListUnfinishedAsync(CancellationToken cancellationToken)
     {
         lock (Sync)

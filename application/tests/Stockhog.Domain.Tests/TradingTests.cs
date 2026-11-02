@@ -145,4 +145,39 @@ public class RiskPolicyTests
 
         Assert.False(RiskPolicy.Evaluate(new OrderIntent(Aapl, OrderSide.Sell, 10, 100), busy, Limits).IsAllowed);
     }
+
+    [Fact]
+    public void Portfolio_limits_refuse_a_new_symbol_too_big_a_share_a_deep_drawdown_and_too_many_orders()
+    {
+        var portfolio = Flat with { Equity = 50_000, EquityPeak = 60_000, OpenPositions = 10, OrdersToday = 25 };
+
+        // 150 × 100 = 15,000: 30% of equity, a new symbol with 10 held, equity 16.7% below its peak, 25 orders today.
+        var decision = RiskPolicy.Evaluate(new OrderIntent(Aapl, OrderSide.Buy, 150, 100), portfolio, Limits with { MaxOrderNotional = 100_000 });
+
+        Assert.Equal(4, decision.Violations.Count);
+        Assert.Contains(decision.Violations, v => v.Contains("10 symbols are already held"));
+        Assert.Contains(decision.Violations, v => v.Contains("30.0% of equity") || v.Contains("30,0% of equity"));
+        Assert.Contains(decision.Violations, v => v.Contains("below its peak"));
+        Assert.Contains(decision.Violations, v => v.Contains("25 orders were placed today"));
+    }
+
+    [Fact]
+    public void Portfolio_limits_never_stop_reducing_a_position_or_adding_to_one_already_held_among_many()
+    {
+        var deepDrawdown = Flat with { CurrentPositionQuantity = 100, Equity = 50_000, EquityPeak = 100_000, OpenPositions = 10, OrdersToday = 99 };
+        var crowded = Flat with { CurrentPositionQuantity = 10, Equity = 100_000, EquityPeak = 100_000, OpenPositions = 10 };
+
+        Assert.True(RiskPolicy.Evaluate(new OrderIntent(Aapl, OrderSide.Sell, 100, 100), deepDrawdown, Limits).IsAllowed);
+        Assert.True(RiskPolicy.Evaluate(new OrderIntent(Aapl, OrderSide.Buy, 10, 100), crowded, Limits).IsAllowed);  // held already: not a new symbol
+    }
+
+    [Theory]
+    [InlineData(100_000, 100_000, 0)]
+    [InlineData(85_000, 100_000, 15)]
+    [InlineData(110_000, 100_000, 0)]   // above the stored peak: no drawdown
+    public void Drawdown_is_measured_from_the_peak(decimal equity, decimal peak, decimal expected)
+    {
+        Assert.Equal(expected, RiskPolicy.DrawdownPercent(equity, peak));
+        Assert.Null(RiskPolicy.DrawdownPercent(0, peak));
+    }
 }

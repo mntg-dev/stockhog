@@ -512,6 +512,23 @@ namespace Stockhog.Infrastructure.Persistence.Migrations
                     b.ToTable("AuditLog", (string)null);
                 });
 
+            modelBuilder.Entity("Stockhog.Infrastructure.Persistence.EquityPeakRecord", b =>
+                {
+                    b.Property<string>("AccountNumber")
+                        .HasMaxLength(64)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("At")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("Equity")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("AccountNumber");
+
+                    b.ToTable("EquityPeaks", (string)null);
+                });
+
             modelBuilder.Entity("Stockhog.Infrastructure.Persistence.InstrumentRecord", b =>
                 {
                     b.Property<string>("Symbol")

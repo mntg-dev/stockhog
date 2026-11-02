@@ -19,6 +19,9 @@ internal sealed class OrderRepository(TradingDbContext db) : IOrderRepository
             .OrderBy(o => o.CreatedAt)
             .ToListAsync(cancellationToken)
             .ConfigureAwait(false);
+
+    public Task<int> CountCreatedSinceAsync(DateTimeOffset since, CancellationToken cancellationToken = default) =>
+        db.Orders.CountAsync(o => o.CreatedAt >= since, cancellationToken);
 }
 
 /// <summary>Read side: a no-tracking projection for the orders view.</summary>

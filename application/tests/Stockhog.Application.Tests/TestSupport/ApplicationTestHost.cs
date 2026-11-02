@@ -13,6 +13,7 @@ using Stockhog.Application.Scanning;
 using Stockhog.Application.Screening;
 using Stockhog.Application.Signals;
 using Stockhog.Application.Trading;
+using Stockhog.Application.Trading.Portfolio;
 using Stockhog.Application.Trading.Safety;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -71,6 +72,7 @@ internal sealed class ApplicationTestHost : IAsyncDisposable
         services.AddSingleton<IStrategyStateReader>(States);
         services.AddSingleton<IProposalRepository>(Proposals);
         services.AddSingleton<IProposalReader>(Proposals);
+        services.AddSingleton<IEquityPeakStore>(EquityPeaks);
         services.AddScoped<IUnitOfWork, InMemoryUnitOfWork>();
 
         _provider = services.BuildServiceProvider(new ServiceProviderOptions { ValidateScopes = true, ValidateOnBuild = true });
@@ -99,6 +101,7 @@ internal sealed class ApplicationTestHost : IAsyncDisposable
     public InMemoryScanStore Scans { get; } = new();
     public FakeStrategyStateReader States { get; } = new();
     public InMemoryProposalStore Proposals { get; } = new();
+    public InMemoryEquityPeakStore EquityPeaks { get; } = new();
 
     public IAssistantToolbox Toolbox => _provider.GetRequiredService<IAssistantToolbox>();
 

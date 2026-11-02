@@ -27,6 +27,8 @@ internal sealed class TradingDbContext(DbContextOptions<TradingDbContext> option
 
     public DbSet<TradeProposal> TradeProposals => Set<TradeProposal>();
 
+    public DbSet<EquityPeakRecord> EquityPeaks => Set<EquityPeakRecord>();
+
     public DbSet<ScreenerRunRecord> ScreenerRuns => Set<ScreenerRunRecord>();
 
     public DbSet<ScreenerRowRecord> ScreenerRows => Set<ScreenerRowRecord>();

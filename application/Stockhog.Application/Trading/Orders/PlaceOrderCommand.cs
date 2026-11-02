@@ -2,6 +2,7 @@ using Stockhog.Application.Abstractions.Messaging;
 using Stockhog.Application.Abstractions.Persistence;
 using Stockhog.Application.Abstractions.Results;
 using Stockhog.Application.Common;
+using Stockhog.Application.Trading.Portfolio;
 using Stockhog.Application.Trading.Safety;
 using Stockhog.Domain.MarketData;
 using Stockhog.Domain.Trading;
@@ -76,6 +77,7 @@ internal sealed class PlaceOrderCommandHandler(
     ILatestPriceSource latestPrices,
     ITradingEnvironment environment,
     LiveTradingSession liveSession,
+    PortfolioRiskReader portfolio,
     Audit audit,
     TimeProvider clock) : ICommandHandler<PlaceOrderCommand, PlacedOrder>
 {
@@ -108,8 +110,10 @@ internal sealed class PlaceOrderCommandHandler(
             return TradingErrors.NoPrice(symbol.Value);
 
         var account = await accountTask;
-        var position = (await positionsTask).FirstOrDefault(p => p.Symbol == symbol.Value)?.Quantity ?? 0;
-        var context = new RiskContext(position, account.DailyProfitLoss, unfinished.Count, account.BuyingPower);
+        var positions = await positionsTask;
+        var position = positions.FirstOrDefault(p => p.Symbol == symbol.Value)?.Quantity ?? 0;
+        var risk = await portfolio.ReadAsync(account, positions, cancellationToken);
+        var context = risk.ContextFor(position, account, unfinished.Count);
         var decision = RiskPolicy.Evaluate(new OrderIntent(symbol, command.Side, command.Quantity, price), context, riskLimits.Current);
 
         var violations = decision.Violations.ToList();

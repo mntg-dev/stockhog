@@ -4,6 +4,7 @@ using Stockhog.Application.Common;
 using Stockhog.Application.Scanning;
 using Stockhog.Application.Trading;
 using Stockhog.Application.Trading.Orders;
+using Stockhog.Application.Trading.Portfolio;
 using Stockhog.Application.Trading.Safety;
 using Stockhog.Domain.MarketData;
 using Stockhog.Domain.Proposals;
@@ -61,6 +62,8 @@ internal sealed class CreateProposalsCommandHandler(
     IProposalRepository proposals,
     IBrokerGateway broker,
     IRiskLimitsStore riskLimits,
+    IOrderRepository orders,
+    PortfolioRiskReader portfolio,
     Audit audit,
     TimeProvider clock) : ICommandHandler<CreateProposalsCommand, CreatedProposals>
 {
@@ -81,10 +84,15 @@ internal sealed class CreateProposalsCommandHandler(
             return TradingErrors.BrokerUnavailable(ex.Message);
         }
 
-        var rules = command.Rules ?? SizingRules.Default;
+        var limits = riskLimits.Current;
+        var requested = command.Rules ?? SizingRules.Default;
+        var rules = requested with { MaxPositionPercent = Math.Min(requested.MaxPositionPercent, limits.MaxPositionPercent) };
         var now = clock.GetUtcNow();
         var held = positions.Where(p => p.Quantity != 0).Select(p => p.Symbol).ToHashSet(StringComparer.Ordinal);
-        var proposed = (await proposals.ListPendingAsync(cancellationToken)).Select(p => p.Symbol.Value).ToHashSet(StringComparer.Ordinal);
+        var pending = await proposals.ListPendingAsync(cancellationToken);
+        var proposed = pending.Select(p => p.Symbol.Value).ToHashSet(StringComparer.Ordinal);
+        var risk = await portfolio.ReadAsync(account, positions, cancellationToken);
+        var openOrders = (await orders.ListUnfinishedAsync(cancellationToken)).Count;
 
         var created = new List<string>();
         var skipped = new List<SkippedProposal>();
@@ -115,9 +123,23 @@ internal sealed class CreateProposalsCommandHandler(
             PositionSize? size = null;
             if (reason is null)
             {
-                size = PositionSizer.Size(account.Equity, account.BuyingPower, signal.LastPrice, signal.StopPrice, rules, riskLimits.Current);
+                size = PositionSizer.Size(account.Equity, account.BuyingPower, signal.LastPrice, signal.StopPrice, rules, limits);
                 if (size.Quantity < 1)
                     reason = $"Not even one share fits the limits (limited by {size.LimitedBy}).";
+            }
+
+            // The checks the order will face on approval, counting the proposals still waiting as if they were bought,
+            // so a batch never proposes more than the portfolio limits allow.
+            if (reason is null)
+            {
+                var context = risk.ContextFor(0, account, openOrders) with
+                {
+                    OpenPositions = risk.OpenPositions + proposed.Count,
+                    OrdersToday = risk.OrdersToday + proposed.Count
+                };
+                var decision = RiskPolicy.Evaluate(new OrderIntent(candidate.Symbol, OrderSide.Buy, size!.Quantity, signal.LastPrice), context, limits);
+                if (!decision.IsAllowed)
+                    reason = "The order would be refused: " + string.Join(" ", decision.Violations);
             }
 
             if (reason is not null)

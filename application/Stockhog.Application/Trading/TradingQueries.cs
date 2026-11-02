@@ -98,6 +98,10 @@ internal sealed class UpdateRiskLimitsCommandValidator : AbstractValidator<Updat
         RuleFor(c => c.Limits.MaxPositionNotional).GreaterThan(0).WithMessage("The position limit must be positive.");
         RuleFor(c => c.Limits.MaxDailyLoss).GreaterThan(0).WithMessage("The daily loss limit must be positive.");
         RuleFor(c => c.Limits.MaxOpenOrders).InclusiveBetween(1, 100).WithMessage("Allow between 1 and 100 open orders.");
+        RuleFor(c => c.Limits.MaxOpenPositions).InclusiveBetween(1, 200).WithMessage("Allow between 1 and 200 positions.");
+        RuleFor(c => c.Limits.MaxPositionPercent).InclusiveBetween(1, 100).WithMessage("One position may take between 1% and 100% of equity.");
+        RuleFor(c => c.Limits.MaxDrawdownPercent).InclusiveBetween(1, 100).WithMessage("The drawdown limit must be between 1% and 100%.");
+        RuleFor(c => c.Limits.MaxOrdersPerDay).InclusiveBetween(1, 1000).WithMessage("Allow between 1 and 1000 orders a day.");
     }
 }
 

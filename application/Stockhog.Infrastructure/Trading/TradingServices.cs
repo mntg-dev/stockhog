@@ -26,7 +26,23 @@ public sealed class RiskOptions
     [Range(1, 100)]
     public int MaxOpenOrders { get; set; } = RiskLimits.Default.MaxOpenOrders;
 
-    public RiskLimits ToLimits() => new(TradingEnabled, MaxOrderNotional, MaxPositionNotional, MaxDailyLoss, MaxOpenOrders);
+    [Range(1, 200)]
+    public int MaxOpenPositions { get; set; } = RiskLimits.Default.MaxOpenPositions;
+
+    [Range(1, 100)]
+    public decimal MaxPositionPercent { get; set; } = RiskLimits.Default.MaxPositionPercent;
+
+    [Range(1, 100)]
+    public decimal MaxDrawdownPercent { get; set; } = RiskLimits.Default.MaxDrawdownPercent;
+
+    [Range(1, 1000)]
+    public int MaxOrdersPerDay { get; set; } = RiskLimits.Default.MaxOrdersPerDay;
+
+    /// <summary>Close every position when the drawdown limit is hit, not only stop new ones. Off by default.</summary>
+    public bool FlattenOnDrawdown { get; set; } = RiskLimits.Default.FlattenOnDrawdown;
+
+    public RiskLimits ToLimits() => new(TradingEnabled, MaxOrderNotional, MaxPositionNotional, MaxDailyLoss, MaxOpenOrders,
+        MaxOpenPositions, MaxPositionPercent, MaxDrawdownPercent, MaxOrdersPerDay, FlattenOnDrawdown);
 }
 
 /// <summary>The limits are replaced as a whole (an immutable record), so readers never see a half-updated set.</summary>
