@@ -38,7 +38,7 @@
 .gallery__button img {
   width: 100%;
   height: auto;
-  aspect-ratio: 2040 / 1290;
+  aspect-ratio: 2022 / 1281;
   object-fit: cover;
   border-radius: var(--radius-sm);
   transition:
@@ -168,7 +168,7 @@
   .gallery__item:first-child img {
     flex: none;
     height: auto;
-    aspect-ratio: 2040 / 1290;
+    aspect-ratio: 2022 / 1281;
   }
 }
 

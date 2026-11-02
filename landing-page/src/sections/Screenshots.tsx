@@ -43,7 +43,7 @@ export function Screenshots() {
                 aria-label={t.screenshots.open.replace('{caption}', item.caption)}
               >
                 <figure>
-                  <img src={`/screenshots/${item.file}`} alt="" width={2040} height={1290} loading="lazy" />
+                  <img src={`/screenshots/${item.file}`} alt="" width={2022} height={1281} loading="lazy" />
                   <figcaption>{item.caption}</figcaption>
                 </figure>
               </button>

@@ -26,8 +26,8 @@ export function HowItWorks() {
                 <img
                   className="shot"
                   src={`/screenshots/${step.file}`}
-                  width={2040}
-                  height={1290}
+                  width={2022}
+                  height={1281}
                   alt={step.imageAlt}
                   loading="lazy"
                 />

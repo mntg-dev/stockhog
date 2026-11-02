@@ -5,7 +5,7 @@ import { REPO_URL } from '../components/links'
 import './Hero.css'
 
 // The two headline results visible in backtest.png: update them whenever that screenshot is retaken.
-const exampleRun = { annualReturn: 0.04954, maxDrawdown: -0.109 }
+const exampleRun = { annualReturn: 0.1573, maxDrawdown: -0.17 }
 
 export function Hero() {
   const { t, language } = useT()
@@ -54,8 +54,8 @@ export function Hero() {
           <img
             className="shot"
             src="/screenshots/backtest.png"
-            width={2040}
-            height={1290}
+            width={2022}
+            height={1281}
             alt={t.hero.imageAlt}
             fetchPriority="high"
           />
