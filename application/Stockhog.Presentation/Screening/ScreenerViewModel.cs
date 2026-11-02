@@ -63,6 +63,7 @@ public sealed partial class ScreenerViewModel : PageViewModel, IRecipient<Screen
     [ObservableProperty] private int _minTradingDays;
     [ObservableProperty] private ScreenerSort _sortBy;
     [ObservableProperty] private int _maxResults;
+    [ObservableProperty] private bool _stocksOnly;
 
     // Results
     [ObservableProperty] private IReadOnlyList<ScreenerRunSummary> _runs = [];
@@ -104,7 +105,8 @@ public sealed partial class ScreenerViewModel : PageViewModel, IRecipient<Screen
         MinTradingDays,
         Exchanges.Where(e => e.IsSelected).Select(e => e.Code).ToList(),
         SortBy,
-        MaxResults);
+        MaxResults,
+        StocksOnly);
 
     [RelayCommand]
     private async Task RunAsync(CancellationToken cancellationToken)
@@ -192,6 +194,7 @@ public sealed partial class ScreenerViewModel : PageViewModel, IRecipient<Screen
         MinTradingDays = criteria.MinTradingDays;
         SortBy = criteria.SortBy;
         MaxResults = criteria.MaxResults;
+        StocksOnly = criteria.StocksOnly;
         foreach (var exchange in Exchanges)
             exchange.IsSelected = criteria.Exchanges.Contains(exchange.Code, StringComparer.OrdinalIgnoreCase);
     }

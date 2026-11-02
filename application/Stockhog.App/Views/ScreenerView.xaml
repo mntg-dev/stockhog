@@ -73,6 +73,8 @@
                     <TextBlock Text="{loc:Tr Screener_SortBy}" Style="{StaticResource FieldLabel}" />
                     <ComboBox ItemsSource="{Binding SortOptions}" SelectedItem="{Binding SortBy}" ItemTemplate="{StaticResource LocalizedEnumItem}" />
 
+                    <CheckBox Content="{loc:Tr Screener_StocksOnly}" IsChecked="{Binding StocksOnly}" ToolTip="{loc:Tr Screener_StocksOnlyHint}" Margin="0,10,0,0" />
+
                     <TextBlock Text="{loc:Tr Screener_Exchanges}" Style="{StaticResource FieldLabel}" />
                     <ItemsControl ItemsSource="{Binding Exchanges}">
                         <ItemsControl.ItemsPanel>

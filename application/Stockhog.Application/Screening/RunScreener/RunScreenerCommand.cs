@@ -97,6 +97,7 @@ internal sealed class RunScreenerCommandHandler(
         var exchanges = new HashSet<string>(criteria.Exchanges, StringComparer.OrdinalIgnoreCase);
         var universe = (await instruments.ListAsync(cancellationToken).ConfigureAwait(false))
             .Where(i => exchanges.Contains(i.Exchange))
+            .Where(i => !criteria.StocksOnly || !FundNames.LooksLikeFund(i.Name))
             .ToDictionary(i => i.Symbol, StringComparer.Ordinal);
         if (universe.Count == 0)
             return ScreenerErrors.NoInstruments;

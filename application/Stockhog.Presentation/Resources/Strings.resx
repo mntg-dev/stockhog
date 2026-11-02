@@ -703,4 +703,6 @@ Estimated value: {6} USD.</value></data>
   <data name="ScreenerSort_AtrPercent" xml:space="preserve"><value>Volatility (ATR %)</value></data>
   <data name="Status_ScreenerQueued" xml:space="preserve"><value>Screener queued; the results appear here when the job finishes.</value></data>
   <data name="Status_ScreenerAlreadyRunning" xml:space="preserve"><value>The screener is already running; its results appear here when it finishes.</value></data>
+  <data name="Screener_StocksOnly" xml:space="preserve"><value>Stocks only (no ETFs or funds)</value></data>
+  <data name="Screener_StocksOnlyHint" xml:space="preserve"><value>Leaves out ETFs, ETNs, leveraged and inverse products and other funds. Recognized by name, so a few may slip through or a closed-end fund company may be left out.</value></data>
 </root>

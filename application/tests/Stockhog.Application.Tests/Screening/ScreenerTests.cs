@@ -103,6 +103,47 @@ public class ScreenerTests
         Assert.Equal(["FAST", "SLOW", "NEW"], host.ScreenerResults.Results[0].Symbols.Select(s => s.Symbol));
     }
 
+    [Theory]
+    [InlineData("State Street SPDR S&P 500 ETF Trust", true)]
+    [InlineData("Invesco QQQ Trust, Series 1", true)]
+    [InlineData("iShares Russell 2000 ETF", true)]
+    [InlineData("Direxion Daily Semiconductor Bull 3X Shares", true)]
+    [InlineData("ProShares UltraPro QQQ", true)]
+    [InlineData("MicroSectors FANG+ Index 3X Leveraged ETN", true)]
+    [InlineData("United States Oil Fund, LP", true)]
+    [InlineData("SPDR Gold Shares", true)]
+    [InlineData("Apple Inc. Common Stock", false)]
+    [InlineData("Vornado Realty Trust Common Stock", false)]
+    [InlineData("Taiwan Semiconductor Manufacturing Company Ltd.", false)]
+    [InlineData("Fundamental Global Inc.", false)]
+    [InlineData("3M Company", false)]
+    public void Funds_are_told_from_companies_by_name(string name, bool isFund)
+    {
+        Assert.Equal(isFund, FundNames.LooksLikeFund(name));
+    }
+
+    [Fact]
+    public async Task Stocks_only_leaves_funds_out_of_the_universe()
+    {
+        await using var host = new ApplicationTestHost();
+        await host.Instruments.ReplaceAllAsync(
+        [
+            new("AAPL", "Apple Inc. Common Stock", "NASDAQ"),
+            new("SPY", "State Street SPDR S&P 500 ETF Trust", "ARCA"),
+            new("SOXL", "Direxion Daily Semiconductor Bull 3X Shares", "ARCA")
+        ], TestData.Now, Ct);
+        foreach (var symbol in new[] { "AAPL", "SPY", "SOXL" })
+            host.DailyBars.Bars[symbol] = FakeDailyBarSource.Series(250, LastSession, 200m);
+
+        var stocks = await host.Dispatcher.SendAsync(new RunScreenerCommand(ScreenerCriteria.LiquidLargeCaps), Ct);
+        var everything = await host.Dispatcher.SendAsync(new RunScreenerCommand(ScreenerCriteria.LiquidLargeCaps with { StocksOnly = false }), Ct);
+
+        Assert.Equal((1, 1), (stocks.Value.UniverseSize, stocks.Value.Matched));
+        Assert.Equal("AAPL", Assert.Single(host.ScreenerResults.Results[0].Symbols).Symbol);
+        Assert.Equal((3, 3), (everything.Value.UniverseSize, everything.Value.Matched));
+        Assert.DoesNotContain(host.DailyBars.Requests.First().Symbols, s => s is "SPY" or "SOXL");
+    }
+
     [Fact]
     public async Task Latest_result_is_returned_with_its_symbols()
     {

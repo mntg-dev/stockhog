@@ -23,6 +23,7 @@ public enum ScreenerSort
 /// <param name="MinTradingDays">Sessions with a bar in the last year: young listings and thin data are left out.</param>
 /// <param name="Exchanges">Alpaca exchange codes to include; see <see cref="RefreshInstrumentsCommand.ListedExchanges"/>.</param>
 /// <param name="MaxResults">How many of the best matches are kept, by <paramref name="SortBy"/>.</param>
+/// <param name="StocksOnly">Leave out ETFs, ETNs and other funds (recognized by name, see <see cref="FundNames"/>).</param>
 public sealed record ScreenerCriteria(
     decimal? MinPrice,
     decimal? MaxPrice,
@@ -32,7 +33,8 @@ public sealed record ScreenerCriteria(
     int MinTradingDays,
     IReadOnlyList<string> Exchanges,
     ScreenerSort SortBy,
-    int MaxResults)
+    int MaxResults,
+    bool StocksOnly = false)
 {
     public const int MaxResultsLimit = 500;
     public const int MinTradingDaysLimit = 21;
@@ -42,19 +44,19 @@ public sealed record ScreenerCriteria(
 
     /// <summary>Large, heavily traded stocks: the default universe for testing strategies.</summary>
     public static ScreenerCriteria LiquidLargeCaps { get; } =
-        new(10m, null, 50_000_000m, null, null, 200, AllExchanges, ScreenerSort.DollarVolume, 100);
+        new(10m, null, 50_000_000m, null, null, 200, AllExchanges, ScreenerSort.DollarVolume, 100, StocksOnly: true);
 
     /// <summary>Tradable mid-sized names: lower liquidity bar, still a year of history.</summary>
     public static ScreenerCriteria LiquidMidCaps { get; } =
-        new(5m, 500m, 10_000_000m, null, null, 200, AllExchanges, ScreenerSort.DollarVolume, 150);
+        new(5m, 500m, 10_000_000m, null, null, 200, AllExchanges, ScreenerSort.DollarVolume, 150, StocksOnly: true);
 
     /// <summary>The strongest six-month performers among liquid stocks, for trend-following strategies.</summary>
     public static ScreenerCriteria Momentum { get; } =
-        new(10m, null, 20_000_000m, null, null, 200, AllExchanges, ScreenerSort.Return6M, 100);
+        new(10m, null, 20_000_000m, null, null, 200, AllExchanges, ScreenerSort.Return6M, 100, StocksOnly: true);
 
     /// <summary>Liquid stocks that move a lot each day, for breakout and mean-reversion strategies.</summary>
     public static ScreenerCriteria Volatile { get; } =
-        new(5m, null, 20_000_000m, 3m, null, 120, AllExchanges, ScreenerSort.AtrPercent, 100);
+        new(5m, null, 20_000_000m, 3m, null, 120, AllExchanges, ScreenerSort.AtrPercent, 100, StocksOnly: true);
 }
 
 /// <summary>A named starting point for the criteria, e.g. on the screener page.</summary>
@@ -91,7 +93,7 @@ public sealed record ScreenedSymbol(int Rank, string Name, string Exchange, Symb
     public string Symbol => Metrics.Symbol;
 }
 
-/// <param name="UniverseSize">Listed instruments on the chosen exchanges.</param>
+/// <param name="UniverseSize">Listed instruments on the chosen exchanges (without funds when only stocks were asked for).</param>
 /// <param name="WithData">Instruments that had enough recent daily bars to be measured.</param>
 /// <param name="AsOf">The latest session in the data.</param>
 public sealed record ScreenerRunSummary(

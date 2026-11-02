@@ -703,4 +703,6 @@ Szacowana wartość: {6} USD.</value></data>
   <data name="ScreenerSort_AtrPercent" xml:space="preserve"><value>Zmienność (ATR %)</value></data>
   <data name="Status_ScreenerQueued" xml:space="preserve"><value>Dodano screener do kolejki; wyniki pojawią się tutaj po zakończeniu zadania.</value></data>
   <data name="Status_ScreenerAlreadyRunning" xml:space="preserve"><value>Screener już działa; wyniki pojawią się tutaj po jego zakończeniu.</value></data>
+  <data name="Screener_StocksOnly" xml:space="preserve"><value>Tylko akcje (bez ETF-ów i funduszy)</value></data>
+  <data name="Screener_StocksOnlyHint" xml:space="preserve"><value>Pomija ETF-y, ETN-y, produkty lewarowane i odwrotne oraz inne fundusze. Rozpoznawane po nazwie, więc pojedyncze mogą się prześlizgnąć albo zostać pominięta spółka funduszu zamkniętego.</value></data>
 </root>
