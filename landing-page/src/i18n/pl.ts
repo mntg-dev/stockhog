@@ -183,9 +183,9 @@ export const pl: typeof en = {
     requirements: ['Windows 10 lub 11, 64-bit', 'Darmowe konto Alpaca do danych rynkowych i handlu demo'],
     quickStartTitle: 'Szybki start',
     quickStart: [
-      'Uruchom instalator (albo rozpakuj wersję przenośną)',
-      'Dodaj swoje klucze API Alpaca do appsettings.json (Alpaca:ApiKey / Alpaca:ApiSecret) albo ustaw je jako zmienne środowiskowe',
-      'Uruchom Stockhog.App.exe',
+      'Uruchom instalator (albo rozpakuj wersję przenośną) i otwórz Stockhog',
+      'Otwórz Ustawienia, wklej klucze konta paper Alpaca i kliknij „Sprawdź połączenie”, a potem „Zapisz klucze”',
+      'Uruchom Stockhog ponownie: dane rynkowe i handel na koncie paper są gotowe',
     ],
     smartScreenNote:
       'Windows SmartScreen może ostrzec przed nierozpoznaną aplikacją przy pierwszym uruchomieniu, bo nie jest jeszcze podpisana cyfrowo. Kliknij „Więcej informacji”, a potem „Uruchom mimo to”.',
@@ -216,7 +216,7 @@ export const pl: typeof en = {
       },
       {
         q: 'Gdzie są przechowywane moje dane i klucze API?',
-        a: 'Na Twoim komputerze: lokalne pliki i Twoje własne dane logowania, a aplikacja nie wysyła telemetrii. Jeśli włączysz opcjonalnego asystenta AI, Twoje pytania i wyniki, które on czyta, trafiają do Anthropic z Twoim własnym kluczem API.',
+        a: 'Na Twoim komputerze: lokalne pliki oraz klucze Alpaca zaszyfrowane dla Twojego użytkownika Windows (DPAPI). Aplikacja nie wysyła telemetrii. Jeśli włączysz opcjonalnego asystenta AI, Twoje pytania i wyniki, które on czyta, trafiają do Anthropic z Twoim własnym kluczem API.',
       },
       {
         q: 'Jakie rynki są wspierane?',

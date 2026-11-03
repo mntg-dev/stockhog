@@ -74,6 +74,10 @@ flowchart LR
 
 Requirements: Windows and the .NET 10 SDK. Market data and trading need a free [Alpaca](https://alpaca.markets) account.
 
+In the app, open **Settings → Alpaca account**, paste the paper account's key ID and secret, click **Test connection**,
+then **Save keys** and restart. The keys are stored encrypted for your Windows user (DPAPI) and win over configuration.
+For development they can also come from user secrets or environment variables:
+
 ```powershell
 cd application
 dotnet user-secrets set "Alpaca:ApiKey" "<key>" --project Stockhog.App

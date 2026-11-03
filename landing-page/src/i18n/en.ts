@@ -181,9 +181,9 @@ export const en = {
     requirements: ['Windows 10 or 11, 64-bit', 'A free Alpaca account for market data and paper trading'],
     quickStartTitle: 'Quick start',
     quickStart: [
-      'Run the installer (or unzip the portable archive)',
-      'Add your Alpaca API keys to appsettings.json (Alpaca:ApiKey / Alpaca:ApiSecret), or set them as environment variables',
-      'Run Stockhog.App.exe',
+      'Run the installer (or unzip the portable archive) and start Stockhog',
+      'Open Settings, paste your Alpaca paper keys and click “Test connection”, then “Save keys”',
+      'Restart Stockhog: market data and paper trading are ready',
     ],
     smartScreenNote:
       'Windows SmartScreen may warn about an unrecognized app on first launch, since it isn’t code-signed yet. Click “More info”, then “Run anyway”.',
@@ -214,7 +214,7 @@ export const en = {
       },
       {
         q: 'Where are my data and API keys stored?',
-        a: 'On your computer: local files and your own credentials, and the app has no telemetry. If you turn on the optional AI assistant, your questions and the results it reads are sent to Anthropic with your own API key.',
+        a: 'On your computer: local files, and your Alpaca keys encrypted for your Windows user (DPAPI). The app has no telemetry. If you turn on the optional AI assistant, your questions and the results it reads are sent to Anthropic with your own API key.',
       },
       {
         q: 'What markets are supported?',
