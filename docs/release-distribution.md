@@ -131,7 +131,7 @@ gh variable set AZURE_SUBSCRIPTION_ID --env release --repo "$REPO" --body "$SUB_
 
 None of these are secrets: without the federated credential they're useless.
 
-Recommended: limit the environment to release tags. In GitHub, go to **Settings → Environments → release → Deployment branches and tags**, choose **Selected branches and tags**, and add the tag rule `v*`. After that, a workflow run on another branch can't get Azure access.
+Recommended: limit the environment to release tags. In GitHub, go to **Settings â†’ Environments â†’ release â†’ Deployment branches and tags**, choose **Selected branches and tags**, and add the tag rule `v*`. After that, a workflow run on another branch can't get Azure access.
 
 ### 8. Publish a release
 
@@ -176,13 +176,24 @@ The GitHub release is created before the Azure upload. If the upload fails, fix 
 
 ### Code signing (removes the SmartScreen warning)
 
-At the moment Windows shows "Windows protected your PC" on first launch. To fix that:
+`release.yml` already has the signing steps; they are skipped until three repository variables exist. They sign
+`Stockhog.App.exe` and `Stockhog.EngineRunner.exe` right after publishing (before WiX packs them) and the `.msi` right
+after it is built (before the hashes are computed). Third-party libraries are left with their own signatures.
 
-1. Get a signing identity. Either:
-   - **Azure Trusted Signing** (about $10/month; works from GitHub Actions without a key file). Check whether you're eligible as an individual in your country first.
-   - an **OV code-signing certificate**, for example Certum's open-source developer certificate.
-2. In `release.yml`, sign `dist/Stockhog.App.exe` and `dist/Stockhog.EngineRunner.exe` after publishing and before the WiX step. Then sign the `.msi` after it's built, before the hashes are computed.
-3. Once signed builds ship, remove `smartScreenNote` from the landing page.
+1. Create an **Azure Artifact Signing** account (formerly Trusted Signing, about $10/month) and a certificate
+   profile in the same subscription. Identity validation decides who can use it: check first whether it accepts an
+   individual in your country, otherwise validate as a company. If Artifact Signing is not available, buy an OV
+   code-signing certificate (e.g. Certum's open-source developer certificate) and replace the signing steps with
+   `signtool sign` using the certificate.
+2. Give the release identity the **Certificate Profile Signer** role on the certificate profile (listed as
+   "Trusted Signing Certificate Profile Signer" before the service was renamed)
+   â€” the same identity that already uploads releases, so OIDC keeps working without stored keys.
+3. Add the repository variables (Settings â†’ Secrets and variables â†’ Actions â†’ Variables):
+   - `SIGNING_ENDPOINT`, e.g. `https://weu.codesigning.azure.net/` (the region of the signing account)
+   - `SIGNING_ACCOUNT`: the signing account name
+   - `SIGNING_PROFILE`: the certificate profile name
+4. Tag a release. Once signed builds ship, remove `smartScreenNote` from the landing page and the "not code-signed"
+   line from SECURITY.md.
 
 SmartScreen trust for a new certificate builds up as more people download the app; it isn't instant.
 
