@@ -7,6 +7,10 @@ on:
   pull_request:
     paths: ['application/**', '.github/workflows/application-ci.yml']
 
+# Read-only token: the workflow only builds and tests.
+permissions:
+  contents: read
+
 jobs:
   build-and-test:
     # WPF projects need Windows.

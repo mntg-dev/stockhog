@@ -16,8 +16,17 @@ jobs:
     defaults:
       run:
         working-directory: application
+    env:
+      # The tag reaches scripts only through this variable, never pasted into them: a tag name could hold $(...).
+      TAG: ${{ github.ref_name }}
 
     steps:
+      - name: Check the tag
+        shell: pwsh
+        working-directory: .
+        run: |
+          if ($env:TAG -notmatch '^v\d+\.\d+\.\d+(-[0-9A-Za-z.]+)?$') { throw "Tag '$env:TAG' is not a version like v1.2.3." }
+
       - uses: actions/checkout@v4
 
       - uses: actions/setup-dotnet@v4
@@ -52,7 +61,7 @@ jobs:
       - name: Build installer (.msi)
         shell: pwsh
         run: |
-          $productVersion = "${{ github.ref_name }}" -replace '^v', ''
+          $productVersion = $env:TAG -replace '^v', ''
           dotnet build installer/Stockhog.Installer/Stockhog.Installer.wixproj `
             -c Release `
             -p:PublishDir="$pwd/../dist" `
@@ -61,7 +70,7 @@ jobs:
       - name: Package
         shell: pwsh
         run: |
-          $version = "${{ github.ref_name }}"
+          $version = $env:TAG
           $zipName = "Stockhog-$version-win-x64.zip"
           Compress-Archive -Path dist/* -DestinationPath $zipName
           $hash = (Get-FileHash -Algorithm SHA256 $zipName).Hash.ToLower()
@@ -81,10 +90,10 @@ jobs:
         shell: pwsh
         working-directory: .
         run: |
-          gh release create "${{ github.ref_name }}" `
+          gh release create $env:TAG `
             "$env:ZIP_NAME" "$env:ZIP_NAME.sha256" `
             "$env:MSI_NAME" "$env:MSI_NAME.sha256" `
-            --title "${{ github.ref_name }}" `
+            --title $env:TAG `
             --generate-notes
 
       - name: Azure login
@@ -98,7 +107,7 @@ jobs:
         shell: pwsh
         working-directory: .
         run: |
-          $version = "${{ github.ref_name }}"
+          $version = $env:TAG
           $account = "emtradingstorage"
           $container = "releases"
           $base = "https://$account.blob.core.windows.net/$container"
