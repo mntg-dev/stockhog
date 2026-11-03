@@ -4,6 +4,7 @@ using Stockhog.Application.Backtesting;
 using Stockhog.Application.Instruments;
 using Stockhog.Application.MarketData;
 using Stockhog.Application.Optimization;
+using Stockhog.Application.Autopilot;
 using Stockhog.Application.Proposals;
 using Stockhog.Application.Scanning;
 using Stockhog.Application.Screening;
@@ -75,6 +76,7 @@ public static class InfrastructureDependencyInjection
         services.AddScoped<IScanReader, ScanReader>();
         services.AddScoped<IProposalRepository, ProposalRepository>();
         services.AddScoped<IProposalReader, ProposalReader>();
+        services.AddScoped<IAutopilotRepository, AutopilotRepository>();
 
         services.AddHostedService<DatabaseInitializer>();
     }
@@ -90,6 +92,7 @@ public static class InfrastructureDependencyInjection
         services.AddSingleton<IRiskLimitsStore, RiskLimitsStore>();
         services.AddSingleton<IAuditLog, AuditLog>();
         services.AddSingleton<IEquityPeakStore, EquityPeakStore>();
+        services.AddSingleton<IAutopilotDecisionLog, AutopilotDecisionLog>();
         services.AddSingleton<QuoteCache>();
         services.AddSingleton<IQuoteCache>(sp => sp.GetRequiredService<QuoteCache>());
     }

@@ -190,3 +190,50 @@ internal sealed class DailyLossGuardService(
         }
     }
 }
+
+/// <summary>
+/// Starts the autopilot's cycle once per session while it is on. Checks every few minutes; a cycle that failed is
+/// tried again after <see cref="RetryAfter"/>, not on every tick, as a cycle runs a backtest per pair.
+/// </summary>
+internal sealed class AutopilotSchedulerService(
+    IDispatcher dispatcher,
+    IOptions<AlpacaOptions> options,
+    TimeProvider clock,
+    ILogger<AutopilotSchedulerService> logger) : Microsoft.Extensions.Hosting.BackgroundService
+{
+    internal static readonly TimeSpan Interval = TimeSpan.FromMinutes(5);
+    internal static readonly TimeSpan RetryAfter = TimeSpan.FromMinutes(30);
+
+    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+    {
+        if (!options.Value.HasTradingCredentials)
+            return;
+
+        DateTimeOffset? lastQueued = null;
+        using var timer = new PeriodicTimer(Interval, clock);
+        try
+        {
+            while (await timer.WaitForNextTickAsync(stoppingToken))
+            {
+                if (lastQueued is { } last && clock.GetUtcNow() - last < RetryAfter)
+                    continue;
+
+                var queued = await dispatcher.SendAsync(new Application.Autopilot.QueueAutopilotCycleCommand(Scheduled: true), stoppingToken);
+                if (queued is { IsSuccess: true, Value.JobId: not null })
+                {
+                    lastQueued = clock.GetUtcNow();
+                    logger.LogInformation("Autopilot cycle queued for {Pairs} pairs", queued.Value.Pairs);
+                }
+                else if (queued.IsFailure)
+                {
+                    lastQueued = clock.GetUtcNow();
+                    logger.LogWarning("Autopilot cycle not queued: {Error}", queued.Error.Message);
+                }
+            }
+        }
+        catch (OperationCanceledException) when (stoppingToken.IsCancellationRequested)
+        {
+            // Shutting down.
+        }
+    }
+}

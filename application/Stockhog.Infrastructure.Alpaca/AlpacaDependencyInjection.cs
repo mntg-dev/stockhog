@@ -89,6 +89,7 @@ public static class AlpacaDependencyInjection
         services.AddHostedService<AlpacaTradeUpdatesStream>();
         services.AddHostedService<OrderReconciliationService>();
         services.AddHostedService<DailyLossGuardService>();
+        services.AddHostedService<AutopilotSchedulerService>();
         services.AddSingleton<ITradingEnvironment, AlpacaTradingEnvironment>();
 
         return services;

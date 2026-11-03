@@ -18,6 +18,37 @@ namespace Stockhog.Infrastructure.Persistence.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "10.0.13");
 
+            modelBuilder.Entity("Stockhog.Domain.Autopilot.Autopilot", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(32)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("LastAssignmentId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("LastCycleAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateOnly?>("LastCycleSession")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("MaxCapitalPercent")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("MaxConsecutiveLosses")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Mode")
+                        .IsRequired()
+                        .HasMaxLength(8)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Autopilot", (string)null);
+                });
+
             modelBuilder.Entity("Stockhog.Domain.Backtesting.BacktestRun", b =>
                 {
                     b.Property<string>("Id")
@@ -512,6 +543,69 @@ namespace Stockhog.Infrastructure.Persistence.Migrations
                     b.ToTable("AuditLog", (string)null);
                 });
 
+            modelBuilder.Entity("Stockhog.Infrastructure.Persistence.AutopilotDecisionRecord", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Action")
+                        .IsRequired()
+                        .HasMaxLength(8)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("AssignmentId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("Executed")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Mode")
+                        .IsRequired()
+                        .HasMaxLength(8)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("OrderId")
+                        .HasMaxLength(128)
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal?>("Price")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal?>("Profit")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("Quantity")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Reason")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal?>("StopPrice")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("StrategyName")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Symbol")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("Time")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Time");
+
+                    b.ToTable("AutopilotDecisions", (string)null);
+                });
+
             modelBuilder.Entity("Stockhog.Infrastructure.Persistence.EquityPeakRecord", b =>
                 {
                     b.Property<string>("AccountNumber")
@@ -636,6 +730,76 @@ namespace Stockhog.Infrastructure.Persistence.Migrations
                     b.HasIndex("CreatedAt");
 
                     b.ToTable("ScreenerRuns", (string)null);
+                });
+
+            modelBuilder.Entity("Stockhog.Domain.Autopilot.Autopilot", b =>
+                {
+                    b.OwnsMany("Stockhog.Domain.Autopilot.AutopilotAssignment", "Assignments", b1 =>
+                        {
+                            b1.Property<string>("AutopilotId")
+                                .HasMaxLength(32)
+                                .HasColumnType("TEXT");
+
+                            b1.Property<int>("Id")
+                                .HasColumnType("INTEGER");
+
+                            b1.Property<DateTime>("AddedAt")
+                                .HasColumnType("TEXT");
+
+                            b1.Property<int>("ClosedTrades")
+                                .HasColumnType("INTEGER");
+
+                            b1.Property<int>("ConsecutiveLosses")
+                                .HasColumnType("INTEGER");
+
+                            b1.Property<bool>("Enabled")
+                                .HasColumnType("INTEGER");
+
+                            b1.Property<DateTime?>("EntryAt")
+                                .HasColumnType("TEXT");
+
+                            b1.Property<decimal?>("EntryPrice")
+                                .HasColumnType("TEXT");
+
+                            b1.Property<string>("PausedReason")
+                                .HasMaxLength(500)
+                                .HasColumnType("TEXT");
+
+                            b1.Property<decimal>("Quantity")
+                                .HasColumnType("TEXT");
+
+                            b1.Property<decimal>("RealizedProfit")
+                                .HasColumnType("TEXT");
+
+                            b1.Property<decimal?>("Score")
+                                .HasColumnType("TEXT");
+
+                            b1.Property<decimal?>("StopPrice")
+                                .HasColumnType("TEXT");
+
+                            b1.Property<string>("Strategy")
+                                .IsRequired()
+                                .HasMaxLength(64)
+                                .HasColumnType("TEXT")
+                                .HasColumnName("StrategyName");
+
+                            b1.Property<string>("Symbol")
+                                .IsRequired()
+                                .HasMaxLength(10)
+                                .HasColumnType("TEXT");
+
+                            b1.Property<int>("WinningTrades")
+                                .HasColumnType("INTEGER");
+
+                            b1.HasKey("AutopilotId", "Id");
+
+                            b1.ToTable("AutopilotAssignments", (string)null);
+
+                            b1.WithOwner()
+                                .HasForeignKey("AutopilotId");
+                        });
+
+                    b.Navigation("Assignments");
                 });
 
             modelBuilder.Entity("Stockhog.Domain.Optimization.OptimizationRun", b =>

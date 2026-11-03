@@ -611,6 +611,60 @@ public sealed class PersistenceTests : IAsyncLifetime
         Assert.Null(await store.GetAsync("OTHER", ct));
     }
 
+    [Fact]
+    public async Task The_autopilot_round_trips_with_its_pairs_and_their_simulated_positions()
+    {
+        var ct = TestContext.Current.CancellationToken;
+        var rsi = StrategyName.Create("RsiPullbackStrategy");
+
+        await using (var db = CreateContext())
+        {
+            var autopilot = await new AutopilotRepository(db).GetOrCreateAsync(ct);
+            autopilot.SetMode(Domain.Autopilot.AutopilotMode.Shadow);
+            autopilot.Configure(2, 40m);
+            autopilot.Add(Symbol.Create("SPY"), rsi, 3.1m, T0);
+            autopilot.Add(Symbol.Create("AAPL"), rsi, null, T0);
+            await db.SaveChangesAsync(ct);
+        }
+
+        await using (var db = CreateContext())
+        {
+            var autopilot = await new AutopilotRepository(db).GetOrCreateAsync(ct);
+            autopilot.Enter(1, 10, 200m, 190m, T0.AddDays(1));
+            autopilot.Remove(2);
+            autopilot.Add(Symbol.Create("MSFT"), rsi, 1.5m, T0);
+            autopilot.CompleteCycle(new DateOnly(2026, 10, 16), T0.AddDays(1));
+            await db.SaveChangesAsync(ct);
+        }
+
+        await using var check = CreateContext();
+        var read = await new AutopilotRepository(check).GetOrCreateAsync(ct);
+        Assert.Equal((Domain.Autopilot.AutopilotMode.Shadow, 2, 40m, new DateOnly(2026, 10, 16)), (read.Mode, read.MaxConsecutiveLosses, read.MaxCapitalPercent, read.LastCycleSession));
+        Assert.Equal([(1, "SPY"), (3, "MSFT")], read.Assignments.OrderBy(a => a.Id).Select(a => (a.Id, a.Symbol.Value)));
+        var spy = read.Assignments.Single(a => a.Id == 1);
+        Assert.Equal((10m, 200m, 190m, T0.AddDays(1), 3.1m), (spy.Quantity, spy.EntryPrice, spy.StopPrice, spy.EntryAt, spy.Score));
+        Assert.Equal(1, await check.Autopilots.CountAsync(ct));
+    }
+
+    [Fact]
+    public async Task Autopilot_decisions_are_appended_and_listed_newest_first()
+    {
+        var ct = TestContext.Current.CancellationToken;
+        var services = new Microsoft.Extensions.DependencyInjection.ServiceCollection()
+            .AddDbContext<TradingDbContext>(options => options.UseSqlite(_connection))
+            .BuildServiceProvider();
+        var log = new AutopilotDecisionLog(services.GetRequiredService<Microsoft.Extensions.DependencyInjection.IServiceScopeFactory>());
+        var buy = new Domain.Autopilot.AutopilotDecision(T0, Domain.Autopilot.AutopilotMode.Shadow, 1, "SPY", "RsiPullbackStrategy",
+            Domain.Autopilot.AutopilotAction.Buy, 10, 200m, 190m, "Entry signal", false);
+        var sell = buy with { Time = T0.AddDays(3), Action = Domain.Autopilot.AutopilotAction.Sell, Price = 210m, StopPrice = null, Profit = 100m };
+
+        await log.AppendAsync([buy], ct);
+        await log.AppendAsync([sell], ct);
+
+        Assert.Equal([sell, buy], await log.ListAsync(10, ct));
+        Assert.Equal([sell], await log.ListAsync(1, ct));
+    }
+
     private static ScreenerResult ScreenerRun(DateTimeOffset createdAt, ScreenerCriteria criteria, params (string Symbol, decimal Close, decimal? Return6M)[] rows)
     {
         var symbols = rows.Select((r, i) => new ScreenedSymbol(i + 1, $"{r.Symbol} Inc.", "NASDAQ",

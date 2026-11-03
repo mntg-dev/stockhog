@@ -29,6 +29,10 @@ internal sealed class TradingDbContext(DbContextOptions<TradingDbContext> option
 
     public DbSet<EquityPeakRecord> EquityPeaks => Set<EquityPeakRecord>();
 
+    public DbSet<Domain.Autopilot.Autopilot> Autopilots => Set<Domain.Autopilot.Autopilot>();
+
+    public DbSet<AutopilotDecisionRecord> AutopilotDecisions => Set<AutopilotDecisionRecord>();
+
     public DbSet<ScreenerRunRecord> ScreenerRuns => Set<ScreenerRunRecord>();
 
     public DbSet<ScreenerRowRecord> ScreenerRows => Set<ScreenerRowRecord>();
