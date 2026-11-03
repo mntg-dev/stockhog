@@ -36,10 +36,22 @@ public partial class App : System.Windows.Application
     public const string DownloadedSymbolSuggestionsKey = "DownloadedSymbolSuggestions";
 
     private IHost? _host;
+    private SingleInstanceGuard? _singleInstance;
 
     protected override async void OnStartup(StartupEventArgs e)
     {
         base.OnStartup(e);
+
+        // Before anything opens the database or talks to the broker: a second copy would trade the same account twice.
+        _singleInstance = new SingleInstanceGuard();
+        if (!_singleInstance.IsFirstInstance)
+        {
+            if (!SingleInstanceGuard.ActivateOtherInstance())
+                MessageBox.Show("Stockhog is already running.", "Stockhog", MessageBoxButton.OK, MessageBoxImage.Information);
+            Shutdown(0);
+            return;
+        }
+
         RegisterGlobalExceptionHandlers();
 
         try
@@ -83,6 +95,7 @@ public partial class App : System.Windows.Application
         }
 
         Log.CloseAndFlush();
+        _singleInstance?.Dispose();
         base.OnExit(e);
     }
 
