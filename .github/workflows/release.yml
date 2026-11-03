@@ -65,7 +65,7 @@ jobs:
       # a signed installer, and SmartScreen shows the publisher instead of "unknown".
       - name: Azure login (signing)
         if: vars.SIGNING_ACCOUNT != ''
-        uses: azure/login@v2
+        uses: azure/login@v3
         with:
           client-id: ${{ vars.AZURE_CLIENT_ID }}
           tenant-id: ${{ vars.AZURE_TENANT_ID }}
@@ -139,7 +139,7 @@ jobs:
             --generate-notes
 
       - name: Azure login
-        uses: azure/login@v2
+        uses: azure/login@v3
         with:
           client-id: ${{ vars.AZURE_CLIENT_ID }}
           tenant-id: ${{ vars.AZURE_TENANT_ID }}
