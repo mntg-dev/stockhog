@@ -31,6 +31,18 @@ internal static class ExchangeCalendar
     public static DateOnly LastCompletedSession(TimeProvider clock) =>
         DateOnly.FromDateTime(TimeZoneInfo.ConvertTime(clock.GetUtcNow(), NewYork).DateTime).AddDays(-1);
 
+    /// <summary>The current date and time in New York.</summary>
+    public static DateTime NewYorkNow(TimeProvider clock) => TimeZoneInfo.ConvertTime(clock.GetUtcNow(), NewYork).DateTime;
+
+    /// <summary>The last weekday before <paramref name="day"/>: the session whose close today's decisions build on.</summary>
+    public static DateOnly PreviousSession(DateOnly day)
+    {
+        var previous = day.AddDays(-1);
+        while (previous.DayOfWeek is DayOfWeek.Saturday or DayOfWeek.Sunday)
+            previous = previous.AddDays(-1);
+        return previous;
+    }
+
     /// <summary>Midnight of the current New York day: the start of today's session for daily counts.</summary>
     public static DateTimeOffset StartOfToday(TimeProvider clock)
     {

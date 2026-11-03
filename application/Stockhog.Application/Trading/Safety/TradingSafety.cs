@@ -32,7 +32,8 @@ public enum AuditCategory
     Order,
     Risk,
     Session,
-    Proposal
+    Proposal,
+    Autopilot
 }
 
 /// <summary>One line of the trading audit trail.</summary>

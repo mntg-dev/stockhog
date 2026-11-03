@@ -1,9 +1,11 @@
 using System.Collections.Concurrent;
+using Stockhog.Application.Autopilot;
 using Stockhog.Application.Proposals;
 using Stockhog.Application.Scanning;
 using Stockhog.Application.Screening;
 using Stockhog.Application.Signals;
 using Stockhog.Application.Trading.Portfolio;
+using Stockhog.Domain.Autopilot;
 using Stockhog.Domain.Backtesting;
 using Stockhog.Domain.MarketData;
 using Stockhog.Domain.Proposals;
@@ -150,5 +152,27 @@ internal sealed class InMemoryEquityPeakStore : IEquityPeakStore
         }
 
         return Task.CompletedTask;
+    }
+}
+
+internal sealed class InMemoryAutopilotStore : IAutopilotRepository, IAutopilotDecisionLog
+{
+    public Domain.Autopilot.Autopilot Autopilot { get; } = Domain.Autopilot.Autopilot.Create();
+
+    public List<AutopilotDecision> Decisions { get; } = [];
+
+    public Task<Domain.Autopilot.Autopilot> GetOrCreateAsync(CancellationToken cancellationToken = default) => Task.FromResult(Autopilot);
+
+    public Task AppendAsync(IReadOnlyList<AutopilotDecision> decisions, CancellationToken cancellationToken = default)
+    {
+        lock (Decisions)
+            Decisions.AddRange(decisions);
+        return Task.CompletedTask;
+    }
+
+    public Task<IReadOnlyList<AutopilotDecision>> ListAsync(int take, CancellationToken cancellationToken = default)
+    {
+        lock (Decisions)
+            return Task.FromResult<IReadOnlyList<AutopilotDecision>>(Decisions.AsEnumerable().Reverse().Take(take).ToList());
     }
 }
