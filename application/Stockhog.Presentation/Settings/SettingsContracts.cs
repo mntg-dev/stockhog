@@ -5,11 +5,28 @@ namespace Stockhog.Presentation.Settings;
 /// </summary>
 public sealed record UserSettings
 {
-    public string Culture { get; init; } = "pl-PL";
+    /// <summary>Empty until the user picks one: the Windows language decides then.</summary>
+    public string Culture { get; init; } = "";
 
     public string DefaultSymbols { get; init; } = "AAPL";
 
     public decimal DefaultInitialCapital { get; init; } = 100_000m;
+
+    /// <summary>The version of <see cref="TermsOfUse"/> the user accepted; 0 until they do.</summary>
+    public int AcceptedTermsVersion { get; init; }
+}
+
+/// <summary>
+/// The risk notice every user accepts before the first start: not investment advice, trading can lose money, the user
+/// decides every order. Raising <see cref="CurrentVersion"/> asks everyone again.
+/// </summary>
+public static class TermsOfUse
+{
+    public const int CurrentVersion = 1;
+
+    public static bool NeedsAcceptance(UserSettings settings) => settings.AcceptedTermsVersion < CurrentVersion;
+
+    public static UserSettings Accept(UserSettings settings) => settings with { AcceptedTermsVersion = CurrentVersion };
 }
 
 /// <summary>Implemented by the host (a JSON file per user).</summary>

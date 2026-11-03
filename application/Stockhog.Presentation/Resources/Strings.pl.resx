@@ -883,4 +883,10 @@ Przełączyć na tryb paper?</value></data>
   <data name="Status_BrokerKeysFailed" xml:space="preserve"><value>Klucze nie działają. {0}</value></data>
   <data name="Status_BrokerKeysSaved" xml:space="preserve"><value>Klucze zapisane. Uruchom Stockhog ponownie, aby ich użyć.</value></data>
   <data name="Status_BrokerKeysRemoved" xml:space="preserve"><value>Zapisane klucze usunięte. Uruchom Stockhog ponownie, aby przestać ich używać.</value></data>
+  <data name="Terms_Title" xml:space="preserve"><value>Zanim zaczniesz</value></data>
+  <data name="Terms_Text" xml:space="preserve"><value>Stockhog to program do badania strategii i handlu na Twoim własnym koncie u brokera. Nie jest doradztwem inwestycyjnym: backtesty, sygnały i oceny opisują przeszłość i nie obiecują przyszłych wyników.
+
+Handel wiąże się z ryzykiem utraty pieniędzy, także większej niż się spodziewasz, gdy ceny gwałtownie się zmieniają. To Ty decydujesz o każdym zleceniu i odpowiadasz za nie, również za zlecenia, które autopilot składa za Ciebie po włączeniu.
+
+Zacznij od konta paper. Czy rozumiesz i akceptujesz te zasady?</value></data>
 </root>

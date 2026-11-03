@@ -5,6 +5,7 @@ using Stockhog.Infrastructure;
 using Stockhog.Infrastructure.Alpaca;
 using Stockhog.Infrastructure.Anthropic;
 using Stockhog.Infrastructure.Lean;
+using System.Globalization;
 using System.IO;
 using Stockhog.App.Hosting;
 using Stockhog.Infrastructure.Configuration;
@@ -58,7 +59,28 @@ public partial class App : System.Windows.Application
         {
             // Data of the app's former name, EmTrading: copied before anything (logging, settings, the database) opens it.
             var copiedFolder = LegacyDataMigration.CopyAppDataFolder(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData));
-            _host = CreateHost(e.Args);
+
+            // User preferences are needed before the first window: the language applies to everything created afterwards.
+            var settingsStore = new JsonUserSettingsStore(JsonUserSettingsStore.DefaultPath);
+            var userSettings = settingsStore.Load();
+            Loc.Instance.SetCulture(Loc.Choose(userSettings.Culture, CultureInfo.CurrentUICulture));
+
+            // Nothing starts, the broker included, until the risk notice is accepted.
+            if (TermsOfUse.NeedsAcceptance(userSettings))
+            {
+                var accepted = MessageBox.Show(Loc.Get("Terms_Text"), Loc.Get("Terms_Title"), MessageBoxButton.YesNo, MessageBoxImage.Information,
+                    MessageBoxResult.No) == MessageBoxResult.Yes;
+                if (!accepted)
+                {
+                    Shutdown(0);
+                    return;
+                }
+
+                userSettings = TermsOfUse.Accept(userSettings);
+                settingsStore.Save(userSettings);
+            }
+
+            _host = CreateHost(e.Args, settingsStore, userSettings);
             var copiedDatabase = LegacyDataMigration.CopyDatabase(_host.Services.GetRequiredService<IOptions<StorageOptions>>().Value.DatabaseFile);
             if (copiedFolder || copiedDatabase)
                 Logger?.LogInformation("Copied EmTrading data: app data folder {Folder}, database {Database}", copiedFolder, copiedDatabase);
@@ -99,7 +121,7 @@ public partial class App : System.Windows.Application
         base.OnExit(e);
     }
 
-    private static IHost CreateHost(string[] args)
+    private static IHost CreateHost(string[] args, IUserSettingsStore settingsStore, UserSettings userSettings)
     {
         var settings = new HostApplicationBuilderSettings
         {
@@ -114,11 +136,7 @@ public partial class App : System.Windows.Application
 
         var builder = Host.CreateApplicationBuilder(settings);
 
-        // User preferences are needed before the first window: the language applies to everything created afterwards.
-        var settingsStore = new JsonUserSettingsStore(JsonUserSettingsStore.DefaultPath);
-        var userSettings = settingsStore.Load();
-        Loc.Instance.SetCulture(Loc.SupportedCultures.FirstOrDefault(c => c.Name == userSettings.Culture) ?? Loc.Polish);
-        builder.Services.AddSingleton<IUserSettingsStore>(settingsStore);
+        builder.Services.AddSingleton(settingsStore);
         builder.Services.AddSingleton(userSettings);
         builder.Services.AddSingleton(CreateEnvironmentInfo);
         builder.Services.AddSingleton<IUserConfirmation, MessageBoxConfirmation>();

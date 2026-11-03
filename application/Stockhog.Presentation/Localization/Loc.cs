@@ -16,6 +16,13 @@ public sealed class Loc : INotifyPropertyChanged
     public static readonly CultureInfo English = CultureInfo.GetCultureInfo("en-US");
     public static readonly IReadOnlyList<CultureInfo> SupportedCultures = [Polish, English];
 
+    /// <summary>The language a new user starts with: Polish on a Polish Windows, English everywhere else.</summary>
+    public static CultureInfo ForSystem(CultureInfo uiCulture) => uiCulture.TwoLetterISOLanguageName == "pl" ? Polish : English;
+
+    /// <summary>The saved language, or the one that suits Windows when none is saved.</summary>
+    public static CultureInfo Choose(string? saved, CultureInfo uiCulture) =>
+        SupportedCultures.FirstOrDefault(c => c.Name == saved) ?? ForSystem(uiCulture);
+
     private static readonly ResourceManager Resources = new("Stockhog.Presentation.Resources.Strings", typeof(Loc).Assembly);
 
     private CultureInfo _culture = Polish;

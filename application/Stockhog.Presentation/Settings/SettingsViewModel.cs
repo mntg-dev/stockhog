@@ -33,7 +33,7 @@ public sealed partial class SettingsViewModel : PageViewModel
         _dispatcher = dispatcher;
         _settings = settings;
         Environment = environment;
-        _selectedCulture = Loc.SupportedCultures.FirstOrDefault(c => c.Name == settings.Culture) ?? Loc.Polish;
+        _selectedCulture = Loc.Instance.Culture;
         _defaultSymbols = settings.DefaultSymbols;
         _defaultInitialCapital = settings.DefaultInitialCapital;
     }

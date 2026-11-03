@@ -883,4 +883,10 @@ Switch to paper mode?</value></data>
   <data name="Status_BrokerKeysFailed" xml:space="preserve"><value>The keys do not work. {0}</value></data>
   <data name="Status_BrokerKeysSaved" xml:space="preserve"><value>Keys saved. Restart Stockhog to use them.</value></data>
   <data name="Status_BrokerKeysRemoved" xml:space="preserve"><value>Saved keys removed. Restart Stockhog to stop using them.</value></data>
+  <data name="Terms_Title" xml:space="preserve"><value>Before you start</value></data>
+  <data name="Terms_Text" xml:space="preserve"><value>Stockhog is software for researching strategies and trading on your own broker account. It is not investment advice: backtests, signals and scores describe the past and do not promise future results.
+
+Trading involves the risk of losing money, including more than you expect when prices gap. You decide on every order and are responsible for it, including the orders the autopilot places for you after you switch it on.
+
+Start with the paper account. Do you understand and accept this?</value></data>
 </root>
