@@ -24,8 +24,9 @@ jobs:
       - name: Restore
         run: dotnet restore StockhogSolution.slnx
 
+      # Known high or critical vulnerabilities in any package, direct or transitive, fail the build.
       - name: Build
-        run: dotnet build StockhogSolution.slnx --configuration Release --no-restore
+        run: dotnet build StockhogSolution.slnx --configuration Release --no-restore -warnaserror:NU1903,NU1904
 
       - name: Test with coverage
         run: dotnet test --solution StockhogSolution.slnx --configuration Release --no-build --coverage --coverage-output-format cobertura --results-directory TestResults

@@ -4,5 +4,12 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+    <!-- Audit transitive packages too; CI turns high and critical findings (NU1903, NU1904) into errors. -->
+    <NuGetAuditMode>all</NuGetAuditMode>
   </PropertyGroup>
+  <ItemGroup>
+    <!-- DotNetZip (via Lean, no fixed version): path traversal when extracting archives. Lean only opens the zip files
+         the app writes itself from broker data, never archives from elsewhere. See SECURITY.md. -->
+    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-xhg6-9j5j-w4vf" />
+  </ItemGroup>
 </Project>

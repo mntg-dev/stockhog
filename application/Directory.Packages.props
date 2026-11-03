@@ -1,4 +1,8 @@
 <Project>
+  <PropertyGroup>
+    <!-- Versions below also apply to packages that only come in transitively, e.g. through Lean. -->
+    <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
+  </PropertyGroup>
   <ItemGroup Label="Microsoft.Extensions">
     <PackageVersion Include="Microsoft.Extensions.Caching.Abstractions" Version="10.0.13" />
     <PackageVersion Include="Microsoft.Extensions.Caching.Hybrid" Version="10.11.0" />
@@ -25,6 +29,15 @@
     <PackageVersion Include="QuantConnect.Lean.Engine" Version="2.5.17999" />
     <PackageVersion Include="Anthropic" Version="13.1.0" />
     <PackageVersion Include="System.Security.Cryptography.ProtectedData" Version="10.0.13" />
+  </ItemGroup>
+  <ItemGroup Label="Security pins">
+    <!-- Patched versions of vulnerable packages that Lean pulls in (System.Drawing.Common via DotNetZip, the rest via
+         NetMQ). ServiceModel stays on 4.x, the API NetMQ was built against. -->
+    <PackageVersion Include="System.Drawing.Common" Version="10.0.13" />
+    <PackageVersion Include="System.Net.Http.WinHttpHandler" Version="10.0.13" />
+    <PackageVersion Include="System.Private.ServiceModel" Version="4.10.3" />
+    <PackageVersion Include="System.ServiceModel.Primitives" Version="4.10.3" />
+    <PackageVersion Include="System.Security.Cryptography.Pkcs" Version="10.0.13" />
   </ItemGroup>
   <ItemGroup Label="Logging">
     <PackageVersion Include="Serilog.Extensions.Hosting" Version="10.0.0" />

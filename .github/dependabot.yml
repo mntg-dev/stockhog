@@ -1,0 +1,24 @@
+version: 2
+updates:
+  # Desktop app: central versions in application/Directory.Packages.props, including the security pins.
+  - package-ecosystem: nuget
+    directory: /application
+    schedule:
+      interval: weekly
+    groups:
+      microsoft-extensions:
+        patterns: ["Microsoft.Extensions.*", "Microsoft.EntityFrameworkCore.*"]
+      quantconnect:
+        patterns: ["QuantConnect.*"]
+    open-pull-requests-limit: 5
+
+  - package-ecosystem: npm
+    directory: /landing-page
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
