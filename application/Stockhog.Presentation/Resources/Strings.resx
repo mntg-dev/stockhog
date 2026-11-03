@@ -798,7 +798,7 @@ If the stop is hit, the loss is about {4:N2} USD ({5:N2}% of equity).</value></d
   <data name="Status_ProposalApproved" xml:space="preserve"><value>Buy order for {0} {1} placed ({2}).</value></data>
   <data name="Status_ProposalRejected" xml:space="preserve"><value>{0} proposal rejected.</value></data>
   <data name="Trading_PortfolioRisk" xml:space="preserve"><value>Peak {0:N2} · drawdown {1:N1}% of {2:N0}% · {3}/{4} positions · {5}/{6} orders today</value></data>
-  <data name="Trading_PortfolioRiskHint" xml:space="preserve"><value>Portfolio limits (Trading:Risk in appsettings): new positions are refused when equity falls this far below its highest point, when this many symbols are held, or after this many orders today. Hitting the drawdown limit also switches trading off.</value></data>
+  <data name="Trading_PortfolioRiskHint" xml:space="preserve"><value>Portfolio limits (edit them on the Settings page): new positions are refused when equity falls this far below its highest point, when this many symbols are held, or after this many orders today. Hitting the drawdown limit also switches trading off.</value></data>
   <data name="Nav_Autopilot" xml:space="preserve"><value>Autopilot</value></data>
   <data name="Autopilot_Title" xml:space="preserve"><value>Autopilot</value></data>
   <data name="Autopilot_Intro" xml:space="preserve"><value>Follows the pairs you add from a scan and decides once per session (from 9:35 New York time) what to buy and sell: sized by risk, within the risk limits and the limits below. In shadow mode it only records its decisions and simulates the positions at the prices it decided at; no order is sent. In paper mode it places the orders on the paper account, each buy with a stop loss held by the broker. Live trading is not available yet.</value></data>
@@ -922,4 +922,18 @@ Start with the paper account. Do you understand and accept this?</value></data>
   <data name="Home_ProposalsPending" xml:space="preserve"><value>{0} proposals wait for your decision.</value></data>
   <data name="Home_ProposalsNone" xml:space="preserve"><value>No proposals waiting.</value></data>
   <data name="Home_AccountSummary" xml:space="preserve"><value>Equity {0:N2} USD · drawdown {1:N1}% of {2:N0}% · {3} of {4} positions</value></data>
+  <data name="Settings_Limits" xml:space="preserve"><value>Risk limits</value></data>
+  <data name="Settings_LimitsHint" xml:space="preserve"><value>Every order, yours and the autopilot's, is checked against these limits. Changes apply at once and are kept for the next start. Switch trading off and on with the kill switch on the Paper trading page.</value></data>
+  <data name="Settings_MaxOrderNotional" xml:space="preserve"><value>Largest order (USD)</value></data>
+  <data name="Settings_MaxPositionNotional" xml:space="preserve"><value>Largest position in one symbol (USD)</value></data>
+  <data name="Settings_MaxPositionPercent" xml:space="preserve"><value>Largest position (% of equity)</value></data>
+  <data name="Settings_MaxDailyLoss" xml:space="preserve"><value>Daily loss that stops trading (USD)</value></data>
+  <data name="Settings_MaxDrawdownPercent" xml:space="preserve"><value>Drawdown from the equity high that stops trading (%)</value></data>
+  <data name="Settings_MaxOpenPositions" xml:space="preserve"><value>Symbols held at most</value></data>
+  <data name="Settings_MaxOpenOrders" xml:space="preserve"><value>Open orders at most</value></data>
+  <data name="Settings_MaxOrdersPerDay" xml:space="preserve"><value>Orders per day at most</value></data>
+  <data name="Settings_FlattenOnDrawdown" xml:space="preserve"><value>Close every position when the drawdown limit is hit</value></data>
+  <data name="Settings_FlattenOnDrawdownHint" xml:space="preserve"><value>Off: hitting the limit only stops new positions. On: it also sells everything held at market.</value></data>
+  <data name="Settings_SaveLimits" xml:space="preserve"><value>Save limits</value></data>
+  <data name="Status_LimitsSaved" xml:space="preserve"><value>Risk limits saved; they apply now and after a restart.</value></data>
 </root>

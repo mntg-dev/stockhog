@@ -5,6 +5,8 @@ using CommunityToolkit.Mvvm.Input;
 using Stockhog.Application.Abstractions.Messaging;
 using Stockhog.Application.Assistant;
 using Stockhog.Application.Brokers;
+using Stockhog.Application.Trading;
+using Stockhog.Domain.Trading;
 using Stockhog.Presentation.Localization;
 using Stockhog.Presentation.Shell;
 using Microsoft.Extensions.Logging;
@@ -85,6 +87,65 @@ public sealed partial class SettingsViewModel : PageViewModel
     {
         await ShowAssistantStatusAsync(_dispatcher.SendAsync(new GetAssistantStatusQuery()));
         await ShowBrokerKeyStatusAsync(_dispatcher.SendAsync(new GetBrokerKeyStatusQuery()));
+        if ((await _dispatcher.SendAsync(new GetRiskLimitsQuery())) is { IsSuccess: true } limits)
+            ShowLimits(limits.Value);
+    }
+
+    // Risk limits: every order is checked against them. Saved for the next start too; the kill switch is on the trading page.
+    [ObservableProperty] private decimal _maxOrderNotional;
+    [ObservableProperty] private decimal _maxPositionNotional;
+    [ObservableProperty] private decimal _maxDailyLoss;
+    [ObservableProperty] private int _maxOpenOrders;
+    [ObservableProperty] private int _maxOpenPositions;
+    [ObservableProperty] private decimal _maxPositionPercent;
+    [ObservableProperty] private decimal _maxDrawdownPercent;
+    [ObservableProperty] private int _maxOrdersPerDay;
+    [ObservableProperty] private bool _flattenOnDrawdown;
+
+    private void ShowLimits(RiskLimits limits)
+    {
+        MaxOrderNotional = limits.MaxOrderNotional;
+        MaxPositionNotional = limits.MaxPositionNotional;
+        MaxDailyLoss = limits.MaxDailyLoss;
+        MaxOpenOrders = limits.MaxOpenOrders;
+        MaxOpenPositions = limits.MaxOpenPositions;
+        MaxPositionPercent = limits.MaxPositionPercent;
+        MaxDrawdownPercent = limits.MaxDrawdownPercent;
+        MaxOrdersPerDay = limits.MaxOrdersPerDay;
+        FlattenOnDrawdown = limits.FlattenOnDrawdown;
+    }
+
+    /// <summary>Applies at once and is kept for the next start; the kill switch keeps its current state.</summary>
+    [RelayCommand]
+    private async Task SaveLimitsAsync()
+    {
+        var current = await _dispatcher.SendAsync(new GetRiskLimitsQuery());
+        if (current.IsFailure)
+        {
+            Status.Show(current.Error);
+            return;
+        }
+
+        var saved = await _dispatcher.SendAsync(new UpdateRiskLimitsCommand(current.Value with
+        {
+            MaxOrderNotional = MaxOrderNotional,
+            MaxPositionNotional = MaxPositionNotional,
+            MaxDailyLoss = MaxDailyLoss,
+            MaxOpenOrders = MaxOpenOrders,
+            MaxOpenPositions = MaxOpenPositions,
+            MaxPositionPercent = MaxPositionPercent,
+            MaxDrawdownPercent = MaxDrawdownPercent,
+            MaxOrdersPerDay = MaxOrdersPerDay,
+            FlattenOnDrawdown = FlattenOnDrawdown
+        }));
+        if (saved.IsFailure)
+        {
+            Status.Show(saved.Error);
+            return;
+        }
+
+        ShowLimits(saved.Value);
+        Status.Show(Loc.Get("Status_LimitsSaved"));
     }
 
     /// <summary>Where the Alpaca keys in use come from, and whether a restart is needed for new ones.</summary>

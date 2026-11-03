@@ -98,7 +98,8 @@ public static class InfrastructureDependencyInjection
             .ValidateDataAnnotations()
             .ValidateOnStart();
 
-        services.AddSingleton<IRiskLimitsStore, RiskLimitsStore>();
+        services.AddSingleton<IRiskLimitsStore>(sp => new RiskLimitsStore(
+            sp.GetRequiredService<IOptions<RiskOptions>>(), sp.GetRequiredService<Microsoft.Extensions.Logging.ILogger<RiskLimitsStore>>()));
         services.AddSingleton<IAuditLog, AuditLog>();
         services.AddSingleton<IEquityPeakStore, EquityPeakStore>();
         services.AddSingleton<IAutopilotDecisionLog, AutopilotDecisionLog>();

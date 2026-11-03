@@ -1,8 +1,10 @@
 using System.Collections.Concurrent;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json;
 using Stockhog.Application.Trading;
 using Stockhog.Domain.MarketData;
 using Stockhog.Domain.Trading;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 namespace Stockhog.Infrastructure.Trading;
@@ -45,14 +47,76 @@ public sealed class RiskOptions
         MaxOpenPositions, MaxPositionPercent, MaxDrawdownPercent, MaxOrdersPerDay, FlattenOnDrawdown);
 }
 
-/// <summary>The limits are replaced as a whole (an immutable record), so readers never see a half-updated set.</summary>
-internal sealed class RiskLimitsStore(IOptions<RiskOptions> options) : IRiskLimitsStore
+/// <summary>
+/// The limits are replaced as a whole (an immutable record), so readers never see a half-updated set. Changes made in
+/// the app are saved to a file and win over configuration from the next start, the kill switch included: trading
+/// that was switched off, by the user or by the drawdown guard, stays off after a restart.
+/// </summary>
+internal sealed class RiskLimitsStore : IRiskLimitsStore
 {
-    private RiskLimits _current = options.Value.ToLimits();
+    public static string DefaultPath => Path.Combine(
+        Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Stockhog", "risk-limits.json");
+
+    private static readonly JsonSerializerOptions Json = new(JsonSerializerDefaults.Web) { WriteIndented = true };
+
+    private readonly string _path;
+    private readonly ILogger<RiskLimitsStore> _logger;
+    private readonly Lock _write = new();
+    private RiskLimits _current;
+
+    public RiskLimitsStore(IOptions<RiskOptions> options, ILogger<RiskLimitsStore> logger, string? path = null)
+    {
+        _path = path ?? DefaultPath;
+        _logger = logger;
+        _current = Load() ?? options.Value.ToLimits();
+    }
 
     public RiskLimits Current => Volatile.Read(ref _current);
 
-    public void Update(RiskLimits limits) => Volatile.Write(ref _current, limits);
+    public void Update(RiskLimits limits)
+    {
+        Volatile.Write(ref _current, limits);
+        lock (_write)
+        {
+            try
+            {
+                Directory.CreateDirectory(Path.GetDirectoryName(_path)!);
+                File.WriteAllText(_path, JsonSerializer.Serialize(limits, Json));
+            }
+            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+            {
+                // The new limits still apply now; only keeping them for the next start failed.
+                _logger.LogError(ex, "Could not save the risk limits to {Path}", _path);
+            }
+        }
+    }
+
+    /// <summary>Saved limits that fail the same checks as the options are ignored, and configuration applies.</summary>
+    private RiskLimits? Load()
+    {
+        if (!File.Exists(_path))
+            return null;
+
+        try
+        {
+            var saved = JsonSerializer.Deserialize<RiskLimits>(File.ReadAllText(_path), Json);
+            if (saved is not null && IsUsable(saved))
+                return saved;
+            _logger.LogWarning("Ignoring the saved risk limits in {Path}: they are out of range", _path);
+        }
+        catch (Exception ex) when (ex is IOException or JsonException or UnauthorizedAccessException)
+        {
+            _logger.LogWarning(ex, "Ignoring the saved risk limits in {Path}", _path);
+        }
+
+        return null;
+    }
+
+    private static bool IsUsable(RiskLimits l) =>
+        l.MaxOrderNotional > 0 && l.MaxPositionNotional > 0 && l.MaxDailyLoss > 0
+        && l.MaxOpenOrders is >= 1 and <= 100 && l.MaxOpenPositions is >= 1 and <= 200
+        && l.MaxPositionPercent is >= 1 and <= 100 && l.MaxDrawdownPercent is >= 1 and <= 100
+        && l.MaxOrdersPerDay is >= 1 and <= 1000;
 }
 
 /// <summary>

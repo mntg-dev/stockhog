@@ -75,6 +75,44 @@
 
             <Border Style="{StaticResource Card}" Margin="0,0,0,12">
                 <StackPanel>
+                    <TextBlock Text="{loc:Tr Settings_Limits}" Style="{StaticResource SectionTitle}" />
+                    <TextBlock Text="{loc:Tr Settings_LimitsHint}" Foreground="Gray" FontSize="11" TextWrapping="Wrap" Margin="0,0,0,6" />
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="16" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0">
+                            <TextBlock Text="{loc:Tr Settings_MaxOrderNotional}" Style="{StaticResource FieldLabel}" />
+                            <TextBox Text="{Binding MaxOrderNotional, UpdateSourceTrigger=PropertyChanged}" />
+                            <TextBlock Text="{loc:Tr Settings_MaxPositionNotional}" Style="{StaticResource FieldLabel}" />
+                            <TextBox Text="{Binding MaxPositionNotional, UpdateSourceTrigger=PropertyChanged}" />
+                            <TextBlock Text="{loc:Tr Settings_MaxPositionPercent}" Style="{StaticResource FieldLabel}" />
+                            <TextBox Text="{Binding MaxPositionPercent, UpdateSourceTrigger=PropertyChanged}" />
+                            <TextBlock Text="{loc:Tr Settings_MaxDailyLoss}" Style="{StaticResource FieldLabel}" />
+                            <TextBox Text="{Binding MaxDailyLoss, UpdateSourceTrigger=PropertyChanged}" />
+                            <TextBlock Text="{loc:Tr Settings_MaxDrawdownPercent}" Style="{StaticResource FieldLabel}" />
+                            <TextBox Text="{Binding MaxDrawdownPercent, UpdateSourceTrigger=PropertyChanged}" />
+                        </StackPanel>
+                        <StackPanel Grid.Column="2">
+                            <TextBlock Text="{loc:Tr Settings_MaxOpenPositions}" Style="{StaticResource FieldLabel}" />
+                            <TextBox Text="{Binding MaxOpenPositions, UpdateSourceTrigger=PropertyChanged}" />
+                            <TextBlock Text="{loc:Tr Settings_MaxOpenOrders}" Style="{StaticResource FieldLabel}" />
+                            <TextBox Text="{Binding MaxOpenOrders, UpdateSourceTrigger=PropertyChanged}" />
+                            <TextBlock Text="{loc:Tr Settings_MaxOrdersPerDay}" Style="{StaticResource FieldLabel}" />
+                            <TextBox Text="{Binding MaxOrdersPerDay, UpdateSourceTrigger=PropertyChanged}" />
+                            <CheckBox Content="{loc:Tr Settings_FlattenOnDrawdown}" IsChecked="{Binding FlattenOnDrawdown}" Margin="0,14,0,0"
+                                      ToolTip="{loc:Tr Settings_FlattenOnDrawdownHint}" />
+                        </StackPanel>
+                    </Grid>
+                    <Button Content="{loc:Tr Settings_SaveLimits}" Command="{Binding SaveLimitsCommand}" Style="{StaticResource PrimaryButton}"
+                            HorizontalAlignment="Left" Margin="0,12,0,0" />
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource Card}" Margin="0,0,0,12">
+                <StackPanel>
                     <TextBlock Text="{loc:Tr Settings_Assistant}" Style="{StaticResource SectionTitle}" />
                     <TextBlock Text="{Binding AssistantStatus}" Margin="0,0,0,4" />
                     <TextBlock Text="{loc:Tr Settings_ApiKey}" Style="{StaticResource FieldLabel}" />
