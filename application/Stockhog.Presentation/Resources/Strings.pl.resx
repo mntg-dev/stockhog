@@ -893,4 +893,33 @@ Zacznij od konta paper. Czy rozumiesz i akceptujesz te zasady?</value></data>
   <data name="Update_Download" xml:space="preserve"><value>Pobierz</value></data>
   <data name="Update_Dismiss" xml:space="preserve"><value>Później</value></data>
   <data name="Settings_Version" xml:space="preserve"><value>Wersja</value></data>
+  <data name="Nav_Home" xml:space="preserve"><value>Start</value></data>
+  <data name="NavGroup_Research" xml:space="preserve"><value>BADANIA</value></data>
+  <data name="NavGroup_Strategies" xml:space="preserve"><value>STRATEGIE</value></data>
+  <data name="NavGroup_Trading" xml:space="preserve"><value>HANDEL</value></data>
+  <data name="NavGroup_More" xml:space="preserve"><value>WIĘCEJ</value></data>
+  <data name="Home_Title" xml:space="preserve"><value>Witaj w Stockhog</value></data>
+  <data name="Home_Intro" xml:space="preserve"><value>Od danych rynkowych do strategii, której ufasz, a potem do transakcji na koncie paper: poniższe kroki prowadzą Cię przez całą drogę.</value></data>
+  <data name="Home_GettingStarted" xml:space="preserve"><value>Pierwsze kroki</value></data>
+  <data name="Home_StepsDone" xml:space="preserve"><value>Ukończono {0} z {1}</value></data>
+  <data name="Home_StepKeys" xml:space="preserve"><value>Połącz konto Alpaca</value></data>
+  <data name="Home_StepKeysHint" xml:space="preserve"><value>Darmowe klucze konta paper odblokowują dane rynkowe, skaner rynku i handel na koncie paper.</value></data>
+  <data name="Home_StepData" xml:space="preserve"><value>Pobierz dane rynkowe</value></data>
+  <data name="Home_StepDataHint" xml:space="preserve"><value>Słupki minutowe dla kilku znanych spółek, np. SPY i AAPL, z ostatnich dwóch lat.</value></data>
+  <data name="Home_StepBacktest" xml:space="preserve"><value>Uruchom pierwszy backtest</value></data>
+  <data name="Home_StepBacktestHint" xml:space="preserve"><value>Zobacz, jak strategia handlowałaby w przeszłości: krzywa kapitału i obsunięcia.</value></data>
+  <data name="Home_StepScan" xml:space="preserve"><value>Przeskanuj strategie na wielu spółkach</value></data>
+  <data name="Home_StepScanHint" xml:space="preserve"><value>Przetestuj każdą strategię na wielu spółkach i zostaw pary, które się sprawdzają.</value></data>
+  <data name="Home_StepAutopilot" xml:space="preserve"><value>Pozwól autopilotowi śledzić najlepsze pary</value></data>
+  <data name="Home_StepAutopilotHint" xml:space="preserve"><value>Zacznij od trybu cienia: zapisuje, co by zrobił, bez składania zleceń.</value></data>
+  <data name="Home_Open" xml:space="preserve"><value>Otwórz</value></data>
+  <data name="Home_Account" xml:space="preserve"><value>Konto</value></data>
+  <data name="Home_AccountNoKeys" xml:space="preserve"><value>Brak połączenia: dodaj klucze Alpaca na stronie Ustawienia.</value></data>
+  <data name="Home_AccountUnavailable" xml:space="preserve"><value>Nie udało się odczytać konta: {0}</value></data>
+  <data name="Home_AutopilotTitle" xml:space="preserve"><value>Autopilot</value></data>
+  <data name="Home_Autopilot" xml:space="preserve"><value>{0} · śledzone pary: {1}, pozycje: {2} · ostatni cykl {3}</value></data>
+  <data name="Home_ProposalsTitle" xml:space="preserve"><value>Propozycje</value></data>
+  <data name="Home_ProposalsPending" xml:space="preserve"><value>Propozycje czekające na Twoją decyzję: {0}.</value></data>
+  <data name="Home_ProposalsNone" xml:space="preserve"><value>Brak oczekujących propozycji.</value></data>
+  <data name="Home_AccountSummary" xml:space="preserve"><value>Kapitał {0:N2} USD · obsunięcie {1:N1}% z {2:N0}% · pozycje: {3} z {4}</value></data>
 </root>

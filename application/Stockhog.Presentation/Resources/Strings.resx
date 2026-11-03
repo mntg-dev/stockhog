@@ -893,4 +893,33 @@ Start with the paper account. Do you understand and accept this?</value></data>
   <data name="Update_Download" xml:space="preserve"><value>Download</value></data>
   <data name="Update_Dismiss" xml:space="preserve"><value>Later</value></data>
   <data name="Settings_Version" xml:space="preserve"><value>Version</value></data>
+  <data name="Nav_Home" xml:space="preserve"><value>Home</value></data>
+  <data name="NavGroup_Research" xml:space="preserve"><value>RESEARCH</value></data>
+  <data name="NavGroup_Strategies" xml:space="preserve"><value>STRATEGIES</value></data>
+  <data name="NavGroup_Trading" xml:space="preserve"><value>TRADING</value></data>
+  <data name="NavGroup_More" xml:space="preserve"><value>MORE</value></data>
+  <data name="Home_Title" xml:space="preserve"><value>Welcome to Stockhog</value></data>
+  <data name="Home_Intro" xml:space="preserve"><value>From market data to a strategy you trust, then to trades on your paper account: the steps below take you there.</value></data>
+  <data name="Home_GettingStarted" xml:space="preserve"><value>Getting started</value></data>
+  <data name="Home_StepsDone" xml:space="preserve"><value>{0} of {1} done</value></data>
+  <data name="Home_StepKeys" xml:space="preserve"><value>Connect your Alpaca account</value></data>
+  <data name="Home_StepKeysHint" xml:space="preserve"><value>Free paper account keys unlock market data, the screener and paper trading.</value></data>
+  <data name="Home_StepData" xml:space="preserve"><value>Download market data</value></data>
+  <data name="Home_StepDataHint" xml:space="preserve"><value>Minute bars for a few symbols you know, e.g. SPY and AAPL, for the last two years.</value></data>
+  <data name="Home_StepBacktest" xml:space="preserve"><value>Run your first backtest</value></data>
+  <data name="Home_StepBacktestHint" xml:space="preserve"><value>See how a strategy would have traded, with its equity curve and drawdowns.</value></data>
+  <data name="Home_StepScan" xml:space="preserve"><value>Scan strategies across symbols</value></data>
+  <data name="Home_StepScanHint" xml:space="preserve"><value>Test every strategy on many symbols and keep the pairs that hold up.</value></data>
+  <data name="Home_StepAutopilot" xml:space="preserve"><value>Let the autopilot follow the best pairs</value></data>
+  <data name="Home_StepAutopilotHint" xml:space="preserve"><value>Start in shadow mode: it records what it would do without placing orders.</value></data>
+  <data name="Home_Open" xml:space="preserve"><value>Open</value></data>
+  <data name="Home_Account" xml:space="preserve"><value>Account</value></data>
+  <data name="Home_AccountNoKeys" xml:space="preserve"><value>Not connected: add your Alpaca keys on the Settings page.</value></data>
+  <data name="Home_AccountUnavailable" xml:space="preserve"><value>The account could not be read: {0}</value></data>
+  <data name="Home_AutopilotTitle" xml:space="preserve"><value>Autopilot</value></data>
+  <data name="Home_Autopilot" xml:space="preserve"><value>{0} · {1} pairs followed, {2} positions · last cycle {3}</value></data>
+  <data name="Home_ProposalsTitle" xml:space="preserve"><value>Proposals</value></data>
+  <data name="Home_ProposalsPending" xml:space="preserve"><value>{0} proposals wait for your decision.</value></data>
+  <data name="Home_ProposalsNone" xml:space="preserve"><value>No proposals waiting.</value></data>
+  <data name="Home_AccountSummary" xml:space="preserve"><value>Equity {0:N2} USD · drawdown {1:N1}% of {2:N0}% · {3} of {4} positions</value></data>
 </root>

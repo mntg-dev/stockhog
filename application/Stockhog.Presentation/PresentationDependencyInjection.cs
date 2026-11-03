@@ -6,6 +6,7 @@ using Stockhog.Presentation.Autopilot;
 using Stockhog.Presentation.Backtesting;
 using Stockhog.Presentation.Compare;
 using Stockhog.Presentation.Guide;
+using Stockhog.Presentation.Home;
 using Stockhog.Presentation.Instruments;
 using Stockhog.Presentation.Jobs;
 using Stockhog.Presentation.Logging;
@@ -44,6 +45,7 @@ public static class PresentationDependencyInjection
         services.AddSingleton<ScannerViewModel>();
         services.AddSingleton<ProposalsViewModel>();
         services.AddSingleton<AutopilotViewModel>();
+        services.AddSingleton<HomeViewModel>();
         services.AddSingleton<UpdateBannerViewModel>();
         services.AddSingleton<AssistantViewModel>();
         services.AddSingleton<IAssistantActions>(sp => sp.GetRequiredService<AssistantViewModel>());

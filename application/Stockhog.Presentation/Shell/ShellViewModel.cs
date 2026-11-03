@@ -9,6 +9,7 @@ using Stockhog.Presentation.Autopilot;
 using Stockhog.Presentation.Backtesting;
 using Stockhog.Presentation.Compare;
 using Stockhog.Presentation.Guide;
+using Stockhog.Presentation.Home;
 using Stockhog.Presentation.Jobs;
 using Stockhog.Presentation.Localization;
 using Stockhog.Presentation.Logging;
@@ -30,6 +31,7 @@ namespace Stockhog.Presentation.Shell;
 public sealed partial class ShellViewModel : ObservableObject, IRecipient<NavigateMessage>
 {
     public ShellViewModel(
+        HomeViewModel home,
         BacktestViewModel backtest,
         StrategiesViewModel strategies,
         HistoryViewModel history,
@@ -56,24 +58,29 @@ public sealed partial class ShellViewModel : ObservableObject, IRecipient<Naviga
         Jobs = jobs;
         Pages =
         [
-            new NavigationItem("Nav_MarketData", "", marketData),
-            new NavigationItem("Nav_Screener", "", screener),
-            new NavigationItem("Nav_Scanner", "", scanner),
-            new NavigationItem("Nav_Proposals", "", proposals),
-            new NavigationItem("Nav_Autopilot", "", autopilot),
-            new NavigationItem("Nav_Backtest", "", backtest),
-            new NavigationItem("Nav_Strategies", "", strategies),
-            new NavigationItem("Nav_History", "", history),
-            new NavigationItem("Nav_Compare", "", compare),
-            new NavigationItem("Nav_Optimization", "", optimization),
-            new NavigationItem("Nav_Analysis", "", analysis),
-            new NavigationItem("Nav_Assistant", "", assistant),
-            new NavigationItem("Nav_Trading", "", trading),
-            new NavigationItem("Nav_Jobs", "", jobs),
-            new NavigationItem("Nav_Logs", "", logs),
-            new NavigationItem("Nav_Guide", "", guide),
-            new NavigationItem("Nav_Settings", "", settings)
+            new NavigationItem("Nav_Home", "", home),
+            new NavigationItem("Nav_MarketData", "", marketData, "NavGroup_Research"),
+            new NavigationItem("Nav_Screener", "", screener, "NavGroup_Research"),
+            new NavigationItem("Nav_Scanner", "", scanner, "NavGroup_Research"),
+            new NavigationItem("Nav_Backtest", "", backtest, "NavGroup_Strategies"),
+            new NavigationItem("Nav_Strategies", "", strategies, "NavGroup_Strategies"),
+            new NavigationItem("Nav_Optimization", "", optimization, "NavGroup_Strategies"),
+            new NavigationItem("Nav_Analysis", "", analysis, "NavGroup_Strategies"),
+            new NavigationItem("Nav_Compare", "", compare, "NavGroup_Strategies"),
+            new NavigationItem("Nav_History", "", history, "NavGroup_Strategies"),
+            new NavigationItem("Nav_Proposals", "", proposals, "NavGroup_Trading"),
+            new NavigationItem("Nav_Autopilot", "", autopilot, "NavGroup_Trading"),
+            new NavigationItem("Nav_Trading", "", trading, "NavGroup_Trading"),
+            new NavigationItem("Nav_Assistant", "", assistant, "NavGroup_More"),
+            new NavigationItem("Nav_Jobs", "", jobs, "NavGroup_More"),
+            new NavigationItem("Nav_Logs", "", logs, "NavGroup_More"),
+            new NavigationItem("Nav_Guide", "", guide, "NavGroup_More"),
+            new NavigationItem("Nav_Settings", "", settings, "NavGroup_More")
         ];
+
+        // Grouped for the sidebar's section headers; the list itself stays in menu order.
+        PagesView = new ListCollectionView(Pages.ToList());
+        PagesView.GroupDescriptions.Add(new PropertyGroupDescription(nameof(NavigationItem.GroupKey)));
 
         messenger.RegisterAll(this);
         Loc.Instance.PropertyChanged += OnLanguageChanged;
@@ -81,6 +88,8 @@ public sealed partial class ShellViewModel : ObservableObject, IRecipient<Naviga
     }
 
     public IReadOnlyList<NavigationItem> Pages { get; }
+
+    public ListCollectionView PagesView { get; }
 
     public StatusViewModel Status { get; }
 

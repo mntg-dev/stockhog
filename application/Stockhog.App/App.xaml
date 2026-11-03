@@ -10,6 +10,7 @@
              xmlns:compare="clr-namespace:Stockhog.Presentation.Compare;assembly=Stockhog.Presentation"
              xmlns:proposals="clr-namespace:Stockhog.Presentation.Proposals;assembly=Stockhog.Presentation"
              xmlns:autopilot="clr-namespace:Stockhog.Presentation.Autopilot;assembly=Stockhog.Presentation"
+             xmlns:home="clr-namespace:Stockhog.Presentation.Home;assembly=Stockhog.Presentation"
              xmlns:scanning="clr-namespace:Stockhog.Presentation.Scanning;assembly=Stockhog.Presentation"
              xmlns:screening="clr-namespace:Stockhog.Presentation.Screening;assembly=Stockhog.Presentation"
              xmlns:strategies="clr-namespace:Stockhog.Presentation.Strategies;assembly=Stockhog.Presentation"
@@ -33,6 +34,7 @@
             <DataTemplate DataType="{x:Type scanning:ScannerViewModel}"><views:ScannerView /></DataTemplate>
             <DataTemplate DataType="{x:Type proposals:ProposalsViewModel}"><views:ProposalsView /></DataTemplate>
             <DataTemplate DataType="{x:Type autopilot:AutopilotViewModel}"><views:AutopilotView /></DataTemplate>
+            <DataTemplate DataType="{x:Type home:HomeViewModel}"><views:HomeView /></DataTemplate>
             <DataTemplate DataType="{x:Type assistant:AssistantViewModel}"><views:AssistantView /></DataTemplate>
             <DataTemplate DataType="{x:Type optimization:OptimizationViewModel}"><views:OptimizationView /></DataTemplate>
             <DataTemplate DataType="{x:Type analytics:AnalysisViewModel}"><views:AnalysisView /></DataTemplate>

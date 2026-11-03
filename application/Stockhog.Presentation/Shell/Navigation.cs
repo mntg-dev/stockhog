@@ -81,7 +81,8 @@ public abstract partial class PageViewModel(StatusViewModel status, ILogger logg
 
 /// <param name="TitleKey">Resource key of the menu label.</param>
 /// <param name="Glyph">Segoe Fluent Icons / MDL2 Assets code point.</param>
-public sealed record NavigationItem(string TitleKey, string Glyph, PageViewModel Page);
+/// <param name="GroupKey">Resource key of the menu section; the first page stands above every section.</param>
+public sealed record NavigationItem(string TitleKey, string Glyph, PageViewModel Page, string GroupKey = "");
 
 // Messages between pages (CommunityToolkit messenger): pages stay unaware of each other.
 
