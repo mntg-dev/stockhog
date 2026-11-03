@@ -4,6 +4,7 @@ using System.Net.Http.Json;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Stockhog.Application.Trading;
+using Stockhog.Domain.MarketData;
 using Stockhog.Domain.Trading;
 using Microsoft.Extensions.Options;
 
@@ -73,6 +74,14 @@ internal sealed class AlpacaBrokerClient(HttpClient httpClient, IOptions<AlpacaO
     public Task CancelOrderAsync(string brokerOrderId, CancellationToken cancellationToken = default) =>
         SendAsync<object>(HttpMethod.Delete, $"v2/orders/{Uri.EscapeDataString(brokerOrderId)}", null, cancellationToken);
 
+    /// <summary>Not nested, so the legs of OTO orders come back as orders of their own.</summary>
+    public async Task<IReadOnlyList<BrokerOrder>> ListOpenOrdersAsync(Symbol symbol, CancellationToken cancellationToken = default)
+    {
+        var path = $"v2/orders?status=open&nested=false&limit=500&symbols={Uri.EscapeDataString(symbol.Value)}";
+        var orders = await SendAsync<List<OrderDto>>(HttpMethod.Get, path, null, cancellationToken).ConfigureAwait(false);
+        return (orders ?? []).Where(o => o.Symbol == symbol.Value).Select(ToBrokerOrder).ToList();
+    }
+
     internal static BrokerOrder ToBrokerOrder(OrderDto order) => new(
         order.Id,
         order.ClientOrderId,
@@ -81,7 +90,8 @@ internal sealed class AlpacaBrokerClient(HttpClient httpClient, IOptions<AlpacaO
         Number(order.Quantity),
         Number(order.FilledQuantity),
         string.IsNullOrEmpty(order.FilledAveragePrice) ? null : Number(order.FilledAveragePrice),
-        order.UpdatedAt ?? order.CreatedAt ?? DateTimeOffset.UtcNow);
+        order.UpdatedAt ?? order.CreatedAt ?? DateTimeOffset.UtcNow,
+        Side: order.Side switch { "buy" => OrderSide.Buy, "sell" => OrderSide.Sell, _ => null });
 
     /// <summary>Alpaca has more states than the app needs; everything still working maps to Submitted.</summary>
     internal static OrderStatus MapStatus(string? status) => status switch
@@ -220,4 +230,5 @@ internal sealed record OrderDto(
     [property: JsonPropertyName("filled_qty")] string? FilledQuantity,
     [property: JsonPropertyName("filled_avg_price")] string? FilledAveragePrice,
     [property: JsonPropertyName("created_at")] DateTimeOffset? CreatedAt,
-    [property: JsonPropertyName("updated_at")] DateTimeOffset? UpdatedAt);
+    [property: JsonPropertyName("updated_at")] DateTimeOffset? UpdatedAt,
+    [property: JsonPropertyName("side")] string? Side = null);

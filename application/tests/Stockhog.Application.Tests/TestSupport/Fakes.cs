@@ -412,6 +412,8 @@ internal sealed class FakeBrokerGateway : IBrokerGateway
         lock (Orders)
         {
             Cancelled.Add(brokerOrderId);
+            if (Legs.Any(l => l.BrokerOrderId == brokerOrderId))
+                return Task.CompletedTask;
             var (key, existing) = Orders.First(o => o.Value.BrokerOrderId == brokerOrderId);
             if (existing.Status is OrderStatus.Filled or OrderStatus.Cancelled)
                 throw new BrokerException("order is not cancelable", isRejection: true);
@@ -421,8 +423,19 @@ internal sealed class FakeBrokerGateway : IBrokerGateway
         return Task.CompletedTask;
     }
 
+    /// <summary>Broker-side orders the app did not send itself, e.g. the stop legs of OTO orders.</summary>
+    public List<BrokerOrder> Legs { get; } = [];
+
+    public Task<IReadOnlyList<BrokerOrder>> ListOpenOrdersAsync(Symbol symbol, CancellationToken cancellationToken = default)
+    {
+        lock (Orders)
+            return Task.FromResult<IReadOnlyList<BrokerOrder>>(Orders.Values.Concat(Legs)
+                .Where(o => o.Symbol == symbol.Value && (o.Status is OrderStatus.Submitted or OrderStatus.PartiallyFilled) && !Cancelled.Contains(o.BrokerOrderId))
+                .ToList());
+    }
+
     public BrokerOrder Report(Order order, OrderStatus status, decimal filled, decimal? price) =>
-        new($"broker-{Interlocked.Increment(ref _nextId)}", order.Id.Value, order.Symbol.Value, status, order.Quantity, filled, price, TestData.Now);
+        new($"broker-{Interlocked.Increment(ref _nextId)}", order.Id.Value, order.Symbol.Value, status, order.Quantity, filled, price, TestData.Now, Side: order.Side);
 }
 
 internal sealed class FakeQuoteCache : IQuoteCache

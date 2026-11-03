@@ -110,6 +110,24 @@ public class AlpacaBrokerClientTests
     }
 
     [Fact]
+    public async Task Open_orders_of_a_symbol_are_listed_flat_so_oto_stop_legs_come_back_with_their_side()
+    {
+        var handler = new StubHandler(_ => Json(HttpStatusCode.OK, """
+            [{"id":"b1","client_order_id":"emt-1","symbol":"SPY","status":"filled","qty":"10","filled_qty":"10","filled_avg_price":"200","side":"buy"},
+             {"id":"s1","client_order_id":"leg","symbol":"SPY","status":"held","qty":"10","filled_qty":"0","side":"sell"}]
+            """));
+
+        var orders = await CreateClient(handler).ListOpenOrdersAsync(Symbol.Create("SPY"), Ct);
+
+        Assert.Equal([("b1", OrderSide.Buy), ("s1", OrderSide.Sell)], orders.Select(o => (o.BrokerOrderId, o.Side!.Value)));
+        Assert.Equal(OrderStatus.Submitted, orders[1].Status);
+        var query = handler.Requests[0].Uri.Query;
+        Assert.Contains("status=open", query);
+        Assert.Contains("nested=false", query);
+        Assert.Contains("symbols=SPY", query);
+    }
+
+    [Fact]
     public async Task Account_and_positions_are_parsed_from_string_numbers()
     {
         var handler = new StubHandler(request => request.Uri.AbsolutePath == "/v2/account"

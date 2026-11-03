@@ -22,6 +22,12 @@ public interface IBrokerGateway
     Task<BrokerOrder> SubmitOrderAsync(Order order, CancellationToken cancellationToken = default);
 
     Task CancelOrderAsync(string brokerOrderId, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Orders still working at the broker for <paramref name="symbol"/>, including the stop legs the broker placed
+    /// for OTO orders, which the app does not track itself.
+    /// </summary>
+    Task<IReadOnlyList<BrokerOrder>> ListOpenOrdersAsync(Symbol symbol, CancellationToken cancellationToken = default);
 }
 
 /// <summary>
@@ -71,7 +77,8 @@ public sealed record BrokerOrder(
     decimal FilledQuantity,
     decimal? AverageFillPrice,
     DateTimeOffset UpdatedAt,
-    string? Reason = null);
+    string? Reason = null,
+    OrderSide? Side = null);
 
 /// <param name="Event">The broker's event name, e.g. <c>fill</c>, <c>partial_fill</c>, <c>canceled</c>.</param>
 public sealed record TradeUpdate(string Event, BrokerOrder Order, DateTimeOffset OccurredAt);
