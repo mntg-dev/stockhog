@@ -1,4 +1,5 @@
 using Stockhog.Application.Abstractions.Results;
+using Stockhog.Application.Common;
 using Stockhog.Domain.Autopilot;
 
 namespace Stockhog.Application.Autopilot;
@@ -34,6 +35,13 @@ public static class AutopilotErrors
         ErrorType.Conflict);
 
     public static Error Off() => new("Autopilot.Off", "The autopilot is off. Switch it to shadow or paper mode first.", ErrorType.Conflict);
+
+    public static Error MarketClosed(MarketDay day) => new(
+        "Autopilot.MarketClosed",
+        day.Session is { } session
+            ? $"Paper orders are sent only while the market is open, from {session.Open.Add(AutopilotSchedule.Margin):HH:mm} to {session.Close.Add(-AutopilotSchedule.Margin):HH:mm} New York time."
+            : $"The market is closed today ({day.Today:yyyy-MM-dd}); paper orders are sent on the next session.",
+        ErrorType.Conflict);
 
     public static Error NothingToFollow() =>
         new("Autopilot.NothingToFollow", "The autopilot follows no pairs. Add the passed pairs of a scan first.", ErrorType.Conflict);

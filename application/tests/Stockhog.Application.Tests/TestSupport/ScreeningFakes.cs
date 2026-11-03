@@ -1,6 +1,7 @@
 using System.Collections.Concurrent;
 using Stockhog.Application.Autopilot;
 using Stockhog.Application.Brokers;
+using Stockhog.Application.Common;
 using Stockhog.Application.Proposals;
 using Stockhog.Application.Scanning;
 using Stockhog.Application.Screening;
@@ -200,4 +201,13 @@ internal sealed class FakeBrokerKeyTester : IBrokerKeyTester
         Tested.Add(keys);
         return Task.FromResult(Result);
     }
+}
+
+internal sealed class FakeMarketCalendar : IMarketCalendar
+{
+    /// <summary>Null: the calendar cannot be read, so weekdays with regular hours are assumed.</summary>
+    public List<MarketSession>? Sessions { get; set; }
+
+    public Task<IReadOnlyList<MarketSession>?> GetSessionsAsync(DateOnly from, DateOnly to, CancellationToken cancellationToken = default) =>
+        Task.FromResult<IReadOnlyList<MarketSession>?>(Sessions?.Where(s => s.Date >= from && s.Date <= to).ToList());
 }

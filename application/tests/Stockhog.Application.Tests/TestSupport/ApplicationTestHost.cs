@@ -10,6 +10,7 @@ using Stockhog.Application.MarketData.GetPriceBars;
 using Stockhog.Application.Optimization;
 using Stockhog.Application.Autopilot;
 using Stockhog.Application.Brokers;
+using Stockhog.Application.Common;
 using Stockhog.Application.Proposals;
 using Stockhog.Application.Scanning;
 using Stockhog.Application.Screening;
@@ -79,6 +80,7 @@ internal sealed class ApplicationTestHost : IAsyncDisposable
         services.AddSingleton<IAutopilotDecisionLog>(Autopilot);
         services.AddSingleton<IBrokerKeyStore>(BrokerKeys);
         services.AddSingleton<IBrokerKeyTester>(BrokerKeyTester);
+        services.AddSingleton<IMarketCalendar>(Calendar);
         services.AddScoped<IUnitOfWork, InMemoryUnitOfWork>();
 
         _provider = services.BuildServiceProvider(new ServiceProviderOptions { ValidateScopes = true, ValidateOnBuild = true });
@@ -111,6 +113,7 @@ internal sealed class ApplicationTestHost : IAsyncDisposable
     public InMemoryAutopilotStore Autopilot { get; } = new();
     public FakeBrokerKeyStore BrokerKeys { get; } = new();
     public FakeBrokerKeyTester BrokerKeyTester { get; } = new();
+    public FakeMarketCalendar Calendar { get; } = new();
 
     public IAssistantToolbox Toolbox => _provider.GetRequiredService<IAssistantToolbox>();
 

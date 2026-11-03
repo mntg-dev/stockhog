@@ -1,4 +1,5 @@
 using Stockhog.Application.Autopilot;
+using Stockhog.Application.Common;
 using Stockhog.Application.Signals;
 using Stockhog.Application.Tests.TestSupport;
 using Stockhog.Application.Trading;
@@ -306,6 +307,51 @@ public class AutopilotTests
         Assert.Equal(("Autopilot.Off", "Autopilot.NothingToFollow"), (off.Error?.Code, empty.Error?.Code));
     }
 
+    [Fact]
+    public async Task No_cycle_is_scheduled_on_an_exchange_holiday_and_paper_orders_wait_for_the_next_session()
+    {
+        await using var host = Paper(out var spy, ("SPY", 200m));
+        host.Calendar.Sessions = [Regular(new DateOnly(2026, 10, 14))];   // the 15th is a holiday
+
+        var scheduled = await host.Dispatcher.SendAsync(new QueueAutopilotCycleCommand(Scheduled: true), Ct);
+        var manual = await host.Dispatcher.SendAsync(new QueueAutopilotCycleCommand(), Ct);
+        var applied = await Apply(host, (spy, ProposalScans.Entry(200m, 190m)));
+
+        Assert.Null(scheduled.Value.JobId);
+        Assert.Equal(("Autopilot.MarketClosed", "Autopilot.MarketClosed"), (manual.Error?.Code, applied.Error?.Code));
+        Assert.Contains("closed today (2026-10-15)", manual.Error!.Message);
+        Assert.Empty(host.Database.Orders);
+    }
+
+    [Fact]
+    public async Task An_early_close_ends_the_cycle_window_early()
+    {
+        await using var host = Shadow(out _, ("SPY", "SmaCrossStrategy", 3m));
+        host.Calendar.Sessions = [Regular(new DateOnly(2026, 10, 14)), new MarketSession(new DateOnly(2026, 10, 15), new TimeOnly(9, 30), new TimeOnly(13, 0))];
+
+        host.Clock.Advance(TimeSpan.FromHours(4.9));   // 12:54 in New York
+        var before = await host.Dispatcher.SendAsync(new QueueAutopilotCycleCommand(Scheduled: true), Ct);
+        host.Jobs.Pending.Clear();
+        host.Clock.Advance(TimeSpan.FromMinutes(2));   // 12:56: within 5 minutes of the 13:00 close
+        var after = await host.Dispatcher.SendAsync(new QueueAutopilotCycleCommand(Scheduled: true), Ct);
+
+        Assert.NotNull(before.Value.JobId);
+        Assert.Null(after.Value.JobId);
+    }
+
+    [Fact]
+    public async Task After_holidays_the_last_session_before_them_counts_as_fresh_data()
+    {
+        await using var host = Shadow(out var spy, ("SPY", "RsiPullbackStrategy", 3m));
+        host.Calendar.Sessions = [Regular(new DateOnly(2026, 10, 12)), Regular(new DateOnly(2026, 10, 15))];   // 13th and 14th closed
+
+        var cycle = await Apply(host, (spy, ProposalScans.Signal(SignalKind.Entry, 200m, 190m, asOf: new DateOnly(2026, 10, 12))));
+
+        Assert.Equal(1, cycle.Value.Buys);
+    }
+
+    private static MarketSession Regular(DateOnly date) => new(date, new TimeOnly(9, 30), new TimeOnly(16, 0));
+
     private static ApplicationTestHost Shadow(out int firstId, params (string Symbol, string Strategy, decimal Score)[] pairs)
     {
         var host = new ApplicationTestHost();
@@ -321,6 +367,7 @@ public class AutopilotTests
     private static ApplicationTestHost Paper(out int firstId, params (string Symbol, decimal Price)[] pairs)
     {
         var host = new ApplicationTestHost();
+        host.Clock.Advance(TimeSpan.FromHours(2));   // 10:00 in New York: paper orders need the market open
         host.LatestPrices.Price = null;
         host.Autopilot.Autopilot.SetMode(AutopilotMode.Paper);
         foreach (var (symbol, price) in pairs)

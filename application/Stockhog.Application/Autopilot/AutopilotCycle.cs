@@ -48,22 +48,17 @@ public static class AutopilotSchedule
 {
     public const string CycleJobKey = "autopilot:cycle";
 
-    /// <summary>Not before the opening auction has settled.</summary>
-    public static readonly TimeOnly Opens = new(9, 35);
+    /// <summary>
+    /// Not in the first minutes, while the opening auction settles, nor so late that an order could miss the close.
+    /// The session's own hours count, so early closes are respected.
+    /// </summary>
+    public static readonly TimeSpan Margin = TimeSpan.FromMinutes(5);
 
-    /// <summary>Not so late that an order could miss the close.</summary>
-    public static readonly TimeOnly Closes = new(15, 55);
-
-    /// <summary>Whether a scheduled cycle should run at <paramref name="newYorkNow"/>.</summary>
-    public static bool IsDue(Domain.Autopilot.Autopilot autopilot, DateTime newYorkNow)
-    {
-        var today = DateOnly.FromDateTime(newYorkNow);
-        var time = TimeOnly.FromDateTime(newYorkNow);
-        return autopilot.Mode != AutopilotMode.Off
-               && newYorkNow.DayOfWeek is not (DayOfWeek.Saturday or DayOfWeek.Sunday)
-               && time >= Opens && time < Closes
-               && autopilot.LastCycleSession != today;
-    }
+    /// <summary>Whether a scheduled cycle should run now: autopilot on, market open, not yet run today.</summary>
+    public static bool IsDue(Domain.Autopilot.Autopilot autopilot, MarketDay day) =>
+        autopilot.Mode != AutopilotMode.Off
+        && day.IsOpen(Margin)
+        && autopilot.LastCycleSession != day.Today;
 }
 
 internal sealed class ApplyAutopilotCycleCommandValidator : AbstractValidator<ApplyAutopilotCycleCommand>
@@ -71,7 +66,7 @@ internal sealed class ApplyAutopilotCycleCommandValidator : AbstractValidator<Ap
     public ApplyAutopilotCycleCommandValidator() => RuleFor(c => c.Signals).NotNull();
 }
 
-internal sealed class QueueAutopilotCycleCommandHandler(IAutopilotRepository autopilots, IJobQueue jobs, TimeProvider clock)
+internal sealed class QueueAutopilotCycleCommandHandler(IAutopilotRepository autopilots, IJobQueue jobs, MarketDays marketDays)
     : ICommandHandler<QueueAutopilotCycleCommand, QueuedAutopilotCycle>
 {
     /// <summary>Signals are backtests; a few at a time keep the machine usable.</summary>
@@ -80,11 +75,15 @@ internal sealed class QueueAutopilotCycleCommandHandler(IAutopilotRepository aut
     public async Task<Result<QueuedAutopilotCycle>> HandleAsync(QueueAutopilotCycleCommand command, CancellationToken cancellationToken)
     {
         var autopilot = await autopilots.GetOrCreateAsync(cancellationToken);
-        var now = ExchangeCalendar.NewYorkNow(clock);
-        if (command.Scheduled && !AutopilotSchedule.IsDue(autopilot, now))
+        var day = await marketDays.TodayAsync(cancellationToken);
+        if (command.Scheduled && !AutopilotSchedule.IsDue(autopilot, day))
             return new QueuedAutopilotCycle(null, false, 0);
         if (autopilot.Mode == AutopilotMode.Off)
             return AutopilotErrors.Off();
+
+        // Shadow cycles may run any time; paper orders are only sent while the market is open.
+        if (autopilot.Mode == AutopilotMode.Paper && !day.IsOpen(AutopilotSchedule.Margin))
+            return AutopilotErrors.MarketClosed(day);
 
         // Pairs no longer followed still get their exits while they hold a position.
         var pairs = autopilot.Assignments
@@ -94,7 +93,7 @@ internal sealed class QueueAutopilotCycleCommandHandler(IAutopilotRepository aut
         if (pairs.Count == 0)
             return AutopilotErrors.NothingToFollow();
 
-        var session = DateOnly.FromDateTime(now);
+        var session = day.Today;
         var job = jobs.Enqueue($"Autopilot cycle ({pairs.Count} pairs)", context => RunAsync(session, pairs, context), AutopilotSchedule.CycleJobKey);
         return new QueuedAutopilotCycle(job.Job.Id, job.WasQueued, pairs.Count);
     }
@@ -133,6 +132,7 @@ internal sealed class ApplyAutopilotCycleCommandHandler(
     ILatestPriceSource latestPrices,
     IDispatcher dispatcher,
     ITradingEnvironment environment,
+    MarketDays marketDays,
     Audit audit,
     TimeProvider clock) : ICommandHandler<ApplyAutopilotCycleCommand, AutopilotCycleSummary>
 {
@@ -151,6 +151,11 @@ internal sealed class ApplyAutopilotCycleCommandHandler(
         if (paper && environment.Mode != TradingMode.Paper)
             return AutopilotErrors.NotPaperAccount();
 
+        // Checked again when the job gets to it: the signals take a while, and the market may have closed meanwhile.
+        var day = await marketDays.TodayAsync(cancellationToken);
+        if (paper && !day.IsOpen(AutopilotSchedule.Margin))
+            return AutopilotErrors.MarketClosed(day);
+
         BrokerAccount account;
         IReadOnlyList<BrokerPosition> positions;
         try
@@ -168,7 +173,8 @@ internal sealed class ApplyAutopilotCycleCommandHandler(
         var risk = await portfolio.ReadAsync(account, positions, cancellationToken);
         var openOrders = (await orders.ListUnfinishedAsync(cancellationToken)).Count;
         var heldInAccount = positions.Where(p => p.Quantity != 0).Select(p => p.Symbol).ToHashSet(StringComparer.Ordinal);
-        var expected = ExchangeCalendar.PreviousSession(command.Session);
+        // The calendar knows holidays: after one, the session before it is still the latest data.
+        var expected = command.Session == day.Today ? day.PreviousSession : ExchangeCalendar.PreviousSession(command.Session);
         var signals = command.Signals.Where(s => s is not null).ToDictionary(s => s.AssignmentId);
         var now = clock.GetUtcNow();
         var decisions = new List<AutopilotDecision>();

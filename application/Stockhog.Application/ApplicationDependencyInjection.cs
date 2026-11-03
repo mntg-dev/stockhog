@@ -26,6 +26,7 @@ public static class ApplicationDependencyInjection
         services.AddSingleton<LiveTradingSession>();
         services.AddTransient<Audit>();
         services.AddTransient<Trading.Portfolio.PortfolioRiskReader>();
+        services.AddTransient<Common.MarketDays>();
         services.AddTransient<IAssistantToolbox, AssistantToolbox>();
 
         // Order matters, outermost first: logging, validation, then unit of work (commands) and caching (queries).

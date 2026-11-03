@@ -1,4 +1,5 @@
 using Stockhog.Application.Brokers;
+using Stockhog.Application.Common;
 using Stockhog.Application.Instruments;
 using Stockhog.Application.Screening;
 using Stockhog.Application.Trading;
@@ -87,6 +88,12 @@ public static class AlpacaDependencyInjection
             .ConfigurePrimaryHttpMessageHandler(HttpClientDefaults.CreatePrimaryHandler);
         latest.AddStandardResilienceHandler(HttpClientDefaults.ConfigureResilience);
         latest.AddHttpMessageHandler<AlpacaRateLimitingHandler>();
+
+        // Holidays and early closes for the autopilot; a short timeout, as the callers fall back to weekdays.
+        var calendar = services.AddHttpClient<IMarketCalendar, AlpacaMarketCalendar>(http => http.Timeout = TimeSpan.FromSeconds(15))
+            .ConfigurePrimaryHttpMessageHandler(HttpClientDefaults.CreatePrimaryHandler);
+        calendar.AddHttpMessageHandler<AlpacaRateLimitingHandler>();
+        services.AddSingleton<MarketCalendarCache>();
 
         services.AddSingleton<StreamSocketFactory>(() => new ClientWebSocketStream());
         services.AddSingleton<ConnectionMonitor>();
