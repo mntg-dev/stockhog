@@ -44,6 +44,7 @@ public static class PresentationDependencyInjection
         services.AddSingleton<ScannerViewModel>();
         services.AddSingleton<ProposalsViewModel>();
         services.AddSingleton<AutopilotViewModel>();
+        services.AddSingleton<UpdateBannerViewModel>();
         services.AddSingleton<AssistantViewModel>();
         services.AddSingleton<IAssistantActions>(sp => sp.GetRequiredService<AssistantViewModel>());
         services.AddSingleton<OptimizationViewModel>();

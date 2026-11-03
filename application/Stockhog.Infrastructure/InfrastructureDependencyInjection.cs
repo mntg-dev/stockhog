@@ -11,11 +11,13 @@ using Stockhog.Application.Screening;
 using Stockhog.Application.Trading;
 using Stockhog.Application.Trading.Portfolio;
 using Stockhog.Application.Trading.Safety;
+using Stockhog.Application.Updates;
 using Stockhog.Infrastructure.Configuration;
 using Stockhog.Infrastructure.Jobs;
 using Stockhog.Infrastructure.MarketData;
 using Stockhog.Infrastructure.Persistence;
 using Stockhog.Infrastructure.Trading;
+using Stockhog.Infrastructure.Updates;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -48,6 +50,13 @@ public static class InfrastructureDependencyInjection
         AddPersistence(services);
         AddJobs(services, configuration);
         AddTrading(services, configuration);
+
+        services.AddOptions<UpdateOptions>()
+            .Bind(configuration.GetSection(UpdateOptions.SectionName))
+            .ValidateDataAnnotations()
+            .ValidateOnStart();
+        services.AddHttpClient<IReleaseFeed, ReleaseFeedClient>(http => http.Timeout = TimeSpan.FromSeconds(10))
+            .ConfigurePrimaryHttpMessageHandler(Http.HttpClientDefaults.CreatePrimaryHandler);
 
         return services;
     }

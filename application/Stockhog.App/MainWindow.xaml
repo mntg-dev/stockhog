@@ -41,7 +41,18 @@
             </ListBox>
         </DockPanel>
 
-        <ContentControl Grid.Row="0" Grid.Column="1" Content="{Binding CurrentPage}" Margin="16" Focusable="False" />
+        <DockPanel Grid.Row="0" Grid.Column="1">
+            <Border DockPanel.Dock="Top" Background="#FFF4E5" BorderBrush="#F0C48A" BorderThickness="0,0,0,1" Padding="16,8"
+                    Visibility="{Binding Update.IsVisible, Converter={StaticResource BooleanToVisibility}}">
+                <DockPanel>
+                    <Button DockPanel.Dock="Right" Content="{loc:Tr Update_Dismiss}" Command="{Binding Update.DismissCommand}" Margin="6,0,0,0" />
+                    <Button DockPanel.Dock="Right" Content="{loc:Tr Update_Download}" Command="{Binding Update.DownloadCommand}"
+                            Style="{StaticResource PrimaryButton}" />
+                    <TextBlock Text="{Binding Update.Text}" VerticalAlignment="Center" TextWrapping="Wrap" />
+                </DockPanel>
+            </Border>
+            <ContentControl Content="{Binding CurrentPage}" Margin="16" Focusable="False" />
+        </DockPanel>
 
         <StatusBar Grid.Row="1" Grid.ColumnSpan="2" Padding="8,2">
             <StatusBar.ItemsPanel>

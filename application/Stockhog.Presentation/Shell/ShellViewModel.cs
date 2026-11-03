@@ -48,9 +48,11 @@ public sealed partial class ShellViewModel : ObservableObject, IRecipient<Naviga
         GuideViewModel guide,
         SettingsViewModel settings,
         StatusViewModel status,
+        UpdateBannerViewModel update,
         IMessenger messenger)
     {
         Status = status;
+        Update = update;
         Jobs = jobs;
         Pages =
         [
@@ -81,6 +83,8 @@ public sealed partial class ShellViewModel : ObservableObject, IRecipient<Naviga
     public IReadOnlyList<NavigationItem> Pages { get; }
 
     public StatusViewModel Status { get; }
+
+    public UpdateBannerViewModel Update { get; }
 
     public JobsViewModel Jobs { get; }
 

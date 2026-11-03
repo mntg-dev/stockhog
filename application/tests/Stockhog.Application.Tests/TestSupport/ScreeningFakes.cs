@@ -6,6 +6,7 @@ using Stockhog.Application.Proposals;
 using Stockhog.Application.Scanning;
 using Stockhog.Application.Screening;
 using Stockhog.Application.Signals;
+using Stockhog.Application.Updates;
 using Stockhog.Application.Trading.Portfolio;
 using Stockhog.Domain.Autopilot;
 using Stockhog.Domain.Backtesting;
@@ -210,4 +211,11 @@ internal sealed class FakeMarketCalendar : IMarketCalendar
 
     public Task<IReadOnlyList<MarketSession>?> GetSessionsAsync(DateOnly from, DateOnly to, CancellationToken cancellationToken = default) =>
         Task.FromResult<IReadOnlyList<MarketSession>?>(Sessions?.Where(s => s.Date >= from && s.Date <= to).ToList());
+}
+
+internal sealed class FakeReleaseFeed : IReleaseFeed
+{
+    public ReleaseInfo? Latest { get; set; }
+
+    public Task<ReleaseInfo?> GetLatestAsync(CancellationToken cancellationToken = default) => Task.FromResult(Latest);
 }

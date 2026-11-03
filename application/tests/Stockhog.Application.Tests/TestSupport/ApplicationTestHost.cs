@@ -18,6 +18,7 @@ using Stockhog.Application.Signals;
 using Stockhog.Application.Trading;
 using Stockhog.Application.Trading.Portfolio;
 using Stockhog.Application.Trading.Safety;
+using Stockhog.Application.Updates;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -81,6 +82,7 @@ internal sealed class ApplicationTestHost : IAsyncDisposable
         services.AddSingleton<IBrokerKeyStore>(BrokerKeys);
         services.AddSingleton<IBrokerKeyTester>(BrokerKeyTester);
         services.AddSingleton<IMarketCalendar>(Calendar);
+        services.AddSingleton<IReleaseFeed>(Releases);
         services.AddScoped<IUnitOfWork, InMemoryUnitOfWork>();
 
         _provider = services.BuildServiceProvider(new ServiceProviderOptions { ValidateScopes = true, ValidateOnBuild = true });
@@ -114,6 +116,7 @@ internal sealed class ApplicationTestHost : IAsyncDisposable
     public FakeBrokerKeyStore BrokerKeys { get; } = new();
     public FakeBrokerKeyTester BrokerKeyTester { get; } = new();
     public FakeMarketCalendar Calendar { get; } = new();
+    public FakeReleaseFeed Releases { get; } = new();
 
     public IAssistantToolbox Toolbox => _provider.GetRequiredService<IAssistantToolbox>();
 

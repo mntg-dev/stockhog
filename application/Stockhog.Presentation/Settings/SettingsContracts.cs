@@ -46,4 +46,5 @@ public sealed record AppEnvironmentInfo(
     string DatabaseFile,
     string LogFolder,
     bool AlpacaCredentialsConfigured,
-    int MaxParallelJobs);
+    int MaxParallelJobs,
+    string Version = "0.0.0");

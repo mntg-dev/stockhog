@@ -6,6 +6,7 @@ using Stockhog.Infrastructure.Alpaca;
 using Stockhog.Infrastructure.Anthropic;
 using Stockhog.Infrastructure.Lean;
 using System.Globalization;
+using System.Reflection;
 using System.IO;
 using Stockhog.App.Hosting;
 using Stockhog.Infrastructure.Configuration;
@@ -16,6 +17,7 @@ using Stockhog.Presentation.Instruments;
 using Stockhog.Presentation.Localization;
 using Stockhog.Presentation.Logging;
 using Stockhog.Presentation.Settings;
+using Stockhog.Presentation.Shell;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -98,6 +100,9 @@ public partial class App : System.Windows.Application
 
             MainWindow = _host.Services.GetRequiredService<MainWindow>();
             MainWindow.Show();
+
+            // After the window is up, so a slow or missing network never delays the start.
+            _ = _host.Services.GetRequiredService<UpdateBannerViewModel>().CheckAsync();
         }
         catch (Exception ex)
         {
@@ -140,6 +145,7 @@ public partial class App : System.Windows.Application
         builder.Services.AddSingleton(userSettings);
         builder.Services.AddSingleton(CreateEnvironmentInfo);
         builder.Services.AddSingleton<IUserConfirmation, MessageBoxConfirmation>();
+        builder.Services.AddSingleton<IExternalLinks, BrowserLinks>();
 
         builder.Services.AddSerilog((services, logger) => logger
             .ReadFrom.Configuration(builder.Configuration)
@@ -172,7 +178,15 @@ public partial class App : System.Windows.Application
             storage.DatabaseFile,
             logFolder,
             services.GetRequiredService<IOptions<AlpacaOptions>>().Value.HasCredentials,
-            services.GetRequiredService<IOptions<JobOptions>>().Value.MaxParallelJobs);
+            services.GetRequiredService<IOptions<JobOptions>>().Value.MaxParallelJobs,
+            AppVersion());
+    }
+
+    /// <summary>The version the release stamped in (from its tag), without the build metadata.</summary>
+    private static string AppVersion()
+    {
+        var informational = typeof(App).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion;
+        return informational?.Split('+')[0] ?? typeof(App).Assembly.GetName().Version?.ToString(3) ?? "0.0.0";
     }
 
     private ILogger<App>? Logger => _host?.Services.GetService<ILogger<App>>();

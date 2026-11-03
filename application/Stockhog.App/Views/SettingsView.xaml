@@ -102,6 +102,7 @@
                         <RowDefinition Height="26" />
                         <RowDefinition Height="26" />
                         <RowDefinition Height="26" />
+                        <RowDefinition Height="26" />
                     </Grid.RowDefinitions>
                     <TextBlock Grid.ColumnSpan="2" Text="{loc:Tr Settings_Environment}" Style="{StaticResource SectionTitle}" />
                     <TextBlock Grid.Row="1" Text="{loc:Tr Settings_DataFolder}" Foreground="Gray" />
@@ -129,6 +130,8 @@
                     </TextBlock>
                     <TextBlock Grid.Row="6" Text="{loc:Tr Settings_ParallelJobs}" Foreground="Gray" />
                     <TextBlock Grid.Row="6" Grid.Column="1" Text="{Binding Environment.MaxParallelJobs}" VerticalAlignment="Center" />
+                    <TextBlock Grid.Row="7" Text="{loc:Tr Settings_Version}" Foreground="Gray" />
+                    <TextBlock Grid.Row="7" Grid.Column="1" Text="{Binding Environment.Version}" VerticalAlignment="Center" />
                 </Grid>
             </Border>
         </StackPanel>

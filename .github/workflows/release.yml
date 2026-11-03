@@ -49,6 +49,7 @@ jobs:
           dotnet publish Stockhog.App/Stockhog.App.csproj
           -c Release -r win-x64 --self-contained true
           -p:PublishSingleFile=false
+          -p:Version=$($env:TAG -replace '^v', '')
           -o ../dist
 
       - name: Publish Stockhog.EngineRunner (self-contained, win-x64)
@@ -56,6 +57,7 @@ jobs:
           dotnet publish Stockhog.EngineRunner/Stockhog.EngineRunner.csproj
           -c Release -r win-x64 --self-contained true
           -p:PublishSingleFile=false
+          -p:Version=$($env:TAG -replace '^v', '')
           -o ../dist
 
       - name: Build installer (.msi)
