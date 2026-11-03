@@ -799,4 +799,58 @@ Jeśli stop zostanie trafiony, strata wyniesie ok. {4:N2} USD ({5:N2}% kapitału
   <data name="Status_ProposalRejected" xml:space="preserve"><value>Odrzucono propozycję {0}.</value></data>
   <data name="Trading_PortfolioRisk" xml:space="preserve"><value>Szczyt {0:N2} · obsunięcie {1:N1}% z {2:N0}% · pozycje {3}/{4} · zlecenia dziś {5}/{6}</value></data>
   <data name="Trading_PortfolioRiskHint" xml:space="preserve"><value>Limity portfela (Trading:Risk w appsettings): nowe pozycje są odrzucane, gdy kapitał spadnie tak daleko poniżej szczytu, gdy tyle spółek jest już w portfelu albo po tylu zleceniach dziś. Osiągnięcie limitu obsunięcia wyłącza też handel.</value></data>
+  <data name="Nav_Autopilot" xml:space="preserve"><value>Autopilot</value></data>
+  <data name="Autopilot_Title" xml:space="preserve"><value>Autopilot</value></data>
+  <data name="Autopilot_Intro" xml:space="preserve"><value>Śledzi pary dodane ze skanu i raz na sesję (od 9:35 czasu nowojorskiego) decyduje, co kupić i sprzedać: z wielkością wyliczoną z ryzyka, w granicach limitów ryzyka i limitów poniżej. W trybie cienia tylko zapisuje swoje decyzje i symuluje pozycje po cenach z chwili decyzji; żadne zlecenie nie jest wysyłane. Handel na koncie paper i live pojawi się po przejrzeniu decyzji z trybu cienia.</value></data>
+  <data name="Autopilot_Mode" xml:space="preserve"><value>Tryb:</value></data>
+  <data name="AutopilotMode_Off" xml:space="preserve"><value>Wyłączony</value></data>
+  <data name="AutopilotMode_Shadow" xml:space="preserve"><value>Cień (bez zleceń)</value></data>
+  <data name="AutopilotMode_Paper" xml:space="preserve"><value>Paper</value></data>
+  <data name="AutopilotMode_Live" xml:space="preserve"><value>Live</value></data>
+  <data name="Autopilot_ModeColumn" xml:space="preserve"><value>Tryb</value></data>
+  <data name="Autopilot_ShadowHint" xml:space="preserve"><value>Decyduje tak, jak by handlował, i zapisuje to, śledząc symulowane pozycje. Nic nie jest wysyłane do brokera.</value></data>
+  <data name="Autopilot_NotAvailableHint" xml:space="preserve"><value>Jeszcze niedostępne: najpierw uruchom autopilota w trybie cienia i przejrzyj jego decyzje.</value></data>
+  <data name="Autopilot_RunCycle" xml:space="preserve"><value>Uruchom cykl teraz</value></data>
+  <data name="Autopilot_RunCycleHint" xml:space="preserve"><value>Odczytuje dzisiejszy sygnał każdej pary i decyduje od razu, bez czekania na zaplanowany cykl. W trybie cienia nic nie jest wysyłane do brokera.</value></data>
+  <data name="Autopilot_MaxLosses" xml:space="preserve"><value>Wstrzymaj parę po stratach z rzędu:</value></data>
+  <data name="Autopilot_MaxCapital" xml:space="preserve"><value>Maksymalna część kapitału w użyciu (%):</value></data>
+  <data name="Autopilot_MaxCapitalHint" xml:space="preserve"><value>Pozycje autopilota łącznie nigdy nie zajmą więcej niż ta część kapitału konta.</value></data>
+  <data name="Autopilot_SaveLimits" xml:space="preserve"><value>Zapisz limity</value></data>
+  <data name="Autopilot_Summary" xml:space="preserve"><value>Ostatni cykl: {0} · otwarte pozycje: {1}, w użyciu {2:N0} USD · zrealizowane {3:N2} USD</value></data>
+  <data name="Autopilot_Never" xml:space="preserve"><value>nigdy</value></data>
+  <data name="Autopilot_Pairs" xml:space="preserve"><value>Śledzone pary</value></data>
+  <data name="Autopilot_Decisions" xml:space="preserve"><value>Decyzje</value></data>
+  <data name="Autopilot_ToggleEnabled" xml:space="preserve"><value>Włącz / wyłącz</value></data>
+  <data name="Autopilot_Resume" xml:space="preserve"><value>Wznów</value></data>
+  <data name="Autopilot_ResumeHint" xml:space="preserve"><value>Ponownie śledzi wstrzymaną parę i zeruje licznik strat z rzędu.</value></data>
+  <data name="Autopilot_Remove" xml:space="preserve"><value>Usuń</value></data>
+  <data name="Autopilot_ConfirmRemoveTitle" xml:space="preserve"><value>Usuń parę</value></data>
+  <data name="Autopilot_ConfirmRemove" xml:space="preserve"><value>Przestać śledzić {0} ze strategią {1}? Jej wyniki zostaną usunięte; dziennik decyzji zostaje.</value></data>
+  <data name="Autopilot_Empty" xml:space="preserve"><value>Autopilot nie śledzi jeszcze żadnych par. Na stronie Skaner wybierz zakończony skan i kliknij Dodaj do autopilota.</value></data>
+  <data name="Autopilot_Enabled" xml:space="preserve"><value>Wł.</value></data>
+  <data name="Autopilot_EntryPrice" xml:space="preserve"><value>Wejście</value></data>
+  <data name="Autopilot_EntryAt" xml:space="preserve"><value>Data wejścia</value></data>
+  <data name="Autopilot_Realized" xml:space="preserve"><value>Zrealizowane</value></data>
+  <data name="Autopilot_Trades" xml:space="preserve"><value>Transakcje</value></data>
+  <data name="Autopilot_WinRate" xml:space="preserve"><value>Wygrane %</value></data>
+  <data name="Autopilot_Losses" xml:space="preserve"><value>Straty z rzędu</value></data>
+  <data name="Autopilot_Paused" xml:space="preserve"><value>Wstrzymana</value></data>
+  <data name="Autopilot_Time" xml:space="preserve"><value>Czas</value></data>
+  <data name="Autopilot_Action" xml:space="preserve"><value>Akcja</value></data>
+  <data name="Autopilot_Price" xml:space="preserve"><value>Cena</value></data>
+  <data name="Autopilot_Profit" xml:space="preserve"><value>Zysk</value></data>
+  <data name="AutopilotAction_Buy" xml:space="preserve"><value>Kupno</value></data>
+  <data name="AutopilotAction_Sell" xml:space="preserve"><value>Sprzedaż</value></data>
+  <data name="AutopilotAction_Hold" xml:space="preserve"><value>Trzymaj</value></data>
+  <data name="AutopilotAction_Wait" xml:space="preserve"><value>Czekaj</value></data>
+  <data name="AutopilotAction_Skip" xml:space="preserve"><value>Pominięta</value></data>
+  <data name="AuditCategory_Proposal" xml:space="preserve"><value>Propozycja</value></data>
+  <data name="AuditCategory_Autopilot" xml:space="preserve"><value>Autopilot</value></data>
+  <data name="Scanner_AddToAutopilot" xml:space="preserve"><value>Dodaj do autopilota</value></data>
+  <data name="Scanner_AddToAutopilotHint" xml:space="preserve"><value>Autopilot zacznie śledzić pary z tego skanu, które przeszły (bez strategii intraday). Zobacz stronę Autopilot.</value></data>
+  <data name="Status_AutopilotAdded" xml:space="preserve"><value>Autopilot śledzi {0} nowych par (już śledzone: {1}, pominięte intraday: {2}).</value></data>
+  <data name="Status_AutopilotCycleQueued" xml:space="preserve"><value>Uruchomiono cykl autopilota dla {0} par; zobacz Zadania.</value></data>
+  <data name="Status_AutopilotCycleRunning" xml:space="preserve"><value>Cykl autopilota już trwa.</value></data>
+  <data name="Status_AutopilotMode" xml:space="preserve"><value>Autopilot: {0}.</value></data>
+  <data name="Status_AutopilotLimitsSaved" xml:space="preserve"><value>Zapisano limity autopilota.</value></data>
 </root>

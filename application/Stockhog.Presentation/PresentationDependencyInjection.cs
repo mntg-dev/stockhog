@@ -2,6 +2,7 @@ using CommunityToolkit.Mvvm.Messaging;
 using Stockhog.Presentation.Analytics;
 using Stockhog.Application.Assistant;
 using Stockhog.Presentation.Assistant;
+using Stockhog.Presentation.Autopilot;
 using Stockhog.Presentation.Backtesting;
 using Stockhog.Presentation.Compare;
 using Stockhog.Presentation.Guide;
@@ -42,6 +43,7 @@ public static class PresentationDependencyInjection
         services.AddSingleton<ScreenerViewModel>();
         services.AddSingleton<ScannerViewModel>();
         services.AddSingleton<ProposalsViewModel>();
+        services.AddSingleton<AutopilotViewModel>();
         services.AddSingleton<AssistantViewModel>();
         services.AddSingleton<IAssistantActions>(sp => sp.GetRequiredService<AssistantViewModel>());
         services.AddSingleton<OptimizationViewModel>();

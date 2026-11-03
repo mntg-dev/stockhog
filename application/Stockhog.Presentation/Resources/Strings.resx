@@ -799,4 +799,58 @@ If the stop is hit, the loss is about {4:N2} USD ({5:N2}% of equity).</value></d
   <data name="Status_ProposalRejected" xml:space="preserve"><value>{0} proposal rejected.</value></data>
   <data name="Trading_PortfolioRisk" xml:space="preserve"><value>Peak {0:N2} · drawdown {1:N1}% of {2:N0}% · {3}/{4} positions · {5}/{6} orders today</value></data>
   <data name="Trading_PortfolioRiskHint" xml:space="preserve"><value>Portfolio limits (Trading:Risk in appsettings): new positions are refused when equity falls this far below its highest point, when this many symbols are held, or after this many orders today. Hitting the drawdown limit also switches trading off.</value></data>
+  <data name="Nav_Autopilot" xml:space="preserve"><value>Autopilot</value></data>
+  <data name="Autopilot_Title" xml:space="preserve"><value>Autopilot</value></data>
+  <data name="Autopilot_Intro" xml:space="preserve"><value>Follows the pairs you add from a scan and decides once per session (from 9:35 New York time) what to buy and sell: sized by risk, within the risk limits and the limits below. In shadow mode it only records its decisions and simulates the positions at the prices it decided at; no order is sent. Paper and live trading come after you have reviewed the shadow decisions.</value></data>
+  <data name="Autopilot_Mode" xml:space="preserve"><value>Mode:</value></data>
+  <data name="AutopilotMode_Off" xml:space="preserve"><value>Off</value></data>
+  <data name="AutopilotMode_Shadow" xml:space="preserve"><value>Shadow (no orders)</value></data>
+  <data name="AutopilotMode_Paper" xml:space="preserve"><value>Paper</value></data>
+  <data name="AutopilotMode_Live" xml:space="preserve"><value>Live</value></data>
+  <data name="Autopilot_ModeColumn" xml:space="preserve"><value>Mode</value></data>
+  <data name="Autopilot_ShadowHint" xml:space="preserve"><value>Decides as it would and records it, tracking simulated positions. Nothing is sent to the broker.</value></data>
+  <data name="Autopilot_NotAvailableHint" xml:space="preserve"><value>Not available yet: run the autopilot in shadow mode and review its decisions first.</value></data>
+  <data name="Autopilot_RunCycle" xml:space="preserve"><value>Run cycle now</value></data>
+  <data name="Autopilot_RunCycleHint" xml:space="preserve"><value>Reads today's signal of every pair and decides now, without waiting for the scheduled cycle. In shadow mode nothing is sent to the broker.</value></data>
+  <data name="Autopilot_MaxLosses" xml:space="preserve"><value>Pause a pair after losses in a row:</value></data>
+  <data name="Autopilot_MaxCapital" xml:space="preserve"><value>Most of equity in use (%):</value></data>
+  <data name="Autopilot_MaxCapitalHint" xml:space="preserve"><value>The autopilot's positions together never take more than this share of the account's equity.</value></data>
+  <data name="Autopilot_SaveLimits" xml:space="preserve"><value>Save limits</value></data>
+  <data name="Autopilot_Summary" xml:space="preserve"><value>Last cycle: {0} · {1} open positions, {2:N0} USD in use · realized {3:N2} USD</value></data>
+  <data name="Autopilot_Never" xml:space="preserve"><value>never</value></data>
+  <data name="Autopilot_Pairs" xml:space="preserve"><value>Pairs followed</value></data>
+  <data name="Autopilot_Decisions" xml:space="preserve"><value>Decisions</value></data>
+  <data name="Autopilot_ToggleEnabled" xml:space="preserve"><value>Enable / disable</value></data>
+  <data name="Autopilot_Resume" xml:space="preserve"><value>Resume</value></data>
+  <data name="Autopilot_ResumeHint" xml:space="preserve"><value>Follows a paused pair again and resets its count of losses in a row.</value></data>
+  <data name="Autopilot_Remove" xml:space="preserve"><value>Remove</value></data>
+  <data name="Autopilot_ConfirmRemoveTitle" xml:space="preserve"><value>Remove pair</value></data>
+  <data name="Autopilot_ConfirmRemove" xml:space="preserve"><value>Stop following {0} with {1}? Its trade record is removed with it; the decision log is kept.</value></data>
+  <data name="Autopilot_Empty" xml:space="preserve"><value>The autopilot follows no pairs yet. On the Scanner page, select a finished scan and click Add to autopilot.</value></data>
+  <data name="Autopilot_Enabled" xml:space="preserve"><value>On</value></data>
+  <data name="Autopilot_EntryPrice" xml:space="preserve"><value>Entry</value></data>
+  <data name="Autopilot_EntryAt" xml:space="preserve"><value>Entered</value></data>
+  <data name="Autopilot_Realized" xml:space="preserve"><value>Realized</value></data>
+  <data name="Autopilot_Trades" xml:space="preserve"><value>Trades</value></data>
+  <data name="Autopilot_WinRate" xml:space="preserve"><value>Win %</value></data>
+  <data name="Autopilot_Losses" xml:space="preserve"><value>Losses in a row</value></data>
+  <data name="Autopilot_Paused" xml:space="preserve"><value>Paused</value></data>
+  <data name="Autopilot_Time" xml:space="preserve"><value>Time</value></data>
+  <data name="Autopilot_Action" xml:space="preserve"><value>Action</value></data>
+  <data name="Autopilot_Price" xml:space="preserve"><value>Price</value></data>
+  <data name="Autopilot_Profit" xml:space="preserve"><value>Profit</value></data>
+  <data name="AutopilotAction_Buy" xml:space="preserve"><value>Buy</value></data>
+  <data name="AutopilotAction_Sell" xml:space="preserve"><value>Sell</value></data>
+  <data name="AutopilotAction_Hold" xml:space="preserve"><value>Hold</value></data>
+  <data name="AutopilotAction_Wait" xml:space="preserve"><value>Wait</value></data>
+  <data name="AutopilotAction_Skip" xml:space="preserve"><value>Skip</value></data>
+  <data name="AuditCategory_Proposal" xml:space="preserve"><value>Proposal</value></data>
+  <data name="AuditCategory_Autopilot" xml:space="preserve"><value>Autopilot</value></data>
+  <data name="Scanner_AddToAutopilot" xml:space="preserve"><value>Add to autopilot</value></data>
+  <data name="Scanner_AddToAutopilotHint" xml:space="preserve"><value>Lets the autopilot follow the passed pairs of this scan (intraday strategies left out). See the Autopilot page.</value></data>
+  <data name="Status_AutopilotAdded" xml:space="preserve"><value>The autopilot follows {0} new pairs ({1} already followed, {2} intraday left out).</value></data>
+  <data name="Status_AutopilotCycleQueued" xml:space="preserve"><value>Autopilot cycle started for {0} pairs; see Jobs.</value></data>
+  <data name="Status_AutopilotCycleRunning" xml:space="preserve"><value>An autopilot cycle is already running.</value></data>
+  <data name="Status_AutopilotMode" xml:space="preserve"><value>Autopilot: {0}.</value></data>
+  <data name="Status_AutopilotLimitsSaved" xml:space="preserve"><value>Autopilot limits saved.</value></data>
 </root>

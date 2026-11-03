@@ -5,6 +5,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
 using Stockhog.Presentation.Analytics;
 using Stockhog.Presentation.Assistant;
+using Stockhog.Presentation.Autopilot;
 using Stockhog.Presentation.Backtesting;
 using Stockhog.Presentation.Compare;
 using Stockhog.Presentation.Guide;
@@ -36,6 +37,7 @@ public sealed partial class ShellViewModel : ObservableObject, IRecipient<Naviga
         ScreenerViewModel screener,
         ScannerViewModel scanner,
         ProposalsViewModel proposals,
+        AutopilotViewModel autopilot,
         AssistantViewModel assistant,
         OptimizationViewModel optimization,
         AnalysisViewModel analysis,
@@ -56,6 +58,7 @@ public sealed partial class ShellViewModel : ObservableObject, IRecipient<Naviga
             new NavigationItem("Nav_Screener", "", screener),
             new NavigationItem("Nav_Scanner", "", scanner),
             new NavigationItem("Nav_Proposals", "", proposals),
+            new NavigationItem("Nav_Autopilot", "", autopilot),
             new NavigationItem("Nav_Backtest", "", backtest),
             new NavigationItem("Nav_Strategies", "", strategies),
             new NavigationItem("Nav_History", "", history),

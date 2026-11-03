@@ -116,6 +116,8 @@
                         Style="{StaticResource PrimaryButton}" Margin="0,0,6,0" />
                 <Button Content="{loc:Tr Scanner_CreateProposals}" Command="{Binding CreateProposalsCommand}" ToolTip="{loc:Tr Scanner_CreateProposalsHint}"
                         Margin="0,0,6,0" />
+                <Button Content="{loc:Tr Scanner_AddToAutopilot}" Command="{Binding AddToAutopilotCommand}" ToolTip="{loc:Tr Scanner_AddToAutopilotHint}"
+                        Margin="0,0,6,0" />
                 <Button Content="{loc:Tr Scanner_Stop}" Command="{Binding StopCommand}" IsEnabled="{Binding CanStop}" Margin="0,0,12,0" />
                 <CheckBox Content="{loc:Tr Scanner_OnlyPassed}" IsChecked="{Binding OnlyPassed}" VerticalAlignment="Center" />
             </StackPanel>

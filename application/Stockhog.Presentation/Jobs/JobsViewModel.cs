@@ -2,6 +2,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Stockhog.Application.Abstractions.Jobs;
+using Stockhog.Application.Autopilot;
 using Stockhog.Application.Instruments;
 using Stockhog.Application.Scanning;
 using Stockhog.Application.Screening;
@@ -58,7 +59,9 @@ public sealed partial class JobsViewModel : PageViewModel
             _messenger.Send(new InstrumentsChangedMessage());
         if (newlyFinished.Any(j => IsScreener(j) && j.Status == JobStatus.Succeeded))
             _messenger.Send(new ScreenerRunsChangedMessage());
-        if (newlyFinished.Any(j => !IsBacktest(j) && !IsOptimization(j) && !IsInstrumentRefresh(j) && !IsScreener(j) && j.Status == JobStatus.Succeeded))
+        if (newlyFinished.Any(j => j.Key == AutopilotSchedule.CycleJobKey))
+            _messenger.Send(new AutopilotChangedMessage());
+        if (newlyFinished.Any(j => !IsBacktest(j) && !IsOptimization(j) && !IsInstrumentRefresh(j) && !IsScreener(j) && j.Key != AutopilotSchedule.CycleJobKey && j.Status == JobStatus.Succeeded))
             _messenger.Send(new MarketDataChangedMessage());
 
         // Optimizations save after every trial: tell their page when a job's progress moves, not on every refresh.

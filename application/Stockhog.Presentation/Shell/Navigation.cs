@@ -118,6 +118,9 @@ public sealed record ScreenerRunsChangedMessage;
 /// <summary>Proposals were created, approved, rejected or expired.</summary>
 public sealed record ProposalsChangedMessage;
 
+/// <summary>The autopilot's pairs, mode or decisions changed, e.g. after a cycle.</summary>
+public sealed record AutopilotChangedMessage;
+
 /// <summary>A scan started, evaluated a candidate, or ended.</summary>
 public sealed record ScansChangedMessage;
 

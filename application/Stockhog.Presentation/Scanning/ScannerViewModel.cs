@@ -4,6 +4,7 @@ using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Stockhog.Application.Abstractions.Jobs;
 using Stockhog.Application.Abstractions.Messaging;
+using Stockhog.Application.Autopilot;
 using Stockhog.Application.Backtesting;
 using Stockhog.Application.Backtesting.Strategies;
 using Stockhog.Application.Proposals;
@@ -13,6 +14,7 @@ using Stockhog.Application.Scanning.StartScan;
 using Stockhog.Application.Screening;
 using Stockhog.Domain.Backtesting;
 using Stockhog.Domain.Scanning;
+using Stockhog.Presentation.Autopilot;
 using Stockhog.Presentation.Backtesting;
 using Stockhog.Presentation.Localization;
 using Stockhog.Presentation.Proposals;
@@ -217,6 +219,26 @@ public sealed partial class ScannerViewModel : PageViewModel, IRecipient<ScansCh
         _messenger.Send(new ProposalsChangedMessage());
         if (created.Value.ProposalIds.Count > 0)
             _messenger.Send(new NavigateMessage(typeof(ProposalsViewModel)));
+    }
+
+    /// <summary>Lets the autopilot follow the passed pairs of the selected scan; see the Autopilot page.</summary>
+    [RelayCommand]
+    private async Task AddToAutopilotAsync(CancellationToken cancellationToken)
+    {
+        if (SelectedScan is not { } scan)
+            return;
+
+        var added = await _dispatcher.SendAsync(new AddToAutopilotCommand(scan.Id), cancellationToken);
+        if (added.IsFailure)
+        {
+            Status.Show(added.Error);
+            return;
+        }
+
+        Status.Show(Loc.Format("Status_AutopilotAdded", added.Value.Added, added.Value.AlreadyFollowed, added.Value.Excluded));
+        _messenger.Send(new AutopilotChangedMessage());
+        if (added.Value.Added > 0)
+            _messenger.Send(new NavigateMessage(typeof(AutopilotViewModel)));
     }
 
     /// <summary>Cancels the selected scan's job; candidates already evaluated are kept.</summary>
