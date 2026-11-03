@@ -801,15 +801,15 @@ Jeśli stop zostanie trafiony, strata wyniesie ok. {4:N2} USD ({5:N2}% kapitału
   <data name="Trading_PortfolioRiskHint" xml:space="preserve"><value>Limity portfela (Trading:Risk w appsettings): nowe pozycje są odrzucane, gdy kapitał spadnie tak daleko poniżej szczytu, gdy tyle spółek jest już w portfelu albo po tylu zleceniach dziś. Osiągnięcie limitu obsunięcia wyłącza też handel.</value></data>
   <data name="Nav_Autopilot" xml:space="preserve"><value>Autopilot</value></data>
   <data name="Autopilot_Title" xml:space="preserve"><value>Autopilot</value></data>
-  <data name="Autopilot_Intro" xml:space="preserve"><value>Śledzi pary dodane ze skanu i raz na sesję (od 9:35 czasu nowojorskiego) decyduje, co kupić i sprzedać: z wielkością wyliczoną z ryzyka, w granicach limitów ryzyka i limitów poniżej. W trybie cienia tylko zapisuje swoje decyzje i symuluje pozycje po cenach z chwili decyzji; żadne zlecenie nie jest wysyłane. Handel na koncie paper i live pojawi się po przejrzeniu decyzji z trybu cienia.</value></data>
+  <data name="Autopilot_Intro" xml:space="preserve"><value>Śledzi pary dodane ze skanu i raz na sesję (od 9:35 czasu nowojorskiego) decyduje, co kupić i sprzedać: z wielkością wyliczoną z ryzyka, w granicach limitów ryzyka i limitów poniżej. W trybie cienia tylko zapisuje swoje decyzje i symuluje pozycje po cenach z chwili decyzji; żadne zlecenie nie jest wysyłane. W trybie paper składa zlecenia na koncie paper, każde kupno ze stop lossem trzymanym u brokera. Handel na koncie live nie jest jeszcze dostępny.</value></data>
   <data name="Autopilot_Mode" xml:space="preserve"><value>Tryb:</value></data>
   <data name="AutopilotMode_Off" xml:space="preserve"><value>Wyłączony</value></data>
   <data name="AutopilotMode_Shadow" xml:space="preserve"><value>Cień (bez zleceń)</value></data>
-  <data name="AutopilotMode_Paper" xml:space="preserve"><value>Paper</value></data>
+  <data name="AutopilotMode_Paper" xml:space="preserve"><value>Paper (zlecenia)</value></data>
   <data name="AutopilotMode_Live" xml:space="preserve"><value>Live</value></data>
   <data name="Autopilot_ModeColumn" xml:space="preserve"><value>Tryb</value></data>
   <data name="Autopilot_ShadowHint" xml:space="preserve"><value>Decyduje tak, jak by handlował, i zapisuje to, śledząc symulowane pozycje. Nic nie jest wysyłane do brokera.</value></data>
-  <data name="Autopilot_NotAvailableHint" xml:space="preserve"><value>Jeszcze niedostępne: najpierw uruchom autopilota w trybie cienia i przejrzyj jego decyzje.</value></data>
+  <data name="Autopilot_NotAvailableHint" xml:space="preserve"><value>Jeszcze niedostępne: najpierw uruchom autopilota na koncie paper.</value></data>
   <data name="Autopilot_RunCycle" xml:space="preserve"><value>Uruchom cykl teraz</value></data>
   <data name="Autopilot_RunCycleHint" xml:space="preserve"><value>Odczytuje dzisiejszy sygnał każdej pary i decyduje od razu, bez czekania na zaplanowany cykl. W trybie cienia nic nie jest wysyłane do brokera.</value></data>
   <data name="Autopilot_MaxLosses" xml:space="preserve"><value>Wstrzymaj parę po stratach z rzędu:</value></data>
@@ -853,4 +853,13 @@ Jeśli stop zostanie trafiony, strata wyniesie ok. {4:N2} USD ({5:N2}% kapitału
   <data name="Status_AutopilotCycleRunning" xml:space="preserve"><value>Cykl autopilota już trwa.</value></data>
   <data name="Status_AutopilotMode" xml:space="preserve"><value>Autopilot: {0}.</value></data>
   <data name="Status_AutopilotLimitsSaved" xml:space="preserve"><value>Zapisano limity autopilota.</value></data>
+  <data name="Autopilot_PaperHint" xml:space="preserve"><value>Sam składa zlecenia na koncie paper: kupno po cenie rynkowej ze stop lossem trzymanym u brokera i sprzedaż po cenie rynkowej. Najpierw prosi o potwierdzenie; po restarcie jest wyłączony, dopóki go nie włączysz.</value></data>
+  <data name="Autopilot_ConfirmPaperTitle" xml:space="preserve"><value>Autopilot na koncie paper</value></data>
+  <data name="Autopilot_ConfirmPaper" xml:space="preserve"><value>Od następnego cyklu autopilot sam składa zlecenia na koncie paper dla {0} śledzonych par: kupno po cenie rynkowej ze stop lossem trzymanym u brokera i sprzedaż po cenie rynkowej, wykorzystując najwyżej {1}% kapitału i w granicach limitów ryzyka.
+
+Symulowane pozycje zostaną usunięte. Po restarcie autopilot jest wyłączony, dopóki go nie włączysz.
+
+Przełączyć na tryb paper?</value></data>
+  <data name="Autopilot_PositionKind" xml:space="preserve"><value>Pozycja</value></data>
+  <data name="Autopilot_EntryOrder" xml:space="preserve"><value>Zlecenie kupna</value></data>
 </root>

@@ -13,14 +13,15 @@ using Microsoft.Extensions.Logging;
 namespace Stockhog.Presentation.Autopilot;
 
 /// <summary>
-/// The automatic trader: the pairs it follows, its mode and limits, and the log of what it decided. Only off and
-/// shadow can be chosen: in shadow mode it records its decisions and simulates the positions, sending no order.
+/// The automatic trader: the pairs it follows, its mode and limits, and the log of what it decided. In shadow mode it
+/// records its decisions and simulates the positions; in paper mode, switched on only after a confirmation, it places
+/// the orders on the paper account. Live cannot be chosen yet.
 /// </summary>
 public sealed partial class AutopilotViewModel : PageViewModel, IRecipient<AutopilotChangedMessage>
 {
     private readonly IDispatcher _dispatcher;
     private readonly IUserConfirmation _confirmation;
-    private bool _isShadow;
+    private AutopilotMode _mode;
 
     public AutopilotViewModel(IDispatcher dispatcher, IMessenger messenger, IUserConfirmation confirmation, StatusViewModel status, ILogger<AutopilotViewModel> logger)
         : base(status, logger)
@@ -44,27 +45,29 @@ public sealed partial class AutopilotViewModel : PageViewModel, IRecipient<Autop
 
     [ObservableProperty] private decimal _maxCapitalPercent = 50m;
 
-    /// <summary>Shadow mode on; switching it sends the change at once.</summary>
-    public bool IsShadow
-    {
-        get => _isShadow;
-        set
-        {
-            if (!SetProperty(ref _isShadow, value))
-                return;
-            OnPropertyChanged(nameof(IsOff));
-            _ = SetModeAsync(value ? AutopilotMode.Shadow : AutopilotMode.Off);
-        }
-    }
-
+    // One property per radio button. Checking one sends the change at once; unchecking is the other button's doing.
     public bool IsOff
     {
-        get => !_isShadow;
-        set
-        {
-            if (value)
-                IsShadow = false;
-        }
+        get => _mode == AutopilotMode.Off;
+        set => Choose(value, AutopilotMode.Off);
+    }
+
+    public bool IsShadow
+    {
+        get => _mode == AutopilotMode.Shadow;
+        set => Choose(value, AutopilotMode.Shadow);
+    }
+
+    public bool IsPaper
+    {
+        get => _mode == AutopilotMode.Paper;
+        set => Choose(value, AutopilotMode.Paper);
+    }
+
+    private void Choose(bool chosen, AutopilotMode mode)
+    {
+        if (chosen && _mode != mode)
+            _ = SetModeAsync(mode);
     }
 
     public bool HasAssignments => Assignments.Count > 0;
@@ -111,13 +114,26 @@ public sealed partial class AutopilotViewModel : PageViewModel, IRecipient<Autop
     /// <summary>Shows the stored mode without sending it back.</summary>
     private void ShowMode(AutopilotMode mode)
     {
-        _isShadow = mode == AutopilotMode.Shadow;
-        OnPropertyChanged(nameof(IsShadow));
+        _mode = mode;
         OnPropertyChanged(nameof(IsOff));
+        OnPropertyChanged(nameof(IsShadow));
+        OnPropertyChanged(nameof(IsPaper));
     }
 
+    /// <summary>Paper mode places orders by itself, so it is switched on only after the user confirms what it will do.</summary>
     private async Task SetModeAsync(AutopilotMode mode)
     {
+        if (mode == AutopilotMode.Paper)
+        {
+            var message = string.Format(Loc.Instance.Culture, Loc.Get("Autopilot_ConfirmPaper"),
+                Assignments.Count(a => a.Enabled && !a.IsPaused), MaxCapitalPercent);
+            if (!_confirmation.Confirm(Loc.Get("Autopilot_ConfirmPaperTitle"), message))
+            {
+                ShowMode(_mode);
+                return;
+            }
+        }
+
         var set = await _dispatcher.SendAsync(new SetAutopilotModeCommand(mode));
         if (set.IsFailure)
         {
@@ -126,7 +142,12 @@ public sealed partial class AutopilotViewModel : PageViewModel, IRecipient<Autop
             return;
         }
 
-        Status.Show(Loc.Format("Status_AutopilotMode", Loc.Get(set.Value == AutopilotMode.Shadow ? "AutopilotMode_Shadow" : "AutopilotMode_Off")));
+        Status.Show(Loc.Format("Status_AutopilotMode", Loc.Get(set.Value switch
+        {
+            AutopilotMode.Shadow => "AutopilotMode_Shadow",
+            AutopilotMode.Paper => "AutopilotMode_Paper",
+            _ => "AutopilotMode_Off"
+        })));
         await RefreshAsync(CancellationToken.None);
     }
 

@@ -801,15 +801,15 @@ If the stop is hit, the loss is about {4:N2} USD ({5:N2}% of equity).</value></d
   <data name="Trading_PortfolioRiskHint" xml:space="preserve"><value>Portfolio limits (Trading:Risk in appsettings): new positions are refused when equity falls this far below its highest point, when this many symbols are held, or after this many orders today. Hitting the drawdown limit also switches trading off.</value></data>
   <data name="Nav_Autopilot" xml:space="preserve"><value>Autopilot</value></data>
   <data name="Autopilot_Title" xml:space="preserve"><value>Autopilot</value></data>
-  <data name="Autopilot_Intro" xml:space="preserve"><value>Follows the pairs you add from a scan and decides once per session (from 9:35 New York time) what to buy and sell: sized by risk, within the risk limits and the limits below. In shadow mode it only records its decisions and simulates the positions at the prices it decided at; no order is sent. Paper and live trading come after you have reviewed the shadow decisions.</value></data>
+  <data name="Autopilot_Intro" xml:space="preserve"><value>Follows the pairs you add from a scan and decides once per session (from 9:35 New York time) what to buy and sell: sized by risk, within the risk limits and the limits below. In shadow mode it only records its decisions and simulates the positions at the prices it decided at; no order is sent. In paper mode it places the orders on the paper account, each buy with a stop loss held by the broker. Live trading is not available yet.</value></data>
   <data name="Autopilot_Mode" xml:space="preserve"><value>Mode:</value></data>
   <data name="AutopilotMode_Off" xml:space="preserve"><value>Off</value></data>
   <data name="AutopilotMode_Shadow" xml:space="preserve"><value>Shadow (no orders)</value></data>
-  <data name="AutopilotMode_Paper" xml:space="preserve"><value>Paper</value></data>
+  <data name="AutopilotMode_Paper" xml:space="preserve"><value>Paper (orders)</value></data>
   <data name="AutopilotMode_Live" xml:space="preserve"><value>Live</value></data>
   <data name="Autopilot_ModeColumn" xml:space="preserve"><value>Mode</value></data>
   <data name="Autopilot_ShadowHint" xml:space="preserve"><value>Decides as it would and records it, tracking simulated positions. Nothing is sent to the broker.</value></data>
-  <data name="Autopilot_NotAvailableHint" xml:space="preserve"><value>Not available yet: run the autopilot in shadow mode and review its decisions first.</value></data>
+  <data name="Autopilot_NotAvailableHint" xml:space="preserve"><value>Not available yet: run the autopilot on the paper account first.</value></data>
   <data name="Autopilot_RunCycle" xml:space="preserve"><value>Run cycle now</value></data>
   <data name="Autopilot_RunCycleHint" xml:space="preserve"><value>Reads today's signal of every pair and decides now, without waiting for the scheduled cycle. In shadow mode nothing is sent to the broker.</value></data>
   <data name="Autopilot_MaxLosses" xml:space="preserve"><value>Pause a pair after losses in a row:</value></data>
@@ -853,4 +853,13 @@ If the stop is hit, the loss is about {4:N2} USD ({5:N2}% of equity).</value></d
   <data name="Status_AutopilotCycleRunning" xml:space="preserve"><value>An autopilot cycle is already running.</value></data>
   <data name="Status_AutopilotMode" xml:space="preserve"><value>Autopilot: {0}.</value></data>
   <data name="Status_AutopilotLimitsSaved" xml:space="preserve"><value>Autopilot limits saved.</value></data>
+  <data name="Autopilot_PaperHint" xml:space="preserve"><value>Places the orders by itself on the paper account: market buys with a stop loss held by the broker, and market sells. Asks for a confirmation first; after a restart it is off until you switch it on again.</value></data>
+  <data name="Autopilot_ConfirmPaperTitle" xml:space="preserve"><value>Autopilot on the paper account</value></data>
+  <data name="Autopilot_ConfirmPaper" xml:space="preserve"><value>From its next cycle the autopilot places orders by itself on the paper account for the {0} pairs it follows: market buys with a stop loss held by the broker and market sells, using at most {1}% of equity and within the risk limits.
+
+Simulated positions are dropped. After a restart the autopilot is off until you switch it on again.
+
+Switch to paper mode?</value></data>
+  <data name="Autopilot_PositionKind" xml:space="preserve"><value>Position</value></data>
+  <data name="Autopilot_EntryOrder" xml:space="preserve"><value>Buy order</value></data>
 </root>

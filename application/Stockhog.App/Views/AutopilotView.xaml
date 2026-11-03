@@ -22,8 +22,8 @@
             <RadioButton GroupName="AutopilotMode" Content="{loc:Tr AutopilotMode_Off}" IsChecked="{Binding IsOff}" VerticalAlignment="Center" Margin="0,0,10,0" />
             <RadioButton GroupName="AutopilotMode" Content="{loc:Tr AutopilotMode_Shadow}" IsChecked="{Binding IsShadow}" VerticalAlignment="Center" Margin="0,0,10,0"
                          ToolTip="{loc:Tr Autopilot_ShadowHint}" />
-            <RadioButton GroupName="AutopilotMode" Content="{loc:Tr AutopilotMode_Paper}" IsEnabled="False" VerticalAlignment="Center" Margin="0,0,10,0"
-                         ToolTip="{loc:Tr Autopilot_NotAvailableHint}" ToolTipService.ShowOnDisabled="True" />
+            <RadioButton GroupName="AutopilotMode" Content="{loc:Tr AutopilotMode_Paper}" IsChecked="{Binding IsPaper}" VerticalAlignment="Center" Margin="0,0,10,0"
+                         ToolTip="{loc:Tr Autopilot_PaperHint}" />
             <RadioButton GroupName="AutopilotMode" Content="{loc:Tr AutopilotMode_Live}" IsEnabled="False" VerticalAlignment="Center" Margin="0,0,18,0"
                          ToolTip="{loc:Tr Autopilot_NotAvailableHint}" ToolTipService.ShowOnDisabled="True" />
             <Button Content="{loc:Tr Autopilot_RunCycle}" Command="{Binding RunCycleCommand}" Style="{StaticResource PrimaryButton}"
@@ -75,7 +75,9 @@
                     <DataGridTextColumn Header="{loc:Tr Field_Symbol}" Binding="{Binding Symbol}" Width="70" MinWidth="70" />
                     <DataGridTextColumn Header="{loc:Tr Field_Strategy}" Binding="{Binding StrategyName, Converter={StaticResource StrategyText}}" Width="170" MinWidth="170" />
                     <DataGridTextColumn Header="{loc:Tr Scanner_Score}" Binding="{Binding Score, StringFormat=N2}" Width="Auto" MinWidth="55" />
+                    <DataGridTextColumn Header="{loc:Tr Autopilot_PositionKind}" Binding="{Binding PositionMode, Converter={StaticResource LocalizedEnum}}" Width="Auto" MinWidth="70" />
                     <DataGridTextColumn Header="{loc:Tr Proposals_Quantity}" Binding="{Binding Quantity, StringFormat=N0}" Width="Auto" MinWidth="60" />
+                    <DataGridTextColumn Header="{loc:Tr Autopilot_EntryOrder}" Binding="{Binding EntryOrderId}" Width="Auto" MinWidth="90" />
                     <DataGridTextColumn Header="{loc:Tr Autopilot_EntryPrice}" Binding="{Binding EntryPrice, StringFormat=N2}" Width="Auto" MinWidth="70" />
                     <DataGridTextColumn Header="{loc:Tr Scanner_StopPrice}" Binding="{Binding StopPrice, StringFormat=N2}" Width="Auto" MinWidth="60" />
                     <DataGridTextColumn Header="{loc:Tr Autopilot_EntryAt}" Binding="{Binding EntryAt.LocalDateTime, StringFormat=g}" Width="Auto" MinWidth="110" />
