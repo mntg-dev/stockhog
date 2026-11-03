@@ -758,11 +758,19 @@ namespace Stockhog.Infrastructure.Persistence.Migrations
                             b1.Property<DateTime?>("EntryAt")
                                 .HasColumnType("TEXT");
 
+                            b1.Property<string>("EntryOrderId")
+                                .HasMaxLength(48)
+                                .HasColumnType("TEXT");
+
                             b1.Property<decimal?>("EntryPrice")
                                 .HasColumnType("TEXT");
 
                             b1.Property<string>("PausedReason")
                                 .HasMaxLength(500)
+                                .HasColumnType("TEXT");
+
+                            b1.Property<string>("PositionMode")
+                                .HasMaxLength(8)
                                 .HasColumnType("TEXT");
 
                             b1.Property<decimal>("Quantity")

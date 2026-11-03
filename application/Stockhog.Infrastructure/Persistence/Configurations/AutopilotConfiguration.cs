@@ -45,6 +45,8 @@ internal sealed class AutopilotConfiguration : IEntityTypeConfiguration<Autopilo
             assignment.Property(x => x.EntryPrice);
             assignment.Property(x => x.EntryAt);
             assignment.Property(x => x.StopPrice);
+            assignment.Property(x => x.PositionMode).HasConversion<string>().HasMaxLength(8);
+            assignment.Property(x => x.EntryOrderId).HasMaxLength(Domain.Trading.ClientOrderId.MaxLength);
             assignment.Property(x => x.RealizedProfit);
             assignment.Property(x => x.ClosedTrades);
             assignment.Property(x => x.WinningTrades);
@@ -52,10 +54,12 @@ internal sealed class AutopilotConfiguration : IEntityTypeConfiguration<Autopilo
 
             assignment.Ignore(x => x.IsActive);
             assignment.Ignore(x => x.IsHolding);
+            assignment.Ignore(x => x.IsEntryPending);
         });
         builder.Navigation(a => a.Assignments).HasField("_assignments").UsePropertyAccessMode(PropertyAccessMode.Field);
 
         builder.Ignore(a => a.DomainEvents);
         builder.Ignore(a => a.CapitalInUse);
+        builder.Ignore(a => a.PaperPositions);
     }
 }

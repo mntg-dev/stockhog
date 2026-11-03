@@ -647,6 +647,25 @@ public sealed class PersistenceTests : IAsyncLifetime
     }
 
     [Fact]
+    public async Task A_paper_position_round_trips_with_its_pending_entry_order()
+    {
+        var ct = TestContext.Current.CancellationToken;
+
+        await using (var db = CreateContext())
+        {
+            var autopilot = await new AutopilotRepository(db).GetOrCreateAsync(ct);
+            autopilot.SetMode(Domain.Autopilot.AutopilotMode.Paper);
+            var id = autopilot.Add(Symbol.Create("SPY"), StrategyName.Create("RsiPullbackStrategy"), 3m, T0)!.Id;
+            autopilot.Enter(id, 10, 200m, 190m, T0, "emt-20261015-0001");
+            await db.SaveChangesAsync(ct);
+        }
+
+        await using var check = CreateContext();
+        var a = (await new AutopilotRepository(check).GetOrCreateAsync(ct)).Assignments.Single();
+        Assert.Equal((Domain.Autopilot.AutopilotMode.Paper, "emt-20261015-0001", true), (a.PositionMode, a.EntryOrderId, a.IsEntryPending));
+    }
+
+    [Fact]
     public async Task Autopilot_decisions_are_appended_and_listed_newest_first()
     {
         var ct = TestContext.Current.CancellationToken;

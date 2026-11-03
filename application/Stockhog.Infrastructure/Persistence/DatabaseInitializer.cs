@@ -44,6 +44,10 @@ internal sealed class DatabaseInitializer(
         var proposals = await dispatcher.SendAsync(new ExpireProposalsCommand(), cancellationToken);
         if (proposals is { IsSuccess: true, Value: > 0 })
             logger.LogInformation("{Count} proposal(s) expired while the app was closed", proposals.Value);
+
+        var autopilot = await dispatcher.SendAsync(new Application.Autopilot.SuspendAutopilotAfterRestartCommand(), cancellationToken);
+        if (autopilot is { IsSuccess: true, Value: true })
+            logger.LogWarning("The autopilot was trading before the restart and is now off; switch it on again on the Autopilot page");
     }
 
     public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;
