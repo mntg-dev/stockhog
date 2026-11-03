@@ -13,7 +13,7 @@ public enum AutopilotMode
     /// <summary>Decides as it would and records it, tracking simulated positions; sends no order.</summary>
     Shadow,
 
-    /// <summary>Places the orders on the paper account. Not available yet.</summary>
+    /// <summary>Places the orders on the paper account, each buy with a stop loss held by the broker.</summary>
     Paper,
 
     /// <summary>Places the orders on the live account. Not available yet.</summary>
@@ -22,8 +22,8 @@ public enum AutopilotMode
 
 /// <summary>
 /// One strategy the autopilot follows on one symbol, with the position it holds for it. In shadow mode the position
-/// is simulated at the prices the decisions were made at, so the user can see what following it would have done.
-/// Changed only through its <see cref="Autopilot"/>.
+/// is simulated at the prices the decisions were made at, so the user can see what following it would have done; in
+/// paper mode it is a real position on the paper account. Changed only through its <see cref="Autopilot"/>.
 /// </summary>
 public sealed class AutopilotAssignment : Entity<int>
 {
@@ -61,6 +61,15 @@ public sealed class AutopilotAssignment : Entity<int>
     public DateTimeOffset? EntryAt { get; private set; }
     public decimal? StopPrice { get; private set; }
 
+    /// <summary>Whether the position is simulated (shadow) or held on the account (paper); null when flat.</summary>
+    public AutopilotMode? PositionMode { get; private set; }
+
+    /// <summary>
+    /// The buy order of a paper position until its fill has been read; the quantity and entry price are the ones
+    /// ordered until then.
+    /// </summary>
+    public string? EntryOrderId { get; private set; }
+
     /// <summary>Profit of the closed round trips, in USD.</summary>
     public decimal RealizedProfit { get; private set; }
 
@@ -72,7 +81,9 @@ public sealed class AutopilotAssignment : Entity<int>
 
     public bool IsHolding => Quantity > 0;
 
-    internal void Open(decimal quantity, decimal price, decimal stopPrice, DateTimeOffset at)
+    public bool IsEntryPending => EntryOrderId is not null;
+
+    internal void Open(decimal quantity, decimal price, decimal stopPrice, DateTimeOffset at, AutopilotMode mode, string? entryOrderId)
     {
         if (IsHolding)
             throw new DomainException($"{Symbol}/{Strategy} already holds {Quantity} shares.");
@@ -83,7 +94,24 @@ public sealed class AutopilotAssignment : Entity<int>
         EntryPrice = price;
         EntryAt = at;
         StopPrice = stopPrice;
+        PositionMode = mode;
+        EntryOrderId = entryOrderId;
     }
+
+    internal void ConfirmEntry(decimal quantity, decimal price)
+    {
+        if (!IsHolding)
+            throw new DomainException($"{Symbol}/{Strategy} holds nothing to confirm.");
+        if (quantity <= 0 || price <= 0)
+            throw new DomainException("A filled entry needs a positive quantity and price.");
+
+        Quantity = quantity;
+        EntryPrice = price;
+        EntryOrderId = null;
+    }
+
+    /// <summary>Forgets the position without counting a trade: an entry that never filled, or a simulated position.</summary>
+    internal void Discard() => Clear();
 
     /// <returns>The round trip's profit in USD.</returns>
     internal decimal Close(decimal price)
@@ -106,11 +134,18 @@ public sealed class AutopilotAssignment : Entity<int>
             ConsecutiveLosses++;
         }
 
+        Clear();
+        return profit;
+    }
+
+    private void Clear()
+    {
         Quantity = 0;
         EntryPrice = null;
         EntryAt = null;
         StopPrice = null;
-        return profit;
+        PositionMode = null;
+        EntryOrderId = null;
     }
 
     internal void Pause(string reason) => PausedReason = reason;
@@ -162,13 +197,47 @@ public sealed class Autopilot : AggregateRoot<string>
 
     public static Autopilot Create() => new();
 
-    /// <summary>Only off and shadow are available: orders come after the shadow decisions have been reviewed.</summary>
-    public void SetMode(AutopilotMode mode)
+    /// <summary>
+    /// Live is not available yet. Switching to paper forgets the simulated positions, as they are not on the account.
+    /// While paper positions are open the autopilot can only go back to paper or off (their stops stay at the broker),
+    /// never to shadow, which would take them for simulated ones.
+    /// </summary>
+    /// <returns>How many simulated positions were forgotten.</returns>
+    public int SetMode(AutopilotMode mode)
     {
-        if (mode is AutopilotMode.Paper or AutopilotMode.Live)
-            throw new DomainException($"{mode} mode is not available yet; review the shadow decisions first.");
+        if (mode == AutopilotMode.Live)
+            throw new DomainException("Live mode is not available yet; run the autopilot on the paper account first.");
+        if (mode == AutopilotMode.Shadow && PaperPositions > 0)
+            throw new DomainException($"{PaperPositions} positions are open on the paper account; switch the autopilot off instead.");
+
+        var discarded = 0;
+        if (mode == AutopilotMode.Paper)
+        {
+            foreach (var simulated in _assignments.Where(a => a.PositionMode == AutopilotMode.Shadow))
+            {
+                simulated.Discard();
+                discarded++;
+            }
+        }
+
         Mode = mode;
+        return discarded;
     }
+
+    /// <summary>
+    /// Called at startup: the autopilot never places orders after a restart until the user switches it on again.
+    /// Open positions keep their stops at the broker.
+    /// </summary>
+    /// <returns>Whether it was trading and is now off.</returns>
+    public bool SuspendAfterRestart()
+    {
+        if (Mode is not (AutopilotMode.Paper or AutopilotMode.Live))
+            return false;
+        Mode = AutopilotMode.Off;
+        return true;
+    }
+
+    public int PaperPositions => _assignments.Count(a => a.IsHolding && a.PositionMode == AutopilotMode.Paper);
 
     public void Configure(int maxConsecutiveLosses, decimal maxCapitalPercent)
     {
@@ -210,8 +279,20 @@ public sealed class Autopilot : AggregateRoot<string>
     /// <summary>Capital the open positions take at their entry prices.</summary>
     public decimal CapitalInUse => _assignments.Where(a => a.IsHolding).Sum(a => a.Quantity * a.EntryPrice!.Value);
 
-    public void Enter(int assignmentId, decimal quantity, decimal price, decimal stopPrice, DateTimeOffset at) =>
-        Assignment(assignmentId).Open(quantity, price, stopPrice, at);
+    /// <summary>Opens a position: a real one in paper mode, with the buy order it waits for, else a simulated one.</summary>
+    public void Enter(int assignmentId, decimal quantity, decimal price, decimal stopPrice, DateTimeOffset at, string? entryOrderId = null)
+    {
+        var mode = Mode == AutopilotMode.Paper ? AutopilotMode.Paper : AutopilotMode.Shadow;
+        if (mode == AutopilotMode.Paper && entryOrderId is null)
+            throw new DomainException("A paper position needs the order that opened it.");
+        Assignment(assignmentId).Open(quantity, price, stopPrice, at, mode, entryOrderId);
+    }
+
+    /// <summary>The entry order filled: the position becomes what was actually bought.</summary>
+    public void ConfirmEntry(int assignmentId, decimal quantity, decimal price) => Assignment(assignmentId).ConfirmEntry(quantity, price);
+
+    /// <summary>The entry order ended without a fill: there is no position, and no trade is counted.</summary>
+    public void DiscardEntry(int assignmentId) => Assignment(assignmentId).Discard();
 
     /// <summary>Closes the pair's position; pauses the pair once it has lost too often in a row.</summary>
     /// <returns>The round trip's profit in USD.</returns>

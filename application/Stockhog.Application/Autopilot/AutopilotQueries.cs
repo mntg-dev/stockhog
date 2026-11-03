@@ -32,7 +32,9 @@ public sealed record AutopilotAssignmentView(
     decimal RealizedProfit,
     int ClosedTrades,
     int WinningTrades,
-    int ConsecutiveLosses)
+    int ConsecutiveLosses,
+    AutopilotMode? PositionMode,
+    string? EntryOrderId)
 {
     public bool IsHolding => Quantity > 0;
 
@@ -60,7 +62,7 @@ internal sealed class GetAutopilotQueryHandler(IAutopilotRepository autopilots) 
                 .OrderByDescending(x => x.IsHolding).ThenByDescending(x => x.Score ?? decimal.MinValue)
                 .Select(x => new AutopilotAssignmentView(
                     x.Id, x.Symbol.Value, x.Strategy.Value, x.Score, x.AddedAt, x.Enabled, x.PausedReason, x.Quantity, x.EntryPrice, x.EntryAt,
-                    x.StopPrice, x.RealizedProfit, x.ClosedTrades, x.WinningTrades, x.ConsecutiveLosses))
+                    x.StopPrice, x.RealizedProfit, x.ClosedTrades, x.WinningTrades, x.ConsecutiveLosses, x.PositionMode, x.EntryOrderId))
                 .ToList());
     }
 }

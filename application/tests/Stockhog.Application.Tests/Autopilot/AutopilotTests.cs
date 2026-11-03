@@ -20,18 +20,145 @@ public class AutopilotTests
     private static CancellationToken Ct => TestContext.Current.CancellationToken;
 
     [Fact]
-    public async Task Only_off_and_shadow_can_be_chosen_for_now()
+    public async Task Paper_mode_needs_the_paper_account_and_live_mode_is_not_available()
     {
         await using var host = new ApplicationTestHost();
 
-        var paper = await host.Dispatcher.SendAsync(new SetAutopilotModeCommand(AutopilotMode.Paper), Ct);
+        host.Environment.Mode = TradingMode.Live;
+        var onLive = await host.Dispatcher.SendAsync(new SetAutopilotModeCommand(AutopilotMode.Paper), Ct);
+        host.Environment.Mode = TradingMode.Paper;
         var live = await host.Dispatcher.SendAsync(new SetAutopilotModeCommand(AutopilotMode.Live), Ct);
         var shadow = await host.Dispatcher.SendAsync(new SetAutopilotModeCommand(AutopilotMode.Shadow), Ct);
+        var paper = await host.Dispatcher.SendAsync(new SetAutopilotModeCommand(AutopilotMode.Paper), Ct);
 
-        Assert.Equal(("Autopilot.ModeNotAvailable", "Autopilot.ModeNotAvailable"), (paper.Error?.Code, live.Error?.Code));
-        Assert.Equal(AutopilotMode.Shadow, shadow.Value);
-        Assert.Equal(AutopilotMode.Shadow, host.Autopilot.Autopilot.Mode);
-        Assert.Contains(host.AuditLog.Entries, e => e.Category == AuditCategory.Autopilot && e.Details.Contains("Off -> Shadow"));
+        Assert.Equal(("Autopilot.NotPaperAccount", "Autopilot.ModeNotAvailable"), (onLive.Error?.Code, live.Error?.Code));
+        Assert.Equal((AutopilotMode.Shadow, AutopilotMode.Paper), (shadow.Value, paper.Value));
+        Assert.Equal(AutopilotMode.Paper, host.Autopilot.Autopilot.Mode);
+        Assert.Contains(host.AuditLog.Entries, e => e.Category == AuditCategory.Autopilot && e.Details.Contains("Shadow -> Paper"));
+    }
+
+    [Fact]
+    public async Task A_paper_entry_buys_at_market_with_a_stop_at_the_broker_and_takes_in_the_fill_next_cycle()
+    {
+        await using var host = Paper(out var spy, ("SPY", 200m));
+
+        var bought = await Apply(host, (spy, ProposalScans.Entry(200m, 190m)));
+
+        var expected = PositionSizer.Size(100_000m, 50_000m, 200m, 190m, SizingRules.Default, host.RiskLimits.Current).Quantity;
+        var order = Assert.Single(host.Database.Orders);
+        Assert.Equal((OrderSide.Buy, OrderType.Market, expected, 190m), (order.Side, order.Type, order.Quantity, order.StopLossPrice));
+        var assignment = host.Autopilot.Autopilot.Assignments[0];
+        Assert.Equal((order.Id.Value, AutopilotMode.Paper), (assignment.EntryOrderId, assignment.PositionMode));
+        var decision = Assert.Single(host.Autopilot.Decisions);
+        Assert.Equal((AutopilotAction.Buy, true, order.Id.Value), (decision.Action, decision.Executed, decision.OrderId));
+        Assert.Equal(1, bought.Value.Buys);
+        Assert.Contains(host.AuditLog.Entries, e => e.Action == "Cycle" && e.Details.Contains("1 orders were sent to the paper account"));
+
+        order.ApplyFill(expected, 201.5m, TestData.Now);
+        host.Broker.Positions.Add(new BrokerPosition("SPY", expected, 201.5m, 202m, expected * 202m, 0, 0));
+        var next = await Apply(host, (spy, ProposalScans.Signal(SignalKind.Holding, 202m, 190m)));
+
+        Assert.Equal(1, next.Value.Holds);
+        Assert.Equal((expected, 201.5m, false), (assignment.Quantity, assignment.EntryPrice, assignment.IsEntryPending));
+    }
+
+    [Fact]
+    public async Task A_paper_exit_cancels_the_stop_leg_first_then_sells_at_market()
+    {
+        await using var host = Paper(out var spy, ("SPY", 210m));
+        Held(host, spy, 10, 200m);
+        host.Broker.Legs.Add(new BrokerOrder("leg-1", null, "SPY", OrderStatus.Submitted, 10, 0, null, TestData.Now, Side: OrderSide.Sell));
+        host.Broker.FillMarketOrdersImmediately = true;
+        host.Broker.FillPrice = 210m;
+
+        var cycle = await Apply(host, (spy, ProposalScans.Signal(SignalKind.Exit, 210m, null)));
+
+        Assert.Equal(1, cycle.Value.Sells);
+        Assert.Equal(["leg-1"], host.Broker.Cancelled);
+        var sell = Assert.Single(host.Database.Orders);
+        Assert.Equal((OrderSide.Sell, OrderType.Market, 10m), (sell.Side, sell.Type, sell.Quantity));
+        var assignment = host.Autopilot.Autopilot.Assignments[0];
+        Assert.Equal((0m, 100m, 1), (assignment.Quantity, assignment.RealizedProfit, assignment.WinningTrades));
+        Assert.Equal((true, 210m), (host.Autopilot.Decisions[0].Executed, host.Autopilot.Decisions[0].Price));
+    }
+
+    [Fact]
+    public async Task A_paper_position_the_account_no_longer_holds_was_stopped_out_at_the_broker()
+    {
+        await using var host = Paper(out var spy, ("SPY", 185m));
+        Held(host, spy, 10, 200m);
+        host.Broker.Positions.Clear();
+
+        var cycle = await Apply(host, (spy, ProposalScans.Entry(185m, 175m)));
+
+        Assert.Equal((1, 0), (cycle.Value.Sells, cycle.Value.Buys));   // not bought again in the same cycle
+        var decision = Assert.Single(host.Autopilot.Decisions);
+        Assert.Equal((AutopilotAction.Sell, false, 190m, -100m), (decision.Action, decision.Executed, decision.Price, decision.Profit));
+        Assert.Contains("stop at the broker", decision.Reason);
+        Assert.Empty(host.Database.Orders);
+    }
+
+    [Fact]
+    public async Task A_paper_entry_whose_order_ended_without_a_fill_is_dropped()
+    {
+        await using var host = Paper(out var spy, ("SPY", 200m));
+        var order = Order.Create(ClientOrderId.New(TestData.Now), Symbol.Create("SPY"), OrderSide.Buy, OrderType.Market, 10, null, null,
+            TimeInForce.Day, TestData.Now, 190m);
+        order.Cancel(TestData.Now);
+        host.Database.Add(order);
+        host.Autopilot.Autopilot.Enter(spy, 10, 200m, 190m, TestData.Now, order.Id.Value);
+
+        var cycle = await Apply(host, (spy, ProposalScans.Entry(200m, 190m)));
+
+        Assert.Equal((0, 1), (cycle.Value.Buys, cycle.Value.Skips));
+        var assignment = host.Autopilot.Autopilot.Assignments[0];
+        Assert.Equal((0m, 0), (assignment.Quantity, assignment.ClosedTrades));
+        Assert.Contains("ended Cancelled without a fill", host.Autopilot.Decisions[0].Reason);
+        Assert.Single(host.Database.Orders);
+    }
+
+    [Fact]
+    public async Task A_refused_paper_sell_keeps_the_position_and_puts_its_stop_back()
+    {
+        await using var host = Paper(out var spy, ("SPY", 210m));
+        Held(host, spy, 10, 200m);
+        host.Broker.SubmitBehavior = order => order is { Side: OrderSide.Sell, Type: OrderType.Market }
+            ? throw new BrokerException("insufficient qty available", isRejection: true)
+            : null;
+
+        var cycle = await Apply(host, (spy, ProposalScans.Signal(SignalKind.Exit, 210m, null)));
+
+        Assert.Equal((0, 1), (cycle.Value.Sells, cycle.Value.Skips));
+        Assert.Equal(10m, host.Autopilot.Autopilot.Assignments[0].Quantity);
+        Assert.Contains("The stop at 190.00 was placed again", host.Autopilot.Decisions[0].Reason);
+        var stop = Assert.Single(host.Database.Orders, o => o.Type == OrderType.Stop);
+        Assert.Equal((OrderSide.Sell, 10m, 190m, TimeInForce.Gtc), (stop.Side, stop.Quantity, stop.StopPrice, stop.TimeInForce));
+    }
+
+    [Fact]
+    public async Task A_paper_cycle_is_refused_once_the_app_runs_against_the_live_account()
+    {
+        await using var host = Paper(out var spy, ("SPY", 200m));
+        host.Environment.Mode = TradingMode.Live;
+
+        var cycle = await Apply(host, (spy, ProposalScans.Entry(200m, 190m)));
+
+        Assert.Equal("Autopilot.NotPaperAccount", cycle.Error?.Code);
+        Assert.Empty(host.Database.Orders);
+    }
+
+    [Fact]
+    public async Task Paper_trading_is_switched_off_after_a_restart()
+    {
+        await using var host = Paper(out var spy, ("SPY", 200m));
+        Held(host, spy, 10, 200m);
+
+        var suspended = await host.Dispatcher.SendAsync(new SuspendAutopilotAfterRestartCommand(), Ct);
+        var again = await host.Dispatcher.SendAsync(new SuspendAutopilotAfterRestartCommand(), Ct);
+
+        Assert.Equal((true, false), (suspended.Value, again.Value));
+        Assert.Equal(AutopilotMode.Off, host.Autopilot.Autopilot.Mode);
+        Assert.Contains(host.AuditLog.Entries, e => e.Action == "Suspended" && e.Details.Contains("1 open positions keep their stops"));
     }
 
     [Fact]
@@ -188,6 +315,31 @@ public class AutopilotTests
             host.Autopilot.Autopilot.Add(Symbol.Create(symbol), StrategyName.Create(strategy), score, TestData.Now);
         firstId = host.Autopilot.Autopilot.Assignments[0].Id;
         return host;
+    }
+
+    /// <summary>One RSI pullback pair per symbol, priced by the quote cache so orders have a reference price.</summary>
+    private static ApplicationTestHost Paper(out int firstId, params (string Symbol, decimal Price)[] pairs)
+    {
+        var host = new ApplicationTestHost();
+        host.LatestPrices.Price = null;
+        host.Autopilot.Autopilot.SetMode(AutopilotMode.Paper);
+        foreach (var (symbol, price) in pairs)
+        {
+            host.Autopilot.Autopilot.Add(Symbol.Create(symbol), StrategyName.Create("RsiPullbackStrategy"), 3m, TestData.Now);
+            host.Quotes.Quotes[symbol] = new Quote(symbol, null, null, price, TestData.Now);
+        }
+
+        firstId = host.Autopilot.Autopilot.Assignments[0].Id;
+        return host;
+    }
+
+    /// <summary>A filled paper position with its stop 10 below the entry, held on the account.</summary>
+    private static void Held(ApplicationTestHost host, int id, decimal quantity, decimal entry)
+    {
+        host.Autopilot.Autopilot.Enter(id, quantity, entry, entry - 10m, TestData.Now.AddDays(-5), "ord-entry");
+        host.Autopilot.Autopilot.ConfirmEntry(id, quantity, entry);
+        var symbol = host.Autopilot.Autopilot.Assignments.Single(a => a.Id == id).Symbol.Value;
+        host.Broker.Positions.Add(new BrokerPosition(symbol, quantity, entry, entry, quantity * entry, 0, 0));
     }
 
     private static Task<Abstractions.Results.Result<AutopilotCycleSummary>> Apply(ApplicationTestHost host, params (int Id, StrategySignal? Signal)[] signals) =>

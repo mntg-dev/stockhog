@@ -131,6 +131,8 @@ internal sealed class ApplyAutopilotCycleCommandHandler(
     PortfolioRiskReader portfolio,
     IQuoteCache quotes,
     ILatestPriceSource latestPrices,
+    IDispatcher dispatcher,
+    ITradingEnvironment environment,
     Audit audit,
     TimeProvider clock) : ICommandHandler<ApplyAutopilotCycleCommand, AutopilotCycleSummary>
 {
@@ -141,8 +143,13 @@ internal sealed class ApplyAutopilotCycleCommandHandler(
         var autopilot = await autopilots.GetOrCreateAsync(cancellationToken);
         if (autopilot.Mode == AutopilotMode.Off)
             return AutopilotErrors.Off();
-        if (autopilot.Mode != AutopilotMode.Shadow)
+        if (autopilot.Mode == AutopilotMode.Live)
             return AutopilotErrors.ModeNotAvailable(autopilot.Mode);
+
+        // Checked again here, not only when the mode was chosen: the app may have been switched to the live account since.
+        var paper = autopilot.Mode == AutopilotMode.Paper;
+        if (paper && environment.Mode != TradingMode.Paper)
+            return AutopilotErrors.NotPaperAccount();
 
         BrokerAccount account;
         IReadOnlyList<BrokerPosition> positions;
@@ -165,18 +172,31 @@ internal sealed class ApplyAutopilotCycleCommandHandler(
         var signals = command.Signals.Where(s => s is not null).ToDictionary(s => s.AssignmentId);
         var now = clock.GetUtcNow();
         var decisions = new List<AutopilotDecision>();
+        var sent = 0;
 
-        AutopilotDecision Decide(AutopilotAssignment a, AutopilotAction action, decimal quantity, decimal? price, decimal? stop, string reason, decimal? profit = null)
+        void Decide(AutopilotAssignment a, AutopilotAction action, decimal quantity, decimal? price, decimal? stop, string reason,
+            decimal? profit = null, string? orderId = null) =>
+            decisions.Add(new AutopilotDecision(now, autopilot.Mode, a.Id, a.Symbol.Value, a.Strategy.Value, action, quantity, price, stop, reason,
+                orderId is not null, orderId, profit));
+
+        string Paused(AutopilotAssignment a) => a.PausedReason is { } paused ? " Paused: " + paused : "";
+
+        // A pair decided before the entries is not bought again in the same cycle, even if its signal still says
+        // entry (e.g. after its stop was hit).
+        var decided = new HashSet<int>();
+
+        // Paper positions first take in what happened at the broker since the last cycle: fills, and stops that fired.
+        foreach (var a in paper ? autopilot.Assignments.Where(a => a.IsHolding && a.PositionMode == AutopilotMode.Paper).ToList() : [])
         {
-            var decision = new AutopilotDecision(now, autopilot.Mode, a.Id, a.Symbol.Value, a.Strategy.Value, action, quantity, price, stop, reason, false, Profit: profit);
-            decisions.Add(decision);
-            return decision;
+            if (await ReconcileAsync(autopilot, a, positions, cancellationToken) is not { } outcome)
+                continue;
+
+            decided.Add(a.Id);
+            Decide(a, outcome.Action, outcome.Quantity, outcome.Price, null, outcome.Reason + Paused(a), outcome.Profit);
         }
 
-        // Exits first: they free capital and position slots for today's entries. A pair decided here is not bought
-        // again in the same cycle, even if its signal still says entry (e.g. after its stop was hit).
-        var decided = new HashSet<int>();
-        foreach (var a in autopilot.Assignments.Where(a => a.IsHolding).ToList())
+        // Exits next: they free capital and position slots for today's entries.
+        foreach (var a in autopilot.Assignments.Where(a => a.IsHolding && !decided.Contains(a.Id)).ToList())
         {
             decided.Add(a.Id);
             if (Unusable(a, signals, expected) is { } problem)
@@ -204,10 +224,25 @@ internal sealed class ApplyAutopilotCycleCommandHandler(
             }
 
             var quantity = a.Quantity;
-            var profit = autopilot.Exit(a.Id, price);
-            if (a.PausedReason is { } paused)
-                reason += " Paused: " + paused;
-            Decide(a, AutopilotAction.Sell, quantity, price, null, reason, profit);
+            if (!paper)
+            {
+                var profit = autopilot.Exit(a.Id, price);
+                Decide(a, AutopilotAction.Sell, quantity, price, null, reason + Paused(a), profit);
+                continue;
+            }
+
+            var sale = await SellAsync(a, reason, cancellationToken);
+            if (sale.OrderId is null)
+            {
+                Decide(a, AutopilotAction.Skip, quantity, price, a.StopPrice, sale.Reason);
+                continue;
+            }
+
+            sent++;
+            var exitPrice = sale.FillPrice ?? price;
+            var realized = autopilot.Exit(a.Id, exitPrice);
+            Decide(a, AutopilotAction.Sell, quantity, exitPrice, null,
+                reason + (sale.FillPrice is null ? " Profit counted at the price when the order was sent." : "") + Paused(a), realized, sale.OrderId);
         }
 
         // Entries by score, so the best pairs get the capital when it runs short.
@@ -265,12 +300,15 @@ internal sealed class ApplyAutopilotCycleCommandHandler(
                 continue;
             }
 
-            // The checks a real order would face. Shadow positions are not in the account, so they are counted here.
-            var shadowHeld = autopilot.Assignments.Where(o => o.IsHolding && !heldInAccount.Contains(o.Symbol.Value)).Select(o => o.Symbol).Distinct().Count();
-            var context = risk.ContextFor(0, account, openOrders) with
+            // The checks a real order would face, counting what this cycle already did: simulated positions are not
+            // in the account, and the account was read before this cycle's buys.
+            var notInAccount = paper
+                ? buys
+                : autopilot.Assignments.Where(o => o.IsHolding && !heldInAccount.Contains(o.Symbol.Value)).Select(o => o.Symbol).Distinct().Count();
+            var context = risk.ContextFor(0, account, openOrders + sent) with
             {
-                OpenPositions = risk.OpenPositions + shadowHeld,
-                OrdersToday = risk.OrdersToday + buys
+                OpenPositions = risk.OpenPositions + notInAccount,
+                OrdersToday = risk.OrdersToday + (paper ? sent : buys)
             };
             var check = RiskPolicy.Evaluate(new OrderIntent(a.Symbol, OrderSide.Buy, size.Quantity, price), context, limits);
             if (!check.IsAllowed)
@@ -279,10 +317,29 @@ internal sealed class ApplyAutopilotCycleCommandHandler(
                 continue;
             }
 
-            autopilot.Enter(a.Id, size.Quantity, price, size.StopPrice, now);
+            var why = string.Create(Invariant,
+                $"Entry signal from {signal.EntryTime:yyyy-MM-dd}; risk {size.RiskAmount:N2} USD{(size.UsesFallbackStop ? " (fallback stop)." : ".")}");
+            if (!paper)
+            {
+                autopilot.Enter(a.Id, size.Quantity, price, size.StopPrice, now);
+                buys++;
+                Decide(a, AutopilotAction.Buy, size.Quantity, price, size.StopPrice, why);
+                continue;
+            }
+
+            var bought = await BuyAsync(a, size, cancellationToken);
+            if (bought.OrderId is null)
+            {
+                Decide(a, AutopilotAction.Skip, size.Quantity, price, size.StopPrice, bought.Reason);
+                continue;
+            }
+
+            sent++;
             buys++;
-            Decide(a, AutopilotAction.Buy, size.Quantity, price, size.StopPrice, string.Create(Invariant,
-                $"Entry signal from {signal.EntryTime:yyyy-MM-dd}; risk {size.RiskAmount:N2} USD{(size.UsesFallbackStop ? " (fallback stop)." : ".")}"));
+            autopilot.Enter(a.Id, size.Quantity, price, size.StopPrice, now, bought.OrderId);
+            if (bought.FillPrice is { } filled)
+                autopilot.ConfirmEntry(a.Id, size.Quantity, filled);
+            Decide(a, AutopilotAction.Buy, size.Quantity, bought.FillPrice ?? price, size.StopPrice, why + bought.Reason, orderId: bought.OrderId);
         }
 
         autopilot.CompleteCycle(command.Session, now);
@@ -295,10 +352,123 @@ internal sealed class ApplyAutopilotCycleCommandHandler(
             decisions.Count(d => d.Action == AutopilotAction.Hold),
             decisions.Count(d => d.Action == AutopilotAction.Wait),
             decisions.Count(d => d.Action == AutopilotAction.Skip));
-        await audit.RecordAsync(AuditCategory.Autopilot, "Cycle", $"{summary} Session {command.Session:yyyy-MM-dd}; no orders were sent.");
+        await audit.RecordAsync(AuditCategory.Autopilot, "Cycle", $"{summary} Session {command.Session:yyyy-MM-dd}; " +
+            (paper ? $"{sent} orders were sent to the paper account." : "no orders were sent."));
 
         // Saved by UnitOfWorkBehavior.
         return summary;
+    }
+
+    private sealed record Reconciled(AutopilotAction Action, decimal Quantity, decimal? Price, string Reason, decimal? Profit = null);
+
+    /// <summary>
+    /// Takes in the fill of a pending entry and notices a position the account no longer holds (its stop fired at the
+    /// broker, or it was sold by hand).
+    /// </summary>
+    /// <returns>A decision to record, or null when the position is as expected and the pair goes on to its signal.</returns>
+    private async Task<Reconciled?> ReconcileAsync(
+        Domain.Autopilot.Autopilot autopilot,
+        AutopilotAssignment a,
+        IReadOnlyList<BrokerPosition> positions,
+        CancellationToken cancellationToken)
+    {
+        if (a.EntryOrderId is { } entryOrderId)
+        {
+            var order = await orders.GetAsync(ClientOrderId.From(entryOrderId), cancellationToken);
+            if (order is null || !order.IsFinal)
+            {
+                return order?.FilledQuantity > 0
+                    ? new Reconciled(AutopilotAction.Skip, a.Quantity, null, $"The buy order {entryOrderId} is partly filled and still open.")
+                    : new Reconciled(AutopilotAction.Skip, a.Quantity, null, $"The buy order {entryOrderId} is still open.");
+            }
+
+            if (order.FilledQuantity <= 0 || order.AverageFillPrice is not { } fillPrice)
+            {
+                autopilot.DiscardEntry(a.Id);
+                return new Reconciled(AutopilotAction.Skip, 0, null, $"The buy order {entryOrderId} ended {order.Status} without a fill; there is no position.");
+            }
+
+            autopilot.ConfirmEntry(a.Id, order.FilledQuantity, fillPrice);
+        }
+
+        var held = positions.FirstOrDefault(p => p.Symbol == a.Symbol.Value)?.Quantity ?? 0;
+        if (held >= a.Quantity)
+            return null;
+
+        if (held > 0)
+        {
+            autopilot.ConfirmEntry(a.Id, held, a.EntryPrice!.Value);
+            return null;
+        }
+
+        var quantity = a.Quantity;
+        var stop = a.StopPrice!.Value;
+        var profit = autopilot.Exit(a.Id, stop);
+        return new Reconciled(AutopilotAction.Sell, quantity, stop,
+            "No longer held on the paper account: the stop at the broker was probably hit. Profit counted at the stop.", profit);
+    }
+
+    private sealed record Sent(string? OrderId, decimal? FillPrice, string Reason);
+
+    /// <summary>
+    /// Sells the whole position at market. The broker holds the shares for the stop leg of the entry, so open sell
+    /// orders on the symbol are cancelled first; if the sell is then refused, the stop is placed again.
+    /// </summary>
+    private async Task<Sent> SellAsync(AutopilotAssignment a, string reason, CancellationToken cancellationToken)
+    {
+        try
+        {
+            foreach (var open in await broker.ListOpenOrdersAsync(a.Symbol, cancellationToken))
+            {
+                if (open.Side == OrderSide.Sell)
+                    await broker.CancelOrderAsync(open.BrokerOrderId, cancellationToken);
+            }
+        }
+        catch (BrokerException ex)
+        {
+            return new Sent(null, null, $"Wanted to sell ({reason}) but the open sell orders could not be cancelled: {ex.Message} The position is kept.");
+        }
+
+        var placed = await dispatcher.SendAsync(new PlaceOrderCommand(a.Symbol.Value, OrderSide.Sell, OrderType.Market, a.Quantity), cancellationToken);
+        if (placed.IsSuccess)
+            return new Sent(placed.Value.ClientOrderId, placed.Value.Status == OrderStatus.Filled ? placed.Value.AverageFillPrice : null, "");
+
+        var restop = await dispatcher.SendAsync(
+            new PlaceOrderCommand(a.Symbol.Value, OrderSide.Sell, OrderType.Stop, a.Quantity, StopPrice: a.StopPrice, TimeInForce: TimeInForce.Gtc),
+            CancellationToken.None);
+        if (restop.IsFailure)
+        {
+            await audit.RecordAsync(AuditCategory.Risk, "Unprotected",
+                $"Autopilot: {a.Quantity} {a.Symbol} could not be sold ({placed.Error.Message}) nor protected by a stop again ({restop.Error.Message}).",
+                symbol: a.Symbol.Value);
+        }
+
+        return new Sent(null, null, $"Wanted to sell ({reason}) but the order was refused: {placed.Error.Message} " +
+            (restop.IsSuccess
+                ? string.Create(Invariant, $"The stop at {a.StopPrice:N2} was placed again.")
+                : $"The stop could not be placed again ({restop.Error.Message}): the position is unprotected."));
+    }
+
+    /// <summary>
+    /// Buys at market with the stop loss held by the broker. When the outcome is unknown (no answer from the broker)
+    /// the order is followed as a pending entry: the next cycle reads whether it filled.
+    /// </summary>
+    private async Task<Sent> BuyAsync(AutopilotAssignment a, PositionSize size, CancellationToken cancellationToken)
+    {
+        var placed = await dispatcher.SendAsync(
+            new PlaceOrderCommand(a.Symbol.Value, OrderSide.Buy, OrderType.Market, size.Quantity, StopLossPrice: size.StopPrice), cancellationToken);
+        if (placed.IsSuccess)
+            return new Sent(placed.Value.ClientOrderId, placed.Value.Status == OrderStatus.Filled ? placed.Value.AverageFillPrice : null, "");
+
+        if (placed.Error.Code == "Trading.SubmitUnknown"
+            && (await orders.ListUnfinishedAsync(cancellationToken))
+                .Where(o => o.Symbol == a.Symbol && o.Side == OrderSide.Buy && o.Status == OrderStatus.New)
+                .MaxBy(o => o.CreatedAt) is { } unknown)
+        {
+            return new Sent(unknown.Id.Value, null, " The broker did not answer; the order is checked at the next cycle.");
+        }
+
+        return new Sent(null, null, "The buy was refused: " + placed.Error.Message);
     }
 
     private static string? Unusable(AutopilotAssignment a, IReadOnlyDictionary<int, AssignmentSignal> signals, DateOnly expected)

@@ -25,10 +25,15 @@ public static class AutopilotErrors
 {
     public static Error ModeNotAvailable(AutopilotMode mode) => new(
         "Autopilot.ModeNotAvailable",
-        $"{mode} mode is not available yet: run the autopilot in shadow mode and review its decisions first.",
+        $"{mode} mode is not available yet: run the autopilot on the paper account first.",
         ErrorType.Conflict);
 
-    public static Error Off() => new("Autopilot.Off", "The autopilot is off. Switch it to shadow mode first.", ErrorType.Conflict);
+    public static Error NotPaperAccount() => new(
+        "Autopilot.NotPaperAccount",
+        "Paper mode needs the app to run against the paper account.",
+        ErrorType.Conflict);
+
+    public static Error Off() => new("Autopilot.Off", "The autopilot is off. Switch it to shadow or paper mode first.", ErrorType.Conflict);
 
     public static Error NothingToFollow() =>
         new("Autopilot.NothingToFollow", "The autopilot follows no pairs. Add the passed pairs of a scan first.", ErrorType.Conflict);

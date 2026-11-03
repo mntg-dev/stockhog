@@ -11,15 +11,75 @@ public class AutopilotTests
     private static readonly StrategyName Rsi = StrategyName.Create("RsiPullbackStrategy");
 
     [Fact]
-    public void A_new_autopilot_is_off_and_cannot_be_switched_to_paper_or_live_yet()
+    public void A_new_autopilot_is_off_and_cannot_be_switched_to_live_yet()
     {
         var autopilot = Autopilot.Autopilot.Create();
 
         Assert.Equal(AutopilotMode.Off, autopilot.Mode);
-        Assert.Throws<DomainException>(() => autopilot.SetMode(AutopilotMode.Paper));
         Assert.Throws<DomainException>(() => autopilot.SetMode(AutopilotMode.Live));
         autopilot.SetMode(AutopilotMode.Shadow);
         Assert.Equal(AutopilotMode.Shadow, autopilot.Mode);
+    }
+
+    [Fact]
+    public void Switching_to_paper_forgets_the_simulated_positions()
+    {
+        var autopilot = Autopilot.Autopilot.Create();
+        autopilot.SetMode(AutopilotMode.Shadow);
+        var id = autopilot.Add(Symbol.Create("SPY"), Rsi, 2m, T0)!.Id;
+        autopilot.Enter(id, 10, 200m, 190m, T0);
+
+        var discarded = autopilot.SetMode(AutopilotMode.Paper);
+
+        var a = autopilot.Assignments[0];
+        Assert.Equal((1, 0m, 0, (AutopilotMode?)null), (discarded, a.Quantity, a.ClosedTrades, a.PositionMode));
+    }
+
+    [Fact]
+    public void Paper_positions_wait_for_their_fill_and_keep_the_autopilot_out_of_shadow_mode()
+    {
+        var autopilot = Autopilot.Autopilot.Create();
+        autopilot.SetMode(AutopilotMode.Paper);
+        var id = autopilot.Add(Symbol.Create("SPY"), Rsi, 2m, T0)!.Id;
+
+        Assert.Throws<DomainException>(() => autopilot.Enter(id, 10, 200m, 190m, T0));   // a paper entry needs its order
+        autopilot.Enter(id, 10, 200m, 190m, T0, "ord-1");
+        Assert.True(autopilot.Assignments[0].IsEntryPending);
+
+        autopilot.ConfirmEntry(id, 10, 201.5m);
+        var a = autopilot.Assignments[0];
+        Assert.Equal((10m, 201.5m, AutopilotMode.Paper, false), (a.Quantity, a.EntryPrice, a.PositionMode, a.IsEntryPending));
+
+        Assert.Throws<DomainException>(() => autopilot.SetMode(AutopilotMode.Shadow));
+        autopilot.SetMode(AutopilotMode.Off);
+        Assert.Equal(1, autopilot.PaperPositions);
+    }
+
+    [Fact]
+    public void An_entry_that_never_filled_is_dropped_without_counting_a_trade()
+    {
+        var autopilot = Autopilot.Autopilot.Create();
+        autopilot.SetMode(AutopilotMode.Paper);
+        var id = autopilot.Add(Symbol.Create("SPY"), Rsi, 2m, T0)!.Id;
+        autopilot.Enter(id, 10, 200m, 190m, T0, "ord-1");
+
+        autopilot.DiscardEntry(id);
+
+        var a = autopilot.Assignments[0];
+        Assert.Equal((0m, 0, (string?)null), (a.Quantity, a.ClosedTrades, a.EntryOrderId));
+    }
+
+    [Theory]
+    [InlineData(AutopilotMode.Paper, true)]
+    [InlineData(AutopilotMode.Shadow, false)]
+    [InlineData(AutopilotMode.Off, false)]
+    public void Only_paper_trading_is_switched_off_by_a_restart(AutopilotMode mode, bool suspended)
+    {
+        var autopilot = Autopilot.Autopilot.Create();
+        autopilot.SetMode(mode);
+
+        Assert.Equal(suspended, autopilot.SuspendAfterRestart());
+        Assert.Equal(suspended ? AutopilotMode.Off : mode, autopilot.Mode);
     }
 
     [Fact]

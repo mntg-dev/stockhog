@@ -6,12 +6,20 @@ using Stockhog.Application.Trading.Safety;
 using Stockhog.Domain.Autopilot;
 using Stockhog.Domain.Common;
 using Stockhog.Domain.Scanning;
+using Stockhog.Domain.Trading;
 using FluentValidation;
 
 namespace Stockhog.Application.Autopilot;
 
-/// <summary>Switches the autopilot off or into shadow mode; paper and live are refused until they exist.</summary>
+/// <summary>
+/// Switches the autopilot off, into shadow mode, or into paper mode (only while the app runs against the paper
+/// account). Live is refused until it exists.
+/// </summary>
 public sealed record SetAutopilotModeCommand(AutopilotMode Mode) : ICommand<AutopilotMode>;
+
+/// <summary>Sent at startup: paper (or live) trading is never resumed by itself after a restart.</summary>
+/// <returns>Whether the autopilot was trading and is now off.</returns>
+public sealed record SuspendAutopilotAfterRestartCommand : ICommand<bool>;
 
 /// <param name="MaxConsecutiveLosses">Pause a pair after this many losing round trips in a row.</param>
 /// <param name="MaxCapitalPercent">Most of the equity the autopilot's positions may take together.</param>
@@ -44,22 +52,54 @@ internal sealed class ConfigureAutopilotCommandValidator : AbstractValidator<Con
     }
 }
 
-internal sealed class SetAutopilotModeCommandHandler(IAutopilotRepository autopilots, Audit audit) : ICommandHandler<SetAutopilotModeCommand, AutopilotMode>
+internal sealed class SetAutopilotModeCommandHandler(IAutopilotRepository autopilots, ITradingEnvironment environment, Audit audit)
+    : ICommandHandler<SetAutopilotModeCommand, AutopilotMode>
 {
     public async Task<Result<AutopilotMode>> HandleAsync(SetAutopilotModeCommand command, CancellationToken cancellationToken)
     {
-        if (command.Mode is AutopilotMode.Paper or AutopilotMode.Live)
+        if (command.Mode == AutopilotMode.Live)
             return AutopilotErrors.ModeNotAvailable(command.Mode);
+        if (command.Mode == AutopilotMode.Paper && environment.Mode != TradingMode.Paper)
+            return AutopilotErrors.NotPaperAccount();
 
         var autopilot = await autopilots.GetOrCreateAsync(cancellationToken);
-        if (autopilot.Mode != command.Mode)
+        if (autopilot.Mode == command.Mode)
+            return autopilot.Mode;
+
+        var previous = autopilot.Mode;
+        int discarded;
+        try
         {
-            await audit.RecordAsync(AuditCategory.Autopilot, "Mode", $"Autopilot: {autopilot.Mode} -> {command.Mode}.");
-            autopilot.SetMode(command.Mode);
+            discarded = autopilot.SetMode(command.Mode);
         }
+        catch (DomainException ex)
+        {
+            return AutopilotErrors.Invalid(ex.Message);
+        }
+
+        await audit.RecordAsync(AuditCategory.Autopilot, "Mode", $"Autopilot: {previous} -> {command.Mode}." +
+            (discarded > 0 ? $" {discarded} simulated positions were dropped." : ""));
 
         // Saved by UnitOfWorkBehavior.
         return autopilot.Mode;
+    }
+}
+
+internal sealed class SuspendAutopilotAfterRestartCommandHandler(IAutopilotRepository autopilots, Audit audit)
+    : ICommandHandler<SuspendAutopilotAfterRestartCommand, bool>
+{
+    public async Task<Result<bool>> HandleAsync(SuspendAutopilotAfterRestartCommand command, CancellationToken cancellationToken)
+    {
+        var autopilot = await autopilots.GetOrCreateAsync(cancellationToken);
+        var previous = autopilot.Mode;
+        if (!autopilot.SuspendAfterRestart())
+            return false;
+
+        await audit.RecordAsync(AuditCategory.Autopilot, "Suspended",
+            $"Autopilot: {previous} -> Off after a restart; {autopilot.PaperPositions} open positions keep their stops at the broker.");
+
+        // Saved by UnitOfWorkBehavior.
+        return true;
     }
 }
 
