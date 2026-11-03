@@ -37,6 +37,44 @@
 
             <Border Style="{StaticResource Card}" Margin="0,0,0,12">
                 <StackPanel>
+                    <TextBlock Text="{loc:Tr Settings_Broker}" Style="{StaticResource SectionTitle}" />
+                    <TextBlock Text="{Binding BrokerKeyStatus}" Margin="0,0,0,4" TextWrapping="Wrap" />
+                    <TextBlock Text="{loc:Tr Settings_BrokerRestart}" Foreground="{StaticResource NegativeBrush}" TextWrapping="Wrap" Margin="0,0,0,4">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding BrokerKeyRestartNeeded}" Value="True">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                    <TextBlock Text="{loc:Tr Settings_BrokerApiKey}" Style="{StaticResource FieldLabel}" />
+                    <TextBox x:Name="BrokerKeyBox" AutomationProperties.Name="{loc:Tr Settings_BrokerApiKey}" />
+                    <TextBlock Text="{loc:Tr Settings_BrokerSecret}" Style="{StaticResource FieldLabel}" />
+                    <PasswordBox x:Name="BrokerSecretBox" AutomationProperties.Name="{loc:Tr Settings_BrokerSecret}" />
+                    <Expander Header="{loc:Tr Settings_BrokerPaperKeys}" Margin="0,8,0,0">
+                        <StackPanel Margin="0,4,0,0">
+                            <TextBlock Text="{loc:Tr Settings_BrokerPaperKeysHint}" Foreground="Gray" FontSize="11" TextWrapping="Wrap" />
+                            <TextBlock Text="{loc:Tr Settings_BrokerPaperApiKey}" Style="{StaticResource FieldLabel}" />
+                            <TextBox x:Name="PaperKeyBox" AutomationProperties.Name="{loc:Tr Settings_BrokerPaperApiKey}" />
+                            <TextBlock Text="{loc:Tr Settings_BrokerPaperSecret}" Style="{StaticResource FieldLabel}" />
+                            <PasswordBox x:Name="PaperSecretBox" AutomationProperties.Name="{loc:Tr Settings_BrokerPaperSecret}" />
+                        </StackPanel>
+                    </Expander>
+                    <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                        <Button Content="{loc:Tr Settings_BrokerTest}" Click="OnTestBrokerKeys" Margin="0,0,6,0" />
+                        <Button Content="{loc:Tr Settings_BrokerSave}" Click="OnSaveBrokerKeys" Style="{StaticResource PrimaryButton}" Margin="0,0,6,0" />
+                        <Button Content="{loc:Tr Settings_BrokerRemove}" Command="{Binding RemoveBrokerKeysCommand}" />
+                    </StackPanel>
+                    <TextBlock Text="{loc:Tr Settings_BrokerHint}" Foreground="Gray" FontSize="11" Margin="0,6,0,0" TextWrapping="Wrap" />
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource Card}" Margin="0,0,0,12">
+                <StackPanel>
                     <TextBlock Text="{loc:Tr Settings_Assistant}" Style="{StaticResource SectionTitle}" />
                     <TextBlock Text="{Binding AssistantStatus}" Margin="0,0,0,4" />
                     <TextBlock Text="{loc:Tr Settings_ApiKey}" Style="{StaticResource FieldLabel}" />

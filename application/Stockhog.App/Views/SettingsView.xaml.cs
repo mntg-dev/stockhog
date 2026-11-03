@@ -18,4 +18,24 @@ public partial class SettingsView
 
         ApiKeyBox.Clear();
     }
+
+    private async void OnTestBrokerKeys(object sender, RoutedEventArgs e)
+    {
+        if (DataContext is SettingsViewModel viewModel)
+            await viewModel.TestBrokerKeysAsync(BrokerKeysInput());
+    }
+
+    /// <summary>The secrets are cleared once handed over; a failed save leaves the key ids to correct.</summary>
+    private async void OnSaveBrokerKeys(object sender, RoutedEventArgs e)
+    {
+        if (DataContext is not SettingsViewModel viewModel)
+            return;
+
+        var input = BrokerKeysInput();
+        BrokerSecretBox.Clear();
+        PaperSecretBox.Clear();
+        await viewModel.SaveBrokerKeysAsync(input);
+    }
+
+    private BrokerKeysInput BrokerKeysInput() => new(BrokerKeyBox.Text, BrokerSecretBox.Password, PaperKeyBox.Text, PaperSecretBox.Password);
 }

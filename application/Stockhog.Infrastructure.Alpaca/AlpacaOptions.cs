@@ -5,8 +5,9 @@ using Microsoft.Extensions.Options;
 namespace Stockhog.Infrastructure.Alpaca;
 
 /// <summary>
-/// Keys are not stored in appsettings.json. Set them with:
-/// <c>dotnet user-secrets set "Alpaca:ApiKey" "..." --project Stockhog.App</c>
+/// Keys are not stored in appsettings.json. Users enter the data and paper keys on the Settings page (stored encrypted,
+/// see <see cref="StoredAlpacaKeys"/>); for development they can come from user secrets:
+/// <c>dotnet user-secrets set "Alpaca:ApiKey" "..." --project Stockhog.App</c>. Live keys only come from configuration.
 /// </summary>
 public sealed class AlpacaOptions
 {

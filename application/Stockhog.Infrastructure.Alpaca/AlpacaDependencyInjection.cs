@@ -1,3 +1,4 @@
+using Stockhog.Application.Brokers;
 using Stockhog.Application.Instruments;
 using Stockhog.Application.Screening;
 using Stockhog.Application.Trading;
@@ -28,6 +29,14 @@ public static class AlpacaDependencyInjection
             .ValidateDataAnnotations()
             .ValidateOnStart();
         services.AddSingleton<IValidateOptions<AlpacaOptions>, TradingModeValidation>();
+
+        // Keys entered on the Settings page are stored encrypted and override configuration from the next start.
+        services.AddSingleton(new ProtectedAlpacaKeyFile());
+        services.AddSingleton<StoredAlpacaKeys>();
+        services.AddSingleton<IPostConfigureOptions<AlpacaOptions>>(sp => sp.GetRequiredService<StoredAlpacaKeys>());
+        services.AddSingleton<IBrokerKeyStore, AlpacaKeyStore>();
+        services.AddHttpClient<IBrokerKeyTester, AlpacaKeyTester>(http => http.Timeout = TimeSpan.FromSeconds(15))
+            .ConfigurePrimaryHttpMessageHandler(HttpClientDefaults.CreatePrimaryHandler);
 
         services.AddSingleton<AlpacaRateLimiter>();
         services.AddTransient<AlpacaRateLimitingHandler>();

@@ -10,6 +10,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="System.Security.Cryptography.ProtectedData" />
+  </ItemGroup>
+
+  <ItemGroup>
     <InternalsVisibleTo Include="Stockhog.Infrastructure.Tests" />
   </ItemGroup>
 

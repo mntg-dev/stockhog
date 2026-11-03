@@ -4,6 +4,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Stockhog.Application.Abstractions.Messaging;
 using Stockhog.Application.Assistant;
+using Stockhog.Application.Brokers;
 using Stockhog.Presentation.Localization;
 using Stockhog.Presentation.Shell;
 using Microsoft.Extensions.Logging;
@@ -80,7 +81,67 @@ public sealed partial class SettingsViewModel : PageViewModel
     /// <summary>Whether the AI assistant has an API key, and its model.</summary>
     [ObservableProperty] private string? _assistantStatus;
 
-    protected override Task LoadAsync() => ShowAssistantStatusAsync(_dispatcher.SendAsync(new GetAssistantStatusQuery()));
+    protected override async Task LoadAsync()
+    {
+        await ShowAssistantStatusAsync(_dispatcher.SendAsync(new GetAssistantStatusQuery()));
+        await ShowBrokerKeyStatusAsync(_dispatcher.SendAsync(new GetBrokerKeyStatusQuery()));
+    }
+
+    /// <summary>Where the Alpaca keys in use come from, and whether a restart is needed for new ones.</summary>
+    [ObservableProperty] private string? _brokerKeyStatus;
+
+    [ObservableProperty] private bool _brokerKeyRestartNeeded;
+
+    [ObservableProperty] private bool _hasStoredBrokerKeys;
+
+    /// <summary>Tries the keys against market data and the paper account without storing them.</summary>
+    public async Task TestBrokerKeysAsync(BrokerKeysInput input)
+    {
+        var check = await _dispatcher.SendAsync(new TestBrokerKeysCommand(input.ApiKey, input.ApiSecret, input.PaperApiKey, input.PaperApiSecret));
+        if (check.IsFailure)
+            Status.Show(check.Error);
+        else if (check.Value.IsOk)
+            Status.Show(Loc.Format("Status_BrokerKeysWork", check.Value.AccountNumber ?? "?"));
+        else
+            Status.Show(Loc.Format("Status_BrokerKeysFailed", string.Join(" ", new[]
+            {
+                check.Value.DataError is { } data ? Loc.Format("Settings_BrokerDataError", data) : null,
+                check.Value.TradingError is { } trading ? Loc.Format("Settings_BrokerTradingError", trading) : null
+            }.OfType<string>())));
+    }
+
+    /// <summary>Tests the keys, then stores them encrypted for this Windows user; they are used from the next start.</summary>
+    public Task SaveBrokerKeysAsync(BrokerKeysInput input) =>
+        ShowBrokerKeyStatusAsync(
+            _dispatcher.SendAsync(new SaveBrokerKeysCommand(input.ApiKey, input.ApiSecret, input.PaperApiKey, input.PaperApiSecret)),
+            "Status_BrokerKeysSaved");
+
+    [RelayCommand(CanExecute = nameof(HasStoredBrokerKeys))]
+    private Task RemoveBrokerKeysAsync() =>
+        ShowBrokerKeyStatusAsync(_dispatcher.SendAsync(new RemoveBrokerKeysCommand()), "Status_BrokerKeysRemoved");
+
+    private async Task ShowBrokerKeyStatusAsync(Task<Application.Abstractions.Results.Result<BrokerKeyStatus>> request, string? successMessage = null)
+    {
+        var result = await request;
+        if (result.IsFailure)
+        {
+            Status.Show(result.Error);
+            return;
+        }
+
+        var status = result.Value;
+        BrokerKeyStatus = status.Source switch
+        {
+            BrokerKeySource.Settings => Loc.Format("Settings_BrokerKeysFromSettings", status.MaskedKey ?? ""),
+            BrokerKeySource.Configuration => Loc.Format("Settings_BrokerKeysFromConfig", status.MaskedKey ?? ""),
+            _ => Loc.Get("Settings_BrokerKeysNone")
+        };
+        BrokerKeyRestartNeeded = status.RestartNeeded;
+        HasStoredBrokerKeys = status.HasStoredKeys;
+        RemoveBrokerKeysCommand.NotifyCanExecuteChanged();
+        if (successMessage is not null)
+            Status.Show(Loc.Get(successMessage));
+    }
 
     /// <summary>Stores the key encrypted for this Windows user; the view passes it from a password box and clears it.</summary>
     [RelayCommand]
@@ -109,3 +170,6 @@ public sealed partial class SettingsViewModel : PageViewModel
             Status.Show(Loc.Get(successMessage));
     }
 }
+
+/// <summary>What the user typed on the Settings page; the secrets come from password boxes and are not kept.</summary>
+public sealed record BrokerKeysInput(string ApiKey, string ApiSecret, string? PaperApiKey, string? PaperApiSecret);

@@ -862,4 +862,25 @@ Simulated positions are dropped. After a restart the autopilot is off until you 
 Switch to paper mode?</value></data>
   <data name="Autopilot_PositionKind" xml:space="preserve"><value>Position</value></data>
   <data name="Autopilot_EntryOrder" xml:space="preserve"><value>Buy order</value></data>
+  <data name="Settings_Broker" xml:space="preserve"><value>Alpaca account</value></data>
+  <data name="Settings_BrokerKeysFromSettings" xml:space="preserve"><value>Using the keys saved on this computer ({0}).</value></data>
+  <data name="Settings_BrokerKeysFromConfig" xml:space="preserve"><value>Using keys from the configuration file or environment ({0}).</value></data>
+  <data name="Settings_BrokerKeysNone" xml:space="preserve"><value>No Alpaca keys: market data, the screener and paper trading are not available.</value></data>
+  <data name="Settings_BrokerRestart" xml:space="preserve"><value>Restart Stockhog to use the keys you saved.</value></data>
+  <data name="Settings_BrokerApiKey" xml:space="preserve"><value>API key ID</value></data>
+  <data name="Settings_BrokerSecret" xml:space="preserve"><value>Secret key</value></data>
+  <data name="Settings_BrokerPaperKeys" xml:space="preserve"><value>Separate paper trading keys (optional)</value></data>
+  <data name="Settings_BrokerPaperKeysHint" xml:space="preserve"><value>Only if your paper account has its own keys. Live account keys are never entered here.</value></data>
+  <data name="Settings_BrokerPaperApiKey" xml:space="preserve"><value>Paper API key ID</value></data>
+  <data name="Settings_BrokerPaperSecret" xml:space="preserve"><value>Paper secret key</value></data>
+  <data name="Settings_BrokerTest" xml:space="preserve"><value>Test connection</value></data>
+  <data name="Settings_BrokerSave" xml:space="preserve"><value>Save keys</value></data>
+  <data name="Settings_BrokerRemove" xml:space="preserve"><value>Remove saved keys</value></data>
+  <data name="Settings_BrokerHint" xml:space="preserve"><value>Get the keys in your Alpaca dashboard (paper account). They are checked first, then stored encrypted for your Windows user and used from the next start. The test only reads market data and the paper account.</value></data>
+  <data name="Settings_BrokerDataError" xml:space="preserve"><value>Market data: {0}</value></data>
+  <data name="Settings_BrokerTradingError" xml:space="preserve"><value>Paper account: {0}</value></data>
+  <data name="Status_BrokerKeysWork" xml:space="preserve"><value>The keys work: market data and paper account {0}.</value></data>
+  <data name="Status_BrokerKeysFailed" xml:space="preserve"><value>The keys do not work. {0}</value></data>
+  <data name="Status_BrokerKeysSaved" xml:space="preserve"><value>Keys saved. Restart Stockhog to use them.</value></data>
+  <data name="Status_BrokerKeysRemoved" xml:space="preserve"><value>Saved keys removed. Restart Stockhog to stop using them.</value></data>
 </root>

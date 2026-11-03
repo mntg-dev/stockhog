@@ -1,5 +1,6 @@
 using System.Collections.Concurrent;
 using Stockhog.Application.Autopilot;
+using Stockhog.Application.Brokers;
 using Stockhog.Application.Proposals;
 using Stockhog.Application.Scanning;
 using Stockhog.Application.Screening;
@@ -174,5 +175,29 @@ internal sealed class InMemoryAutopilotStore : IAutopilotRepository, IAutopilotD
     {
         lock (Decisions)
             return Task.FromResult<IReadOnlyList<AutopilotDecision>>(Decisions.AsEnumerable().Reverse().Take(take).ToList());
+    }
+}
+
+internal sealed class FakeBrokerKeyStore : IBrokerKeyStore
+{
+    public BrokerKeySource SourceInUse { get; set; } = BrokerKeySource.None;
+
+    public string? KeyInUse { get; set; }
+
+    public BrokerKeys? Stored { get; set; }
+
+    public void Save(BrokerKeys? keys) => Stored = keys;
+}
+
+internal sealed class FakeBrokerKeyTester : IBrokerKeyTester
+{
+    public BrokerKeyCheck Result { get; set; } = new(null, null, "PA123");
+
+    public List<BrokerKeys> Tested { get; } = [];
+
+    public Task<BrokerKeyCheck> TestAsync(BrokerKeys keys, CancellationToken cancellationToken = default)
+    {
+        Tested.Add(keys);
+        return Task.FromResult(Result);
     }
 }

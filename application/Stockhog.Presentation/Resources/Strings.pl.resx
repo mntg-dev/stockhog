@@ -862,4 +862,25 @@ Symulowane pozycje zostaną usunięte. Po restarcie autopilot jest wyłączony, 
 Przełączyć na tryb paper?</value></data>
   <data name="Autopilot_PositionKind" xml:space="preserve"><value>Pozycja</value></data>
   <data name="Autopilot_EntryOrder" xml:space="preserve"><value>Zlecenie kupna</value></data>
+  <data name="Settings_Broker" xml:space="preserve"><value>Konto Alpaca</value></data>
+  <data name="Settings_BrokerKeysFromSettings" xml:space="preserve"><value>Używane są klucze zapisane na tym komputerze ({0}).</value></data>
+  <data name="Settings_BrokerKeysFromConfig" xml:space="preserve"><value>Używane są klucze z pliku konfiguracji lub zmiennych środowiskowych ({0}).</value></data>
+  <data name="Settings_BrokerKeysNone" xml:space="preserve"><value>Brak kluczy Alpaca: dane rynkowe, skaner rynku i handel na koncie paper są niedostępne.</value></data>
+  <data name="Settings_BrokerRestart" xml:space="preserve"><value>Uruchom Stockhog ponownie, aby użyć zapisanych kluczy.</value></data>
+  <data name="Settings_BrokerApiKey" xml:space="preserve"><value>Identyfikator klucza API</value></data>
+  <data name="Settings_BrokerSecret" xml:space="preserve"><value>Klucz tajny</value></data>
+  <data name="Settings_BrokerPaperKeys" xml:space="preserve"><value>Osobne klucze konta paper (opcjonalnie)</value></data>
+  <data name="Settings_BrokerPaperKeysHint" xml:space="preserve"><value>Tylko jeśli konto paper ma własne klucze. Kluczy konta live nie wpisuje się tutaj.</value></data>
+  <data name="Settings_BrokerPaperApiKey" xml:space="preserve"><value>Identyfikator klucza API konta paper</value></data>
+  <data name="Settings_BrokerPaperSecret" xml:space="preserve"><value>Klucz tajny konta paper</value></data>
+  <data name="Settings_BrokerTest" xml:space="preserve"><value>Sprawdź połączenie</value></data>
+  <data name="Settings_BrokerSave" xml:space="preserve"><value>Zapisz klucze</value></data>
+  <data name="Settings_BrokerRemove" xml:space="preserve"><value>Usuń zapisane klucze</value></data>
+  <data name="Settings_BrokerHint" xml:space="preserve"><value>Klucze znajdziesz w panelu Alpaca (konto paper). Najpierw są sprawdzane, potem zapisywane w postaci zaszyfrowanej dla Twojego użytkownika Windows i używane od następnego uruchomienia. Test tylko odczytuje dane rynkowe i konto paper.</value></data>
+  <data name="Settings_BrokerDataError" xml:space="preserve"><value>Dane rynkowe: {0}</value></data>
+  <data name="Settings_BrokerTradingError" xml:space="preserve"><value>Konto paper: {0}</value></data>
+  <data name="Status_BrokerKeysWork" xml:space="preserve"><value>Klucze działają: dane rynkowe i konto paper {0}.</value></data>
+  <data name="Status_BrokerKeysFailed" xml:space="preserve"><value>Klucze nie działają. {0}</value></data>
+  <data name="Status_BrokerKeysSaved" xml:space="preserve"><value>Klucze zapisane. Uruchom Stockhog ponownie, aby ich użyć.</value></data>
+  <data name="Status_BrokerKeysRemoved" xml:space="preserve"><value>Zapisane klucze usunięte. Uruchom Stockhog ponownie, aby przestać ich używać.</value></data>
 </root>
