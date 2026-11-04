@@ -19,7 +19,7 @@ public sealed class XYSeriesChart : ChartBase
     public static readonly DependencyProperty YLabelProperty = DependencyProperty.Register(
         nameof(YLabel), typeof(string), typeof(XYSeriesChart), RedrawOnChange(string.Empty));
 
-    private static readonly ScottPlot.Color Background = ScottPlot.Color.FromHex("#90A4AE").WithAlpha(0.35);
+    private static readonly ScottPlot.Color Background = ScottPlot.Color.FromHex("#A8A29E").WithAlpha(0.35);
 
     private readonly WpfPlot _plot = CreatePlot();
 

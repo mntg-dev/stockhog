@@ -12,9 +12,10 @@ namespace Stockhog.Wpf.Controls.Charts;
 /// </summary>
 public abstract class ChartBase : ContentControl
 {
-    protected static readonly ScottPlot.Color Positive = ScottPlot.Color.FromHex("#2E7D32");
-    protected static readonly ScottPlot.Color Negative = ScottPlot.Color.FromHex("#C62828");
-    protected static readonly ScottPlot.Color Accent = ScottPlot.Color.FromHex("#1565C0");
+    // The app's brand colours (Themes/AppStyles.xaml): copper for the main series, the site's profit and loss colours.
+    protected static readonly ScottPlot.Color Positive = ScottPlot.Color.FromHex("#15803D");
+    protected static readonly ScottPlot.Color Negative = ScottPlot.Color.FromHex("#C0392B");
+    protected static readonly ScottPlot.Color Accent = ScottPlot.Color.FromHex("#B0560F");
 
     protected ChartBase()
     {
@@ -28,7 +29,7 @@ public abstract class ChartBase : ContentControl
     {
         var plot = new WpfPlot();
         plot.Plot.FigureBackground.Color = ScottPlot.Colors.White;
-        plot.Plot.Grid.MajorLineColor = ScottPlot.Color.FromHex("#EEEEEE");
+        plot.Plot.Grid.MajorLineColor = ScottPlot.Color.FromHex("#F0EAE3");
         return plot;
     }
 
