@@ -948,4 +948,9 @@ Zacznij od konta paper. Czy rozumiesz i akceptujesz te zasady?</value></data>
   <data name="Notice_HaltedOnDrawdown" xml:space="preserve"><value>Kapitał jest {0:N1}% poniżej szczytu; limit to {1:N1}%. Nowe zlecenia są blokowane, dopóki ponownie nie włączysz handlu.</value></data>
   <data name="Notice_AutopilotTitle" xml:space="preserve"><value>Autopilot</value></data>
   <data name="Notice_AutopilotTraded" xml:space="preserve"><value>Wysłano na konto paper zleceń kupna: {0}, sprzedaży: {1}.</value></data>
+  <data name="Settings_ExportDiagnostics" xml:space="preserve"><value>Eksportuj diagnostykę…</value></data>
+  <data name="Settings_ExportDiagnosticsHint" xml:space="preserve"><value>Zapisuje jeden plik zip dla wsparcia: logi z ostatniego tygodnia, ustawienia i limity ryzyka, ostatnie wpisy dziennika zdarzeń i informacje o instalacji. Klucze nigdy nie są dołączane.</value></data>
+  <data name="Settings_ZipFilter" xml:space="preserve"><value>Pliki zip|*.zip</value></data>
+  <data name="Status_ExportingDiagnostics" xml:space="preserve"><value>Eksportowanie diagnostyki…</value></data>
+  <data name="Status_DiagnosticsExported" xml:space="preserve"><value>Zapisano diagnostykę (plików: {0}): {1}</value></data>
 </root>

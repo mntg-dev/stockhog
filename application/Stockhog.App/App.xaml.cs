@@ -148,6 +148,7 @@ public partial class App : System.Windows.Application
         builder.Services.AddSingleton<IUserConfirmation, MessageBoxConfirmation>();
         builder.Services.AddSingleton<IExternalLinks, BrowserLinks>();
         builder.Services.AddSingleton<INotifier, WindowsNotifier>();
+        builder.Services.AddSingleton<IFileDialogs, FileDialogs>();
 
         builder.Services.AddSerilog((services, logger) => logger
             .ReadFrom.Configuration(builder.Configuration)

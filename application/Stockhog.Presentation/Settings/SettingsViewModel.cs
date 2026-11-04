@@ -5,8 +5,10 @@ using CommunityToolkit.Mvvm.Input;
 using Stockhog.Application.Abstractions.Messaging;
 using Stockhog.Application.Assistant;
 using Stockhog.Application.Brokers;
+using Stockhog.Application.Diagnostics;
 using Stockhog.Application.Trading;
 using Stockhog.Domain.Trading;
+using Stockhog.Presentation.Common;
 using Stockhog.Presentation.Localization;
 using Stockhog.Presentation.Shell;
 using Microsoft.Extensions.Logging;
@@ -20,6 +22,7 @@ public sealed partial class SettingsViewModel : PageViewModel
 {
     private readonly IUserSettingsStore _store;
     private readonly IDispatcher _dispatcher;
+    private readonly IFileDialogs _fileDialogs;
     private UserSettings _settings;
 
     public SettingsViewModel(
@@ -27,12 +30,14 @@ public sealed partial class SettingsViewModel : PageViewModel
         IDispatcher dispatcher,
         UserSettings settings,
         AppEnvironmentInfo environment,
+        IFileDialogs fileDialogs,
         StatusViewModel status,
         ILogger<SettingsViewModel> logger)
         : base(status, logger)
     {
         _store = store;
         _dispatcher = dispatcher;
+        _fileDialogs = fileDialogs;
         _settings = settings;
         Environment = environment;
         _selectedCulture = Loc.Instance.Culture;
@@ -83,6 +88,38 @@ public sealed partial class SettingsViewModel : PageViewModel
     {
         _settings = settings;
         _store.Save(settings);
+    }
+
+    /// <summary>One zip for support: recent logs, settings, limits and audit entries, with keys left out.</summary>
+    [RelayCommand]
+    private async Task ExportDiagnosticsAsync()
+    {
+        var suggested = $"Stockhog-diagnostics-{DateTime.Now:yyyyMMdd-HHmm}.zip";
+        if (_fileDialogs.ChooseSaveFile(Loc.Get("Settings_ExportDiagnostics"), suggested, Loc.Get("Settings_ZipFilter")) is not { } path)
+            return;
+
+        var facts = new Dictionary<string, string>
+        {
+            ["Version"] = Environment.Version,
+            ["Language"] = Loc.Instance.Culture.Name,
+            ["Alpaca keys configured"] = Environment.AlpacaCredentialsConfigured.ToString(),
+            ["Parallel jobs"] = Environment.MaxParallelJobs.ToString(CultureInfo.InvariantCulture),
+            ["Data folder"] = Environment.DataFolder,
+            ["Results folder"] = Environment.ResultsFolder,
+            ["Database"] = Environment.DatabaseFile
+        };
+
+        await RunOperationAsync(Loc.Get("Status_ExportingDiagnostics"), async _ =>
+        {
+            var export = await _dispatcher.SendAsync(new ExportDiagnosticsCommand(path, facts));
+            if (export.IsFailure)
+            {
+                Status.Show(export.Error);
+                return Status.Message;
+            }
+
+            return Loc.Format("Status_DiagnosticsExported", export.Value.Files, export.Value.Path);
+        });
     }
 
     /// <summary>Whether the AI assistant has an API key, and its model.</summary>

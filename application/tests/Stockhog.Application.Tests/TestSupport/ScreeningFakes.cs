@@ -2,6 +2,7 @@ using System.Collections.Concurrent;
 using Stockhog.Application.Autopilot;
 using Stockhog.Application.Brokers;
 using Stockhog.Application.Common;
+using Stockhog.Application.Diagnostics;
 using Stockhog.Application.Proposals;
 using Stockhog.Application.Scanning;
 using Stockhog.Application.Screening;
@@ -229,5 +230,17 @@ internal sealed class RecordingNotifier : INotifier
     {
         lock (Notices)
             Notices.Add(notice);
+    }
+}
+
+internal sealed class RecordingDiagnosticsExporter : IDiagnosticsExporter
+{
+    public IReadOnlyList<string>? AuditLines { get; private set; }
+
+    public Task<DiagnosticsExport> ExportAsync(string targetPath, IReadOnlyDictionary<string, string> facts, IReadOnlyList<string> auditLines,
+        CancellationToken cancellationToken = default)
+    {
+        AuditLines = auditLines;
+        return Task.FromResult(new DiagnosticsExport(targetPath, 2 + facts.Count, 100));
     }
 }

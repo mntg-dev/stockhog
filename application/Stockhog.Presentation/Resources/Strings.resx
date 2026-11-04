@@ -948,4 +948,9 @@ Start with the paper account. Do you understand and accept this?</value></data>
   <data name="Notice_HaltedOnDrawdown" xml:space="preserve"><value>Equity is {0:N1}% below its peak; the limit is {1:N1}%. No new orders until you switch trading on again.</value></data>
   <data name="Notice_AutopilotTitle" xml:space="preserve"><value>Autopilot</value></data>
   <data name="Notice_AutopilotTraded" xml:space="preserve"><value>Sent {0} buy and {1} sell orders to the paper account.</value></data>
+  <data name="Settings_ExportDiagnostics" xml:space="preserve"><value>Export diagnostics…</value></data>
+  <data name="Settings_ExportDiagnosticsHint" xml:space="preserve"><value>Saves one zip for support: the last week of logs, your settings and risk limits, the latest audit entries and facts about this installation. Keys are never included.</value></data>
+  <data name="Settings_ZipFilter" xml:space="preserve"><value>Zip files|*.zip</value></data>
+  <data name="Status_ExportingDiagnostics" xml:space="preserve"><value>Exporting diagnostics…</value></data>
+  <data name="Status_DiagnosticsExported" xml:space="preserve"><value>Diagnostics saved ({0} files): {1}</value></data>
 </root>

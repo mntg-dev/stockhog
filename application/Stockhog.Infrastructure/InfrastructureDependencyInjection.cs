@@ -1,6 +1,7 @@
 ﻿using Stockhog.Application.Abstractions.Jobs;
 using Stockhog.Application.Abstractions.Persistence;
 using Stockhog.Application.Backtesting;
+using Stockhog.Application.Diagnostics;
 using Stockhog.Application.Instruments;
 using Stockhog.Application.MarketData;
 using Stockhog.Application.Optimization;
@@ -13,6 +14,7 @@ using Stockhog.Application.Trading.Portfolio;
 using Stockhog.Application.Trading.Safety;
 using Stockhog.Application.Updates;
 using Stockhog.Infrastructure.Configuration;
+using Stockhog.Infrastructure.Diagnostics;
 using Stockhog.Infrastructure.Jobs;
 using Stockhog.Infrastructure.MarketData;
 using Stockhog.Infrastructure.Persistence;
@@ -55,6 +57,7 @@ public static class InfrastructureDependencyInjection
             .Bind(configuration.GetSection(UpdateOptions.SectionName))
             .ValidateDataAnnotations()
             .ValidateOnStart();
+        services.AddSingleton<IDiagnosticsExporter>(sp => new DiagnosticsExporter(sp.GetRequiredService<TimeProvider>()));
         services.AddHttpClient<IReleaseFeed, ReleaseFeedClient>(http => http.Timeout = TimeSpan.FromSeconds(10))
             .ConfigurePrimaryHttpMessageHandler(Http.HttpClientDefaults.CreatePrimaryHandler);
 
