@@ -1,6 +1,7 @@
 using Stockhog.Application.Abstractions.Messaging;
 using Stockhog.Application.Abstractions.Results;
 using Stockhog.Application.Common;
+using Stockhog.Application.Notifications;
 using Stockhog.Application.Trading.Orders;
 using Stockhog.Application.Trading.Safety;
 using Stockhog.Domain.Trading;
@@ -104,7 +105,8 @@ internal sealed class EnforcePortfolioLimitsCommandHandler(
     PortfolioRiskReader reader,
     IRiskLimitsStore limits,
     IDispatcher dispatcher,
-    Audit audit) : ICommandHandler<EnforcePortfolioLimitsCommand, bool>
+    Audit audit,
+    INotifier notifier) : ICommandHandler<EnforcePortfolioLimitsCommand, bool>
 {
     public async Task<Result<bool>> HandleAsync(EnforcePortfolioLimitsCommand command, CancellationToken cancellationToken)
     {
@@ -128,6 +130,7 @@ internal sealed class EnforcePortfolioLimitsCommandHandler(
         await audit.RecordAsync(AuditCategory.Risk, "Halted",
             $"Equity {risk.Equity:N2} USD is {risk.DrawdownPercent:N2}% below its peak of {risk.EquityPeak:N2} USD; " +
             $"the limit is {current.MaxDrawdownPercent:N1}%. Trading switched off" + (current.FlattenOnDrawdown ? " and every position is being closed." : "."));
+        notifier.Notify(new Notice(NoticeTopic.HaltedOnDrawdown, [risk.DrawdownPercent, current.MaxDrawdownPercent]));
 
         if (current.FlattenOnDrawdown)
         {

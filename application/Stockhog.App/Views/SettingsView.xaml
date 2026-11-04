@@ -18,6 +18,8 @@
                         </ComboBox.ItemTemplate>
                     </ComboBox>
                     <TextBlock Text="{loc:Tr Settings_LanguageHint}" Foreground="Gray" FontSize="11" Margin="0,6,0,0" TextWrapping="Wrap" />
+                    <CheckBox Content="{loc:Tr Settings_ShowNotifications}" IsChecked="{Binding ShowNotifications}" Margin="0,12,0,0"
+                              ToolTip="{loc:Tr Settings_ShowNotificationsHint}" />
                 </StackPanel>
             </Border>
 

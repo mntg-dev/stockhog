@@ -3,6 +3,7 @@ using Stockhog.Application.Abstractions.Jobs;
 using Stockhog.Application.Abstractions.Messaging;
 using Stockhog.Application.Abstractions.Results;
 using Stockhog.Application.Common;
+using Stockhog.Application.Notifications;
 using Stockhog.Application.Signals.EvaluateSignal;
 using Stockhog.Application.Trading;
 using Stockhog.Application.Trading.Orders;
@@ -134,6 +135,7 @@ internal sealed class ApplyAutopilotCycleCommandHandler(
     ITradingEnvironment environment,
     MarketDays marketDays,
     Audit audit,
+    INotifier notifier,
     TimeProvider clock) : ICommandHandler<ApplyAutopilotCycleCommand, AutopilotCycleSummary>
 {
     private static readonly CultureInfo Invariant = CultureInfo.InvariantCulture;
@@ -360,6 +362,10 @@ internal sealed class ApplyAutopilotCycleCommandHandler(
             decisions.Count(d => d.Action == AutopilotAction.Skip));
         await audit.RecordAsync(AuditCategory.Autopilot, "Cycle", $"{summary} Session {command.Session:yyyy-MM-dd}; " +
             (paper ? $"{sent} orders were sent to the paper account." : "no orders were sent."));
+
+        // Only real orders are worth an interruption; shadow decisions are on the autopilot page.
+        if (paper && summary.Buys + summary.Sells > 0)
+            notifier.Notify(new Notice(NoticeTopic.AutopilotTraded, [summary.Buys, summary.Sells]));
 
         // Saved by UnitOfWorkBehavior.
         return summary;

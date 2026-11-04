@@ -81,6 +81,8 @@ public class AutopilotTests
         var assignment = host.Autopilot.Autopilot.Assignments[0];
         Assert.Equal((0m, 100m, 1), (assignment.Quantity, assignment.RealizedProfit, assignment.WinningTrades));
         Assert.Equal((true, 210m), (host.Autopilot.Decisions[0].Executed, host.Autopilot.Decisions[0].Price));
+        var notice = Assert.Single(host.Notifier.Notices, n => n.Topic == Application.Notifications.NoticeTopic.AutopilotTraded);
+        Assert.Equal([0, 1], notice.Args);
     }
 
     [Fact]

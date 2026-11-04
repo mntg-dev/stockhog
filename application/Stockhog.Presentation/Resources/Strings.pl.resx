@@ -936,4 +936,16 @@ Zacznij od konta paper. Czy rozumiesz i akceptujesz te zasady?</value></data>
   <data name="Settings_FlattenOnDrawdownHint" xml:space="preserve"><value>Wyłączone: przekroczenie limitu tylko blokuje nowe pozycje. Włączone: dodatkowo sprzedaje wszystko po cenie rynkowej.</value></data>
   <data name="Settings_SaveLimits" xml:space="preserve"><value>Zapisz limity</value></data>
   <data name="Status_LimitsSaved" xml:space="preserve"><value>Limity ryzyka zapisane; działają od teraz i po ponownym uruchomieniu.</value></data>
+  <data name="Settings_ShowNotifications" xml:space="preserve"><value>Pokazuj powiadomienia Windows</value></data>
+  <data name="Settings_ShowNotificationsHint" xml:space="preserve"><value>O zrealizowanych i odrzuconych zleceniach, zatrzymaniu handlu przez limit ryzyka i zleceniach składanych przez autopilota.</value></data>
+  <data name="Notice_OrderFilledTitle" xml:space="preserve"><value>Zlecenie zrealizowane</value></data>
+  <data name="Notice_BoughtFilled" xml:space="preserve"><value>Kupiono {0} {1} po {2:N2}.</value></data>
+  <data name="Notice_SoldFilled" xml:space="preserve"><value>Sprzedano {0} {1} po {2:N2}.</value></data>
+  <data name="Notice_OrderRejectedTitle" xml:space="preserve"><value>Zlecenie odrzucone</value></data>
+  <data name="Notice_OrderRejected" xml:space="preserve"><value>{0}: {1}</value></data>
+  <data name="Notice_HaltedTitle" xml:space="preserve"><value>Handel zatrzymany</value></data>
+  <data name="Notice_HaltedOnDailyLoss" xml:space="preserve"><value>Dzisiejsza strata {0:N2} USD osiągnęła limit {1:N2} USD. Nowe zlecenia są blokowane, dopóki ponownie nie włączysz handlu.</value></data>
+  <data name="Notice_HaltedOnDrawdown" xml:space="preserve"><value>Kapitał jest {0:N1}% poniżej szczytu; limit to {1:N1}%. Nowe zlecenia są blokowane, dopóki ponownie nie włączysz handlu.</value></data>
+  <data name="Notice_AutopilotTitle" xml:space="preserve"><value>Autopilot</value></data>
+  <data name="Notice_AutopilotTraded" xml:space="preserve"><value>Wysłano na konto paper zleceń kupna: {0}, sprzedaży: {1}.</value></data>
 </root>

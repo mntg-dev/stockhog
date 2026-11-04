@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Threading;
 using Stockhog.Application;
+using Stockhog.Application.Notifications;
 using Stockhog.Infrastructure;
 using Stockhog.Infrastructure.Alpaca;
 using Stockhog.Infrastructure.Anthropic;
@@ -146,6 +147,7 @@ public partial class App : System.Windows.Application
         builder.Services.AddSingleton(CreateEnvironmentInfo);
         builder.Services.AddSingleton<IUserConfirmation, MessageBoxConfirmation>();
         builder.Services.AddSingleton<IExternalLinks, BrowserLinks>();
+        builder.Services.AddSingleton<INotifier, WindowsNotifier>();
 
         builder.Services.AddSerilog((services, logger) => logger
             .ReadFrom.Configuration(builder.Configuration)

@@ -12,6 +12,9 @@ public sealed record UserSettings
 
     public decimal DefaultInitialCapital { get; init; } = 100_000m;
 
+    /// <summary>Windows notifications for fills, rejections, trading halts and autopilot orders.</summary>
+    public bool ShowNotifications { get; init; } = true;
+
     /// <summary>The version of <see cref="TermsOfUse"/> the user accepted; 0 until they do.</summary>
     public int AcceptedTermsVersion { get; init; }
 }

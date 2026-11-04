@@ -5,6 +5,7 @@ using Stockhog.Application.Common;
 using Stockhog.Application.Proposals;
 using Stockhog.Application.Scanning;
 using Stockhog.Application.Screening;
+using Stockhog.Application.Notifications;
 using Stockhog.Application.Signals;
 using Stockhog.Application.Updates;
 using Stockhog.Application.Trading.Portfolio;
@@ -218,4 +219,15 @@ internal sealed class FakeReleaseFeed : IReleaseFeed
     public ReleaseInfo? Latest { get; set; }
 
     public Task<ReleaseInfo?> GetLatestAsync(CancellationToken cancellationToken = default) => Task.FromResult(Latest);
+}
+
+internal sealed class RecordingNotifier : INotifier
+{
+    public List<Notice> Notices { get; } = [];
+
+    public void Notify(Notice notice)
+    {
+        lock (Notices)
+            Notices.Add(notice);
+    }
 }

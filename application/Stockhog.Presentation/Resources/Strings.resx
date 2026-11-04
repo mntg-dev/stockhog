@@ -936,4 +936,16 @@ Start with the paper account. Do you understand and accept this?</value></data>
   <data name="Settings_FlattenOnDrawdownHint" xml:space="preserve"><value>Off: hitting the limit only stops new positions. On: it also sells everything held at market.</value></data>
   <data name="Settings_SaveLimits" xml:space="preserve"><value>Save limits</value></data>
   <data name="Status_LimitsSaved" xml:space="preserve"><value>Risk limits saved; they apply now and after a restart.</value></data>
+  <data name="Settings_ShowNotifications" xml:space="preserve"><value>Show Windows notifications</value></data>
+  <data name="Settings_ShowNotificationsHint" xml:space="preserve"><value>For filled and rejected orders, trading halted by a risk limit, and orders the autopilot places.</value></data>
+  <data name="Notice_OrderFilledTitle" xml:space="preserve"><value>Order filled</value></data>
+  <data name="Notice_BoughtFilled" xml:space="preserve"><value>Bought {0} {1} at {2:N2}.</value></data>
+  <data name="Notice_SoldFilled" xml:space="preserve"><value>Sold {0} {1} at {2:N2}.</value></data>
+  <data name="Notice_OrderRejectedTitle" xml:space="preserve"><value>Order rejected</value></data>
+  <data name="Notice_OrderRejected" xml:space="preserve"><value>{0}: {1}</value></data>
+  <data name="Notice_HaltedTitle" xml:space="preserve"><value>Trading stopped</value></data>
+  <data name="Notice_HaltedOnDailyLoss" xml:space="preserve"><value>Today's loss of {0:N2} USD reached the limit of {1:N2} USD. No new orders until you switch trading on again.</value></data>
+  <data name="Notice_HaltedOnDrawdown" xml:space="preserve"><value>Equity is {0:N1}% below its peak; the limit is {1:N1}%. No new orders until you switch trading on again.</value></data>
+  <data name="Notice_AutopilotTitle" xml:space="preserve"><value>Autopilot</value></data>
+  <data name="Notice_AutopilotTraded" xml:space="preserve"><value>Sent {0} buy and {1} sell orders to the paper account.</value></data>
 </root>

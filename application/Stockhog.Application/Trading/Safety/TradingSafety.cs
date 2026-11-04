@@ -1,6 +1,7 @@
 using Stockhog.Application.Abstractions.Events;
 using Stockhog.Application.Abstractions.Messaging;
 using Stockhog.Application.Abstractions.Results;
+using Stockhog.Application.Notifications;
 using Stockhog.Domain.Trading;
 using FluentValidation;
 
@@ -161,7 +162,8 @@ public sealed record EnforceDailyLossLimitCommand : ICommand<bool>;
 internal sealed class EnforceDailyLossLimitCommandHandler(
     IBrokerGateway broker,
     IRiskLimitsStore limits,
-    Audit audit) : ICommandHandler<EnforceDailyLossLimitCommand, bool>
+    Audit audit,
+    INotifier notifier) : ICommandHandler<EnforceDailyLossLimitCommand, bool>
 {
     public async Task<Result<bool>> HandleAsync(EnforceDailyLossLimitCommand command, CancellationToken cancellationToken)
     {
@@ -185,6 +187,7 @@ internal sealed class EnforceDailyLossLimitCommandHandler(
         limits.Update(current with { TradingEnabled = false });
         await audit.RecordAsync(AuditCategory.Risk, "Halted",
             $"Daily loss {-account.DailyProfitLoss:N2} USD reached the limit of {current.MaxDailyLoss:N2} USD; trading switched off.");
+        notifier.Notify(new Notice(NoticeTopic.HaltedOnDailyLoss, [-account.DailyProfitLoss, current.MaxDailyLoss]));
         return true;
     }
 }

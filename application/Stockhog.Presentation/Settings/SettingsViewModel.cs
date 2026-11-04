@@ -38,7 +38,12 @@ public sealed partial class SettingsViewModel : PageViewModel
         _selectedCulture = Loc.Instance.Culture;
         _defaultSymbols = settings.DefaultSymbols;
         _defaultInitialCapital = settings.DefaultInitialCapital;
+        _showNotifications = settings.ShowNotifications;
     }
+
+    [ObservableProperty] private bool _showNotifications;
+
+    partial void OnShowNotificationsChanged(bool value) => Persist(_settings with { ShowNotifications = value });
 
     public AppEnvironmentInfo Environment { get; }
 
