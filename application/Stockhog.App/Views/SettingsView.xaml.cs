@@ -37,5 +37,16 @@ public partial class SettingsView
         await viewModel.SaveBrokerKeysAsync(input);
     }
 
+    /// <summary>The token is cleared once handed over.</summary>
+    private async void OnSaveChatAlerts(object sender, RoutedEventArgs e)
+    {
+        if (DataContext is not SettingsViewModel viewModel)
+            return;
+
+        var token = ChatTokenBox.Password;
+        ChatTokenBox.Clear();
+        await viewModel.SaveChatAlertsAsync(token);
+    }
+
     private BrokerKeysInput BrokerKeysInput() => new(BrokerKeyBox.Text, BrokerSecretBox.Password, PaperKeyBox.Text, PaperSecretBox.Password);
 }

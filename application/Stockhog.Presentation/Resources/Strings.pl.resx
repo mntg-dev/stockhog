@@ -953,4 +953,14 @@ Zacznij od konta paper. Czy rozumiesz i akceptujesz te zasady?</value></data>
   <data name="Settings_ZipFilter" xml:space="preserve"><value>Pliki zip|*.zip</value></data>
   <data name="Status_ExportingDiagnostics" xml:space="preserve"><value>Eksportowanie diagnostyki…</value></data>
   <data name="Status_DiagnosticsExported" xml:space="preserve"><value>Zapisano diagnostykę (plików: {0}): {1}</value></data>
+  <data name="Settings_Chat" xml:space="preserve"><value>Powiadomienia na telefonie (Telegram)</value></data>
+  <data name="Settings_ChatOn" xml:space="preserve"><value>Włączone: powiadomienia trafiają na czat Telegram {0}.</value></data>
+  <data name="Settings_ChatOff" xml:space="preserve"><value>Wyłączone.</value></data>
+  <data name="Settings_ChatHint" xml:space="preserve"><value>W Telegramie utwórz bota przez @BotFather i skopiuj jego token, wyślij botowi dowolną wiadomość, a potem sprawdź swój identyfikator czatu, np. przez @userinfobot. Przed zapisaniem wysyłana jest wiadomość testowa; token jest przechowywany w postaci zaszyfrowanej dla Twojego użytkownika Windows.</value></data>
+  <data name="Settings_ChatToken" xml:space="preserve"><value>Token bota</value></data>
+  <data name="Settings_ChatId" xml:space="preserve"><value>Identyfikator czatu</value></data>
+  <data name="Settings_ChatSave" xml:space="preserve"><value>Wyślij test i zapisz</value></data>
+  <data name="Settings_ChatRemove" xml:space="preserve"><value>Wyłącz</value></data>
+  <data name="Settings_ChatTestMessage" xml:space="preserve"><value>Stockhog jest połączony: tutaj będą przychodzić powiadomienia o realizacjach zleceń, zatrzymaniu handlu i zleceniach autopilota.</value></data>
+  <data name="Status_ChatSaved" xml:space="preserve"><value>Powiadomienia Telegram włączone; sprawdź wiadomość testową na telefonie.</value></data>
 </root>

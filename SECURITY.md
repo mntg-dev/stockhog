@@ -32,6 +32,8 @@ Only the latest release is supported.
 
 **Your data**
 - Everything stays on your computer: market data, results, the database and logs. The app sends no telemetry.
+- Optional Telegram alerts send the text of each notification (fills, rejections, trading halts, autopilot orders)
+  to your own bot and chat. The bot token is stored encrypted with DPAPI like the broker keys and never logged.
 - The optional AI assistant sends your questions and the results it reads (runs, prices, account summary) to
   Anthropic with your own key. Its tools are read-only; the one that touches trading only pre-fills the order ticket,
   which you must check and send yourself.

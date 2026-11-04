@@ -4,6 +4,7 @@ using Stockhog.Application.Backtesting;
 using Stockhog.Application.Diagnostics;
 using Stockhog.Application.Instruments;
 using Stockhog.Application.MarketData;
+using Stockhog.Application.Notifications;
 using Stockhog.Application.Optimization;
 using Stockhog.Application.Autopilot;
 using Stockhog.Application.Proposals;
@@ -17,6 +18,7 @@ using Stockhog.Infrastructure.Configuration;
 using Stockhog.Infrastructure.Diagnostics;
 using Stockhog.Infrastructure.Jobs;
 using Stockhog.Infrastructure.MarketData;
+using Stockhog.Infrastructure.Notifications;
 using Stockhog.Infrastructure.Persistence;
 using Stockhog.Infrastructure.Trading;
 using Stockhog.Infrastructure.Updates;
@@ -57,6 +59,11 @@ public static class InfrastructureDependencyInjection
             .Bind(configuration.GetSection(UpdateOptions.SectionName))
             .ValidateDataAnnotations()
             .ValidateOnStart();
+        // Short timeout without retries: a chat alert that is late is not worth holding anything up for.
+        services.AddHttpClient(TelegramChannel.HttpClientName, http => http.Timeout = TimeSpan.FromSeconds(10))
+            .ConfigurePrimaryHttpMessageHandler(Http.HttpClientDefaults.CreatePrimaryHandler);
+        services.AddSingleton<IChatChannel>(sp => new TelegramChannel(
+            sp.GetRequiredService<IHttpClientFactory>(), sp.GetRequiredService<Microsoft.Extensions.Logging.ILogger<TelegramChannel>>()));
         services.AddSingleton<IDiagnosticsExporter>(sp => new DiagnosticsExporter(sp.GetRequiredService<TimeProvider>()));
         services.AddHttpClient<IReleaseFeed, ReleaseFeedClient>(http => http.Timeout = TimeSpan.FromSeconds(10))
             .ConfigurePrimaryHttpMessageHandler(Http.HttpClientDefaults.CreatePrimaryHandler);

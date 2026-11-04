@@ -6,6 +6,7 @@ using Stockhog.Application.Abstractions.Messaging;
 using Stockhog.Application.Assistant;
 using Stockhog.Application.Brokers;
 using Stockhog.Application.Diagnostics;
+using Stockhog.Application.Notifications;
 using Stockhog.Application.Trading;
 using Stockhog.Domain.Trading;
 using Stockhog.Presentation.Common;
@@ -131,6 +132,47 @@ public sealed partial class SettingsViewModel : PageViewModel
         await ShowBrokerKeyStatusAsync(_dispatcher.SendAsync(new GetBrokerKeyStatusQuery()));
         if ((await _dispatcher.SendAsync(new GetRiskLimitsQuery())) is { IsSuccess: true } limits)
             ShowLimits(limits.Value);
+        if ((await _dispatcher.SendAsync(new GetChatAlertStatusQuery())) is { IsSuccess: true } chat)
+            ShowChat(chat.Value);
+    }
+
+    /// <summary>Telegram alerts: the same notices as Windows notifications, on the phone.</summary>
+    [ObservableProperty] private string? _chatStatus;
+
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(RemoveChatAlertsCommand))]
+    private bool _hasChatAlerts;
+
+    [ObservableProperty] private string _chatId = "";
+
+    private void ShowChat(ChatAlertStatus status)
+    {
+        HasChatAlerts = status.IsConfigured;
+        ChatStatus = status.IsConfigured ? Loc.Format("Settings_ChatOn", status.ChatId ?? "") : Loc.Get("Settings_ChatOff");
+        if (status.ChatId is { } id)
+            ChatId = id;
+    }
+
+    /// <summary>Sends a test message, and keeps the bot token (from a password box) only once it arrived.</summary>
+    public async Task SaveChatAlertsAsync(string botToken)
+    {
+        var saved = await _dispatcher.SendAsync(new SaveChatAlertsCommand(botToken, ChatId, Loc.Get("Settings_ChatTestMessage")));
+        if (saved.IsFailure)
+        {
+            Status.Show(saved.Error);
+            return;
+        }
+
+        ShowChat(saved.Value);
+        Status.Show(Loc.Get("Status_ChatSaved"));
+    }
+
+    [RelayCommand(CanExecute = nameof(HasChatAlerts))]
+    private async Task RemoveChatAlertsAsync()
+    {
+        var removed = await _dispatcher.SendAsync(new RemoveChatAlertsCommand());
+        if (removed.IsSuccess)
+            ShowChat(removed.Value);
     }
 
     // Risk limits: every order is checked against them. Saved for the next start too; the kill switch is on the trading page.

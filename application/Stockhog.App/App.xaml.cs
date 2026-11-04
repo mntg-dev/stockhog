@@ -147,7 +147,10 @@ public partial class App : System.Windows.Application
         builder.Services.AddSingleton(CreateEnvironmentInfo);
         builder.Services.AddSingleton<IUserConfirmation, MessageBoxConfirmation>();
         builder.Services.AddSingleton<IExternalLinks, BrowserLinks>();
-        builder.Services.AddSingleton<INotifier, WindowsNotifier>();
+        builder.Services.AddSingleton<WindowsNotifier>();
+        builder.Services.AddSingleton<ChatNotifier>();
+        builder.Services.AddSingleton<INotifier>(sp => new CompositeNotifier(
+            [sp.GetRequiredService<WindowsNotifier>(), sp.GetRequiredService<ChatNotifier>()], sp.GetRequiredService<ILogger<CompositeNotifier>>()));
         builder.Services.AddSingleton<IFileDialogs, FileDialogs>();
 
         builder.Services.AddSerilog((services, logger) => logger

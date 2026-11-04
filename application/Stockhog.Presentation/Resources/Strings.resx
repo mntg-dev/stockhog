@@ -953,4 +953,14 @@ Start with the paper account. Do you understand and accept this?</value></data>
   <data name="Settings_ZipFilter" xml:space="preserve"><value>Zip files|*.zip</value></data>
   <data name="Status_ExportingDiagnostics" xml:space="preserve"><value>Exporting diagnostics…</value></data>
   <data name="Status_DiagnosticsExported" xml:space="preserve"><value>Diagnostics saved ({0} files): {1}</value></data>
+  <data name="Settings_Chat" xml:space="preserve"><value>Alerts on your phone (Telegram)</value></data>
+  <data name="Settings_ChatOn" xml:space="preserve"><value>On: alerts go to Telegram chat {0}.</value></data>
+  <data name="Settings_ChatOff" xml:space="preserve"><value>Off.</value></data>
+  <data name="Settings_ChatHint" xml:space="preserve"><value>In Telegram, create a bot with @BotFather and copy its token, send your bot any message, then get your chat id, e.g. from @userinfobot. A test message is sent before anything is saved; the token is stored encrypted for your Windows user.</value></data>
+  <data name="Settings_ChatToken" xml:space="preserve"><value>Bot token</value></data>
+  <data name="Settings_ChatId" xml:space="preserve"><value>Chat id</value></data>
+  <data name="Settings_ChatSave" xml:space="preserve"><value>Send a test and save</value></data>
+  <data name="Settings_ChatRemove" xml:space="preserve"><value>Turn off</value></data>
+  <data name="Settings_ChatTestMessage" xml:space="preserve"><value>Stockhog is connected: alerts about fills, trading halts and autopilot orders will arrive here.</value></data>
+  <data name="Status_ChatSaved" xml:space="preserve"><value>Telegram alerts are on; check the test message on your phone.</value></data>
 </root>

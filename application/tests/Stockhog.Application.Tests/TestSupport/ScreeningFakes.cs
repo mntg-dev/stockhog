@@ -244,3 +244,22 @@ internal sealed class RecordingDiagnosticsExporter : IDiagnosticsExporter
         return Task.FromResult(new DiagnosticsExport(targetPath, 2 + facts.Count, 100));
     }
 }
+
+internal sealed class FakeChatChannel : IChatChannel
+{
+    public string? Refusal { get; set; }
+
+    public List<(ChatTarget Target, string Text)> Sent { get; } = [];
+
+    public ChatTarget? Target { get; private set; }
+
+    public bool IsConfigured => Target is not null;
+
+    public Task<string?> SendAsync(ChatTarget target, string text, CancellationToken cancellationToken = default)
+    {
+        Sent.Add((target, text));
+        return Task.FromResult(Refusal);
+    }
+
+    public void Save(ChatTarget? target) => Target = target;
+}

@@ -87,6 +87,7 @@ internal sealed class ApplicationTestHost : IAsyncDisposable
         services.AddSingleton<IReleaseFeed>(Releases);
         services.AddSingleton<INotifier>(Notifier);
         services.AddSingleton<IDiagnosticsExporter>(Diagnostics);
+        services.AddSingleton<IChatChannel>(Chat);
         services.AddScoped<IUnitOfWork, InMemoryUnitOfWork>();
 
         _provider = services.BuildServiceProvider(new ServiceProviderOptions { ValidateScopes = true, ValidateOnBuild = true });
@@ -123,6 +124,7 @@ internal sealed class ApplicationTestHost : IAsyncDisposable
     public FakeReleaseFeed Releases { get; } = new();
     public RecordingNotifier Notifier { get; } = new();
     public RecordingDiagnosticsExporter Diagnostics { get; } = new();
+    public FakeChatChannel Chat { get; } = new();
 
     public IAssistantToolbox Toolbox => _provider.GetRequiredService<IAssistantToolbox>();
 
