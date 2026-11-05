@@ -28,7 +28,7 @@
     <PackageVersion Include="QuantConnect.Lean" Version="2.5.17999" />
     <PackageVersion Include="QuantConnect.Lean.Engine" Version="2.5.17999" />
     <PackageVersion Include="Anthropic" Version="13.1.0" />
-    <PackageVersion Include="System.Security.Cryptography.ProtectedData" Version="10.0.13" />
+    <PackageVersion Include="System.Security.Cryptography.ProtectedData" Version="10.0.14" />
   </ItemGroup>
   <ItemGroup Label="Security pins">
     <!-- Patched versions of vulnerable packages that Lean pulls in (System.Drawing.Common via DotNetZip, the rest via
