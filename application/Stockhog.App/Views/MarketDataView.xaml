@@ -50,7 +50,7 @@
                 <TextBlock Text="{loc:Tr MarketData_Stored}" Style="{StaticResource SectionTitle}" VerticalAlignment="Center" Margin="0,0,12,0" />
                 <Button Content="{loc:Tr Common_Refresh}" Command="{Binding RefreshCoverageCommand}" />
             </StackPanel>
-            <DataGrid Grid.Row="1" ItemsSource="{Binding Coverage}" SelectedItem="{Binding SelectedCoverage}" SelectionMode="Single">
+            <DataGrid Grid.Row="1" x:Name="CoverageGrid" ItemsSource="{Binding Coverage}" SelectedItem="{Binding SelectedCoverage}" SelectionMode="Single">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="{loc:Tr Field_Symbol}" Binding="{Binding Symbol}" Width="70" />
                     <DataGridTextColumn Header="{loc:Tr Field_Timeframe}" Binding="{Binding Timeframe, Converter={StaticResource LocalizedEnum}}" Width="90" />
@@ -59,6 +59,7 @@
                     <DataGridTextColumn Header="{loc:Tr MarketData_Ranges}" Binding="{Binding RangesText}" Width="*" />
                 </DataGrid.Columns>
             </DataGrid>
+            <TextBlock Grid.Row="1" Style="{StaticResource EmptyHint}" Text="{loc:Tr MarketData_Empty}" Tag="{Binding HasItems, ElementName=CoverageGrid}" />
             <TextBlock Grid.Row="2" Margin="0,10,0,4" Foreground="Gray">
                 <TextBlock.Style>
                     <Style TargetType="TextBlock">

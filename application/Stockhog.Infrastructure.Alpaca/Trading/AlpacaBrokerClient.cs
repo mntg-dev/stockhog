@@ -117,7 +117,7 @@ internal sealed class AlpacaBrokerClient(HttpClient httpClient, IOptions<AlpacaO
     {
         var settings = options.Value;
         if (!settings.HasTradingCredentials)
-            throw new BrokerException("Alpaca trading keys are not configured (Alpaca:TradingApiKey/TradingApiSecret or Alpaca:ApiKey/ApiSecret).", isRejection: true);
+            throw new BrokerException("Trading needs your Alpaca keys: add them on the Settings page.", isRejection: true);
 
         using var request = new HttpRequestMessage(method, path);
         request.Headers.Add("APCA-API-KEY-ID", settings.TradingKey);

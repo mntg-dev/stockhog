@@ -142,7 +142,7 @@
                 <Button Content="{loc:Tr Optimization_OpenTrial}" Command="{Binding OpenTrialCommand}" />
             </StackPanel>
 
-            <DataGrid Grid.Row="2" ItemsSource="{Binding Optimizations}" SelectedItem="{Binding SelectedOptimization}" SelectionMode="Single">
+            <DataGrid Grid.Row="2" x:Name="OptimizationsGrid" ItemsSource="{Binding Optimizations}" SelectedItem="{Binding SelectedOptimization}" SelectionMode="Single">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="{loc:Tr History_Created}" Binding="{Binding CreatedAt.LocalDateTime, StringFormat=g}" Width="125" />
                     <DataGridTextColumn Header="{loc:Tr Field_Symbol}" Binding="{Binding Symbol}" Width="60" />
@@ -171,6 +171,7 @@
                     <DataGridTextColumn Header="{loc:Tr History_Error}" Binding="{Binding FailureReason}" Width="*" />
                 </DataGrid.Columns>
             </DataGrid>
+            <TextBlock Grid.Row="2" Style="{StaticResource EmptyHint}" Text="{loc:Tr Optimization_Empty}" Tag="{Binding HasItems, ElementName=OptimizationsGrid}" />
 
             <TextBlock Grid.Row="3" Text="{Binding BestText}" FontWeight="SemiBold" Margin="3,8,0,6" TextWrapping="Wrap" />
 

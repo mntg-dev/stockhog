@@ -85,7 +85,7 @@
   <data name="Guide_OpenPage" xml:space="preserve"><value>Otwórz stronę</value></data>
   <data name="Guide_Start_Title" xml:space="preserve"><value>1. Pierwsze uruchomienie: klucze i język</value></data>
   <data name="Guide_Start_Body" xml:space="preserve"><value>Dane rynkowe i handel na koncie paper pochodzą z Alpaca. Załóż darmowe konto na alpaca.markets i wygeneruj klucze API dla konta paper.
-• Zapisz klucze jako zmienne środowiskowe użytkownika Windows Alpaca__ApiKey i Alpaca__ApiSecret (dwa podkreślenia), a potem uruchom aplikację ponownie. Przy pracy ze źródłami działają też user secrets (zob. README).
+• Otwórz Ustawienia → Konto Alpaca, wklej identyfikator klucza i klucz tajny, kliknij Sprawdź połączenie, potem Zapisz klucze i uruchom aplikację ponownie. Klucze są przechowywane w postaci zaszyfrowanej dla Twojego użytkownika Windows.
 • Backtesty na już pobranych danych działają bez kluczy.
 • Język: Ustawienia → Język od razu przełącza między polskim a angielskim.
 • Ustawienia → Wartości domyślne ustalają symbole i kapitał, od których startują formularze.</value></data>
@@ -228,8 +228,8 @@
   <data name="Settings_Database" xml:space="preserve"><value>Baza danych</value></data>
   <data name="Settings_LogFolder" xml:space="preserve"><value>Folder logów</value></data>
   <data name="Settings_AlpacaKeys" xml:space="preserve"><value>Klucze API Alpaca</value></data>
-  <data name="Settings_AlpacaConfigured" xml:space="preserve"><value>Skonfigurowane (user secrets)</value></data>
-  <data name="Settings_AlpacaMissing" xml:space="preserve"><value>Brak – patrz README</value></data>
+  <data name="Settings_AlpacaConfigured" xml:space="preserve"><value>Skonfigurowane</value></data>
+  <data name="Settings_AlpacaMissing" xml:space="preserve"><value>Brak – dodaj je wyżej, w sekcji Konto Alpaca</value></data>
   <data name="Settings_ParallelJobs" xml:space="preserve"><value>Równoległe zadania</value></data>
   <data name="Strategy_Range" xml:space="preserve"><value>Zakres: {0}.</value></data>
   <data name="Resolution_Daily" xml:space="preserve"><value>dzienne</value></data>
@@ -967,4 +967,8 @@ Zacznij od konta paper. Czy rozumiesz i akceptujesz te zasady?</value></data>
   <data name="Pipeline_Scanner" xml:space="preserve"><value>2  Przetestuj strategie i sprawdź sygnały</value></data>
   <data name="Pipeline_Proposals" xml:space="preserve"><value>3  Zatwierdzaj transakcje pojedynczo</value></data>
   <data name="Pipeline_Autopilot" xml:space="preserve"><value>albo pozwól handlować autopilotowi</value></data>
+  <data name="History_Empty" xml:space="preserve"><value>Nie ma jeszcze przebiegów. Uruchom backtest, a pojawi się tutaj razem z wynikami.</value></data>
+  <data name="MarketData_Empty" xml:space="preserve"><value>Nic jeszcze nie pobrano. Wpisz po lewej kilka spółek, np. SPY, AAPL, i pobierz je.</value></data>
+  <data name="Optimization_Empty" xml:space="preserve"><value>Nie ma jeszcze optymalizacji. Wybierz po lewej strategię i zakresy, a potem uruchom optymalizację.</value></data>
+  <data name="Autopilot_DecisionsEmpty" xml:space="preserve"><value>Nie ma jeszcze decyzji. Włącz tryb cienia i uruchom cykl: każda decyzja pojawi się tutaj wraz z powodem.</value></data>
 </root>

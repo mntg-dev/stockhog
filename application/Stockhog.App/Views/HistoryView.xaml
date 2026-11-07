@@ -39,6 +39,7 @@
                 <DataGridTextColumn Header="{loc:Tr History_Error}" Binding="{Binding FailureReason}" Width="*" />
             </DataGrid.Columns>
         </DataGrid>
+        <TextBlock Grid.Row="2" Style="{StaticResource EmptyHint}" Text="{loc:Tr History_Empty}" Tag="{Binding HasItems, ElementName=HistoryGrid}" />
 
         <GridSplitter Grid.Row="3" Height="6" HorizontalAlignment="Stretch" Background="Transparent"
                       Visibility="{Binding HasComparison, Converter={StaticResource BooleanToVisibility}}" />

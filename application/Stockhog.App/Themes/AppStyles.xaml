@@ -359,6 +359,24 @@
         </Style.Triggers>
     </Style>
 
+    <!-- What to do when a table is empty: bind Tag to the table's HasItems and put it in the table's grid cell. -->
+    <Style x:Key="EmptyHint" TargetType="TextBlock">
+        <Setter Property="Foreground" Value="{StaticResource MutedBrush}" />
+        <Setter Property="TextWrapping" Value="Wrap" />
+        <Setter Property="TextAlignment" Value="Center" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="VerticalAlignment" Value="Top" />
+        <Setter Property="Margin" Value="16,56,16,0" />
+        <Setter Property="MaxWidth" Value="520" />
+        <Setter Property="IsHitTestVisible" Value="False" />
+        <Setter Property="Visibility" Value="Collapsed" />
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding Tag, RelativeSource={RelativeSource Self}}" Value="False">
+                <Setter Property="Visibility" Value="Visible" />
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
     <!-- A step of the way from the market to a trade; the current one is copper. -->
     <Style x:Key="PipelineChip" TargetType="Button">
         <Setter Property="Background" Value="Transparent" />

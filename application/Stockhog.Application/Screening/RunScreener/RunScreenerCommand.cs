@@ -66,7 +66,7 @@ internal static class ScreenerErrors
 {
     public static readonly Error SourceNotConfigured = Error.Failure(
         "Screener.SourceNotConfigured",
-        "The screener needs Alpaca market data keys (Alpaca:ApiKey/ApiSecret).");
+        "The screener needs your Alpaca keys: add them on the Settings page.");
 
     public static readonly Error NoInstruments = Error.Failure(
         "Screener.NoInstruments",

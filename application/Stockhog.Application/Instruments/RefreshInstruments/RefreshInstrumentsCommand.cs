@@ -26,7 +26,7 @@ internal static class InstrumentErrors
 {
     public static readonly Error SourceNotConfigured = Error.Failure(
         "Instruments.SourceNotConfigured",
-        "The instrument list needs Alpaca keys (Alpaca:ApiKey/ApiSecret or Alpaca:TradingApiKey/TradingApiSecret).");
+        "The instrument list needs your Alpaca keys: add them on the Settings page.");
 
     public static readonly Error EmptyList = Error.Failure(
         "Instruments.EmptyList",

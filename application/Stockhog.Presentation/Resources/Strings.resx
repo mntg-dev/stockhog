@@ -85,7 +85,7 @@
   <data name="Guide_OpenPage" xml:space="preserve"><value>Open page</value></data>
   <data name="Guide_Start_Title" xml:space="preserve"><value>1. First start: keys and language</value></data>
   <data name="Guide_Start_Body" xml:space="preserve"><value>Market data and paper trading come from Alpaca. Create a free account at alpaca.markets and generate API keys for the paper account.
-• Store the keys as Windows user environment variables Alpaca__ApiKey and Alpaca__ApiSecret (two underscores), then restart the app. When developing from source, user secrets work too (see the README).
+• Open Settings → Alpaca account, paste the key ID and the secret, click Test connection, then Save keys, and restart the app. The keys are stored encrypted for your Windows user.
 • Backtests of data you already have work without keys.
 • Language: Settings → Language switches between Polish and English at once.
 • Settings → Defaults sets the symbols and the initial capital the forms start with.</value></data>
@@ -228,8 +228,8 @@
   <data name="Settings_Database" xml:space="preserve"><value>Database</value></data>
   <data name="Settings_LogFolder" xml:space="preserve"><value>Log folder</value></data>
   <data name="Settings_AlpacaKeys" xml:space="preserve"><value>Alpaca API keys</value></data>
-  <data name="Settings_AlpacaConfigured" xml:space="preserve"><value>Configured (user secrets)</value></data>
-  <data name="Settings_AlpacaMissing" xml:space="preserve"><value>Missing – see README</value></data>
+  <data name="Settings_AlpacaConfigured" xml:space="preserve"><value>Configured</value></data>
+  <data name="Settings_AlpacaMissing" xml:space="preserve"><value>Missing – add them under Alpaca account above</value></data>
   <data name="Settings_ParallelJobs" xml:space="preserve"><value>Parallel jobs</value></data>
   <data name="Strategy_Range" xml:space="preserve"><value>Range: {0}.</value></data>
   <data name="Resolution_Daily" xml:space="preserve"><value>daily</value></data>
@@ -967,4 +967,8 @@ Start with the paper account. Do you understand and accept this?</value></data>
   <data name="Pipeline_Scanner" xml:space="preserve"><value>2  Test strategies and check signals</value></data>
   <data name="Pipeline_Proposals" xml:space="preserve"><value>3  Approve trades one by one</value></data>
   <data name="Pipeline_Autopilot" xml:space="preserve"><value>or let the autopilot trade</value></data>
+  <data name="History_Empty" xml:space="preserve"><value>No runs yet. Run a backtest and it appears here with its results.</value></data>
+  <data name="MarketData_Empty" xml:space="preserve"><value>Nothing downloaded yet. Enter a few symbols on the left, e.g. SPY, AAPL, and download them.</value></data>
+  <data name="Optimization_Empty" xml:space="preserve"><value>No optimizations yet. Pick a strategy and its ranges on the left, then start one.</value></data>
+  <data name="Autopilot_DecisionsEmpty" xml:space="preserve"><value>No decisions yet. Switch to shadow mode and run a cycle: every decision appears here with its reason.</value></data>
 </root>

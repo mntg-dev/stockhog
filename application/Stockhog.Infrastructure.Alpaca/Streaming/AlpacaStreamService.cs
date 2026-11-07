@@ -44,7 +44,7 @@ internal abstract class AlpacaStreamService(
     {
         if (!HasCredentials)
         {
-            monitor.Report(Name, ConnectionState.NotConfigured, "Alpaca keys are not configured.");
+            monitor.Report(Name, ConnectionState.NotConfigured, "Add your Alpaca keys on the Settings page.");
             logger.LogInformation("{Stream} stream not started: Alpaca keys are not configured", Name);
             return;
         }

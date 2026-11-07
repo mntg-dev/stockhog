@@ -114,6 +114,4 @@ internal sealed class AlpacaMarketDataClient(HttpClient httpClient, IOptions<Alp
 }
 
 public sealed class AlpacaConfigurationException() : InvalidOperationException(
-    "Alpaca API credentials are not configured. Run: " +
-    "dotnet user-secrets set \"Alpaca:ApiKey\" \"<key>\" --project Stockhog.App, " +
-    "then the same for \"Alpaca:ApiSecret\".");
+    "Market data needs your Alpaca keys: add them on the Settings page.");
