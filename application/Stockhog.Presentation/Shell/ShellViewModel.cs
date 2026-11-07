@@ -4,24 +4,9 @@ using System.Windows.Markup;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
-using Stockhog.Presentation.Analytics;
-using Stockhog.Presentation.Assistant;
-using Stockhog.Presentation.Autopilot;
-using Stockhog.Presentation.Backtesting;
-using Stockhog.Presentation.Compare;
-using Stockhog.Presentation.Guide;
-using Stockhog.Presentation.Home;
+using Microsoft.Extensions.DependencyInjection;
 using Stockhog.Presentation.Jobs;
 using Stockhog.Presentation.Localization;
-using Stockhog.Presentation.Logging;
-using Stockhog.Presentation.MarketData;
-using Stockhog.Presentation.Optimization;
-using Stockhog.Presentation.Proposals;
-using Stockhog.Presentation.Scanning;
-using Stockhog.Presentation.Screening;
-using Stockhog.Presentation.Settings;
-using Stockhog.Presentation.Strategies;
-using Stockhog.Presentation.Trading;
 
 namespace Stockhog.Presentation.Shell;
 
@@ -32,24 +17,9 @@ namespace Stockhog.Presentation.Shell;
 public sealed partial class ShellViewModel : ObservableObject, IRecipient<NavigateMessage>
 {
     public ShellViewModel(
-        HomeViewModel home,
-        BacktestViewModel backtest,
-        StrategiesViewModel strategies,
-        HistoryViewModel history,
-        CompareViewModel compare,
-        ScreenerViewModel screener,
-        ScannerViewModel scanner,
-        ProposalsViewModel proposals,
-        AutopilotViewModel autopilot,
-        AssistantViewModel assistant,
-        OptimizationViewModel optimization,
-        AnalysisViewModel analysis,
-        TradingViewModel trading,
-        MarketDataViewModel marketData,
+        IEnumerable<PageEntry> entries,
+        IServiceProvider services,
         JobsViewModel jobs,
-        LogsViewModel logs,
-        GuideViewModel guide,
-        SettingsViewModel settings,
         StatusViewModel status,
         UpdateBannerViewModel update,
         IMessenger messenger)
@@ -57,36 +27,16 @@ public sealed partial class ShellViewModel : ObservableObject, IRecipient<Naviga
         Status = status;
         Update = update;
         Jobs = jobs;
-        Pages =
-        [
-            new NavigationItem("Nav_Home", "", home),
-            new NavigationItem("Nav_MarketData", "", marketData, "NavGroup_Research"),
-            new NavigationItem("Nav_Screener", "", screener, "NavGroup_Research"),
-            new NavigationItem("Nav_Scanner", "", scanner, "NavGroup_Research"),
-            new NavigationItem("Nav_Backtest", "", backtest, "NavGroup_Strategies"),
-            new NavigationItem("Nav_Strategies", "", strategies, "NavGroup_Strategies"),
-            new NavigationItem("Nav_Optimization", "", optimization, "NavGroup_Strategies"),
-            new NavigationItem("Nav_Analysis", "", analysis, "NavGroup_Strategies"),
-            new NavigationItem("Nav_Compare", "", compare, "NavGroup_Strategies"),
-            new NavigationItem("Nav_History", "", history, "NavGroup_Strategies"),
-            new NavigationItem("Nav_Proposals", "", proposals, "NavGroup_Trading"),
-            new NavigationItem("Nav_Autopilot", "", autopilot, "NavGroup_Trading"),
-            new NavigationItem("Nav_Trading", "", trading, "NavGroup_Trading"),
-            new NavigationItem("Nav_Assistant", "", assistant, "NavGroup_More"),
-            new NavigationItem("Nav_Jobs", "", jobs, "NavGroup_More"),
-            new NavigationItem("Nav_Logs", "", logs, "NavGroup_More"),
-            new NavigationItem("Nav_Guide", "", guide, "NavGroup_More"),
-            new NavigationItem("Nav_Settings", "", settings, "NavGroup_More")
-        ];
 
-        NavigationItem Page(PageViewModel page) => Pages.First(p => p.Page == page);
-        Pipeline =
-        [
-            new PipelineStep("Pipeline_Screener", Page(screener), false),
-            new PipelineStep("Pipeline_Scanner", Page(scanner), true),
-            new PipelineStep("Pipeline_Proposals", Page(proposals), true),
-            new PipelineStep("Pipeline_Autopilot", Page(autopilot), false)
-        ];
+        var ordered = entries.OrderBy(e => e.Order).ToList();
+        var items = ordered.ToDictionary(
+            e => e,
+            e => new NavigationItem(e.TitleKey, e.Glyph, (PageViewModel)services.GetRequiredService(e.PageType), e.GroupKey, e.Feature));
+        Pages = ordered.Select(e => items[e]).ToList();
+        Pipeline = ordered
+            .Where(e => e.PipelineKey is not null)
+            .Select((e, index) => new PipelineStep(e.PipelineKey!, items[e], index > 0 && e.PipelineArrow))
+            .ToList();
 
         // Grouped for the sidebar's section headers; the list itself stays in menu order.
         PagesView = new ListCollectionView(Pages.ToList());

@@ -33,7 +33,7 @@ public sealed class LocalizationTests : IDisposable
     public void Every_key_used_in_xaml_or_view_models_exists()
     {
         var root = FindSolutionRoot();
-        var usage = new Regex(@"loc:Tr (?<key>\w+)|Loc\.(?:Get|Format)\(""(?<key>\w+)""|NavigationItem\(""(?<key>\w+)""");
+        var usage = new Regex(@"loc:Tr (?<key>\w+)|Loc\.(?:Get|Format)\(""(?<key>\w+)""|NavigationItem\(""(?<key>\w+)""|""(?<key>(?:Nav|NavGroup|Pipeline)_\w+)""");
         var sources = Directory.EnumerateFiles(Path.Combine(root, "Stockhog.App"), "*.xaml", SearchOption.AllDirectories)
             .Concat(Directory.EnumerateFiles(Path.Combine(root, "Stockhog.Presentation"), "*.cs", SearchOption.AllDirectories))
             .Where(f => !f.Contains($"{Path.DirectorySeparatorChar}obj{Path.DirectorySeparatorChar}"));
