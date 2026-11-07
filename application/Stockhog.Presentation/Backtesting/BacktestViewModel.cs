@@ -194,10 +194,11 @@ public sealed partial class BacktestViewModel : PageViewModel, IRecipient<OpenBa
         LoadLatestResultsCommand.Cancel();
     }
 
-    /// <summary>From the history page: show a finished run.</summary>
+    /// <summary>From the history page: show a finished run, with its setup in the form so it can be changed and rerun.</summary>
     public async void Receive(OpenBacktestRunMessage message)
     {
         var run = message.Run;
+        await ApplySetupAsync(run.StrategyName, run.Symbol, run.Start, run.End, run.InitialCapital, run.Parameters);
         await RunOperationAsync(Loc.Format("Status_LoadingResults", run.RunId), async _ =>
         {
             var report = await _dispatcher.SendAsync(new GetBacktestReportQuery(run.Symbol, run.RunId));
@@ -209,7 +210,6 @@ public sealed partial class BacktestViewModel : PageViewModel, IRecipient<OpenBa
         });
     }
 
-    /// <summary>From the optimization page: fill the form with a strategy setup, e.g. the best parameters found.</summary>
     /// <summary>Another page (e.g. Strategies) asks to try a strategy: select it with its default parameters.</summary>
     public async void Receive(SelectBacktestStrategyMessage message)
     {
@@ -219,19 +219,23 @@ public sealed partial class BacktestViewModel : PageViewModel, IRecipient<OpenBa
         SelectedStrategy = Strategies.FirstOrDefault(s => s.Name == message.StrategyName) ?? SelectedStrategy;
     }
 
-    public async void Receive(ApplyBacktestSetupMessage message)
+    /// <summary>From the optimization page: fill the form with a strategy setup, e.g. the best parameters found.</summary>
+    public async void Receive(ApplyBacktestSetupMessage message) =>
+        await ApplySetupAsync(message.StrategyName, message.Symbol, message.Start, message.End, message.InitialCapital, message.Parameters);
+
+    private async Task ApplySetupAsync(string strategyName, string symbol, DateOnly start, DateOnly end, decimal initialCapital, IReadOnlyDictionary<string, string>? parameters)
     {
         if (Strategies.Count == 0)
             await LoadAsync();
 
-        SelectedStrategy = Strategies.FirstOrDefault(s => s.Name == message.StrategyName) ?? SelectedStrategy;
-        Symbol = message.Symbol;
-        StartDate = message.Start.ToDateTime(TimeOnly.MinValue);
-        EndDate = message.End.ToDateTime(TimeOnly.MinValue);
-        InitialCapital = message.InitialCapital;
+        SelectedStrategy = Strategies.FirstOrDefault(s => s.Name == strategyName) ?? SelectedStrategy;
+        Symbol = symbol;
+        StartDate = start.ToDateTime(TimeOnly.MinValue);
+        EndDate = end.ToDateTime(TimeOnly.MinValue);
+        InitialCapital = initialCapital;
         foreach (var input in StrategyParameters)
         {
-            if (message.Parameters.TryGetValue(input.Name, out var value))
+            if (parameters?.TryGetValue(input.Name, out var value) == true)
                 input.Value = value;
         }
     }

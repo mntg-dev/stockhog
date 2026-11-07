@@ -65,7 +65,8 @@ public sealed record BacktestRunSummary(
     DateTimeOffset CreatedAt,
     TimeSpan? Duration,
     string? FailureReason,
-    string? OptimizationId = null)
+    string? OptimizationId = null,
+    IReadOnlyDictionary<string, string>? Parameters = null)
 {
     public bool HasReport => Status == BacktestStatus.Completed;
 }

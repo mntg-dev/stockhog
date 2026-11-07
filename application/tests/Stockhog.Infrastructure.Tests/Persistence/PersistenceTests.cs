@@ -181,6 +181,7 @@ public sealed class PersistenceTests : IAsyncLifetime
         Assert.Equal(TimeSpan.FromSeconds(12), aapl[1].Duration);
         Assert.Equal(100_000m, aapl[1].InitialCapital);
         Assert.True(aapl[1].HasReport);
+        Assert.Equal(("26", "130"), (aapl[1].Parameters!["fast-period"], aapl[1].Parameters!["slow-period"]));
 
         Assert.Equal(2, (await reader.ListAsync(null, take: 2, cancellationToken: ct)).Count);
     }

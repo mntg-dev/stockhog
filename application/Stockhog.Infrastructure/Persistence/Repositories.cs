@@ -92,7 +92,8 @@ internal sealed class BacktestHistoryReader(TradingDbContext db) : IBacktestHist
                 r.StartedAt,
                 r.FinishedAt,
                 r.FailureReason,
-                r.OptimizationId
+                r.OptimizationId,
+                r.Parameters
             })
             .ToListAsync(cancellationToken)
             .ConfigureAwait(false);
@@ -110,7 +111,8 @@ internal sealed class BacktestHistoryReader(TradingDbContext db) : IBacktestHist
                 r.CreatedAt,
                 r.StartedAt is { } started && r.FinishedAt is { } finished ? finished - started : null,
                 r.FailureReason,
-                r.OptimizationId?.Value))
+                r.OptimizationId?.Value,
+                r.Parameters.Values))
             .ToList();
     }
 

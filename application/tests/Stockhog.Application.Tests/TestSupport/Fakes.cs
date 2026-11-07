@@ -154,7 +154,7 @@ internal sealed class InMemoryDatabase :
                 .OrderByDescending(r => r.CreatedAt)
                 .Take(take)
                 .Select(r => new BacktestRunSummary(r.Id.Value, r.Symbol.Value, r.Strategy.Value, r.Period.Start, r.Period.End,
-                    r.InitialCapital.Amount, r.Status, r.Progress, r.CreatedAt, r.Duration, r.FailureReason, r.OptimizationId?.Value))
+                    r.InitialCapital.Amount, r.Status, r.Progress, r.CreatedAt, r.Duration, r.FailureReason, r.OptimizationId?.Value, r.Parameters.Values))
                 .ToList());
         }
     }
