@@ -963,4 +963,8 @@ Start with the paper account. Do you understand and accept this?</value></data>
   <data name="Settings_ChatRemove" xml:space="preserve"><value>Turn off</value></data>
   <data name="Settings_ChatTestMessage" xml:space="preserve"><value>Stockhog is connected: alerts about fills, trading halts and autopilot orders will arrive here.</value></data>
   <data name="Status_ChatSaved" xml:space="preserve"><value>Telegram alerts are on; check the test message on your phone.</value></data>
+  <data name="Pipeline_Screener" xml:space="preserve"><value>1  Find candidates</value></data>
+  <data name="Pipeline_Scanner" xml:space="preserve"><value>2  Test strategies and check signals</value></data>
+  <data name="Pipeline_Proposals" xml:space="preserve"><value>3  Approve trades one by one</value></data>
+  <data name="Pipeline_Autopilot" xml:space="preserve"><value>or let the autopilot trade</value></data>
 </root>

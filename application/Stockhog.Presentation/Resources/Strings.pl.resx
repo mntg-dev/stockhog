@@ -963,4 +963,8 @@ Zacznij od konta paper. Czy rozumiesz i akceptujesz te zasady?</value></data>
   <data name="Settings_ChatRemove" xml:space="preserve"><value>Wyłącz</value></data>
   <data name="Settings_ChatTestMessage" xml:space="preserve"><value>Stockhog jest połączony: tutaj będą przychodzić powiadomienia o realizacjach zleceń, zatrzymaniu handlu i zleceniach autopilota.</value></data>
   <data name="Status_ChatSaved" xml:space="preserve"><value>Powiadomienia Telegram włączone; sprawdź wiadomość testową na telefonie.</value></data>
+  <data name="Pipeline_Screener" xml:space="preserve"><value>1  Znajdź kandydatów</value></data>
+  <data name="Pipeline_Scanner" xml:space="preserve"><value>2  Przetestuj strategie i sprawdź sygnały</value></data>
+  <data name="Pipeline_Proposals" xml:space="preserve"><value>3  Zatwierdzaj transakcje pojedynczo</value></data>
+  <data name="Pipeline_Autopilot" xml:space="preserve"><value>albo pozwól handlować autopilotowi</value></data>
 </root>

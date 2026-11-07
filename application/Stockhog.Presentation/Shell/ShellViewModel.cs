@@ -2,6 +2,7 @@ using System.ComponentModel;
 using System.Windows.Data;
 using System.Windows.Markup;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Stockhog.Presentation.Analytics;
 using Stockhog.Presentation.Assistant;
@@ -78,6 +79,15 @@ public sealed partial class ShellViewModel : ObservableObject, IRecipient<Naviga
             new NavigationItem("Nav_Settings", "", settings, "NavGroup_More")
         ];
 
+        NavigationItem Page(PageViewModel page) => Pages.First(p => p.Page == page);
+        Pipeline =
+        [
+            new PipelineStep("Pipeline_Screener", Page(screener), false),
+            new PipelineStep("Pipeline_Scanner", Page(scanner), true),
+            new PipelineStep("Pipeline_Proposals", Page(proposals), true),
+            new PipelineStep("Pipeline_Autopilot", Page(autopilot), false)
+        ];
+
         // Grouped for the sidebar's section headers; the list itself stays in menu order.
         PagesView = new ListCollectionView(Pages.ToList());
         PagesView.GroupDescriptions.Add(new PropertyGroupDescription(nameof(NavigationItem.GroupKey)));
@@ -90,6 +100,11 @@ public sealed partial class ShellViewModel : ObservableObject, IRecipient<Naviga
     public IReadOnlyList<NavigationItem> Pages { get; }
 
     public ListCollectionView PagesView { get; }
+
+    /// <summary>From the market to a trade; shown above the pages that take part.</summary>
+    public IReadOnlyList<PipelineStep> Pipeline { get; }
+
+    public bool IsOnPipeline => Pipeline.Any(s => s.IsCurrent);
 
     public StatusViewModel Status { get; }
 
@@ -107,9 +122,16 @@ public sealed partial class ShellViewModel : ObservableObject, IRecipient<Naviga
     partial void OnSelectedItemChanged(NavigationItem? value)
     {
         CurrentPage = value?.Page;
+        foreach (var step in Pipeline)
+            step.IsCurrent = step.Item == value;
+        OnPropertyChanged(nameof(IsOnPipeline));
+
         if (value is not null)
             _ = value.Page.OnNavigatedToAsync();
     }
+
+    [RelayCommand]
+    private void OpenPipelineStep(PipelineStep step) => SelectedItem = step.Item;
 
     public void Receive(NavigateMessage message) =>
         SelectedItem = Pages.FirstOrDefault(p => p.Page.GetType() == message.PageType) ?? SelectedItem;

@@ -77,6 +77,36 @@
                     <TextBlock Text="{Binding Update.Text}" VerticalAlignment="Center" TextWrapping="Wrap" />
                 </DockPanel>
             </Border>
+            <!-- The way from the market to a trade, above the pages that take part. -->
+            <Border DockPanel.Dock="Top" Background="White" BorderBrush="{StaticResource BorderBrush}" BorderThickness="0,0,0,1" Padding="12,6"
+                    Visibility="{Binding IsOnPipeline, Converter={StaticResource BooleanToVisibility}}">
+                <ItemsControl ItemsSource="{Binding Pipeline}" Focusable="False">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Horizontal" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="›" Foreground="{StaticResource MutedBrush}" VerticalAlignment="Center" Margin="4,0" FontSize="16"
+                                           Visibility="{Binding ShowsArrow, Converter={StaticResource BooleanToVisibility}}" />
+                                <Button Style="{StaticResource PipelineChip}" CommandParameter="{Binding}"
+                                        Command="{Binding DataContext.OpenPipelineStepCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}">
+                                    <TextBlock>
+                                        <TextBlock.Text>
+                                            <MultiBinding Converter="{StaticResource LocalizeKey}">
+                                                <Binding Path="TitleKey" />
+                                                <Binding Path="Culture" Source="{x:Static loc:Loc.Instance}" />
+                                            </MultiBinding>
+                                        </TextBlock.Text>
+                                    </TextBlock>
+                                </Button>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </Border>
             <ContentControl Content="{Binding CurrentPage}" Margin="16" Focusable="False" />
         </DockPanel>
 
