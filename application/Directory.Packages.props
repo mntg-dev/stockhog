@@ -4,17 +4,17 @@
     <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
   </PropertyGroup>
   <ItemGroup Label="Microsoft.Extensions">
-    <PackageVersion Include="Microsoft.Extensions.Caching.Abstractions" Version="10.0.13" />
+    <PackageVersion Include="Microsoft.Extensions.Caching.Abstractions" Version="10.0.14" />
     <PackageVersion Include="Microsoft.Extensions.Caching.Hybrid" Version="10.11.0" />
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="10.0.13" />
-    <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.13" />
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.14" />
     <PackageVersion Include="Microsoft.Extensions.Hosting" Version="10.0.13" />
-    <PackageVersion Include="Microsoft.Extensions.Hosting.Abstractions" Version="10.0.13" />
+    <PackageVersion Include="Microsoft.Extensions.Hosting.Abstractions" Version="10.0.14" />
     <PackageVersion Include="Microsoft.Extensions.Http" Version="10.0.13" />
     <PackageVersion Include="Microsoft.Extensions.Http.Resilience" Version="10.11.0" />
-    <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.13" />
-    <PackageVersion Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="10.0.13" />
-    <PackageVersion Include="Microsoft.Extensions.Options.DataAnnotations" Version="10.0.13" />
+    <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.14" />
+    <PackageVersion Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="10.0.14" />
+    <PackageVersion Include="Microsoft.Extensions.Options.DataAnnotations" Version="10.0.14" />
   </ItemGroup>
   <ItemGroup Label="Application">
     <PackageVersion Include="FluentValidation" Version="12.2.0" />
