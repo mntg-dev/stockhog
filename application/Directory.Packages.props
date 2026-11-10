@@ -23,10 +23,10 @@
   <ItemGroup Label="Infrastructure">
     <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.13" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore.Sqlite" Version="10.0.13" />
-    <PackageVersion Include="QuantConnect.Algorithm" Version="2.5.17999" />
-    <PackageVersion Include="QuantConnect.Common" Version="2.5.17999" />
-    <PackageVersion Include="QuantConnect.Lean" Version="2.5.17999" />
-    <PackageVersion Include="QuantConnect.Lean.Engine" Version="2.5.17999" />
+    <PackageVersion Include="QuantConnect.Algorithm" Version="2.5.18229" />
+    <PackageVersion Include="QuantConnect.Common" Version="2.5.18229" />
+    <PackageVersion Include="QuantConnect.Lean" Version="2.5.18229" />
+    <PackageVersion Include="QuantConnect.Lean.Engine" Version="2.5.18229" />
     <PackageVersion Include="Anthropic" Version="13.1.0" />
     <PackageVersion Include="System.Security.Cryptography.ProtectedData" Version="10.0.13" />
   </ItemGroup>
